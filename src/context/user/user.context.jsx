@@ -54,6 +54,30 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+const updateUserPartial = async (_id, { username, email }) => {
+    try {
+        const currentUserData = await getUserById(_id);
+        console.log("pruebassss:",currentUserData )
+
+        const updatedUserData = {
+            username: username || currentUserData.username,
+            email: email || currentUserData.email,
+            state: currentUserData.state,
+            role: currentUserData.role,
+        };
+        console.log("pruebas 2: ", updatedUserData)
+
+       
+
+        await updateUserApi(_id, updatedUserData);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+    
+    
+
     const deleteUser = async (id) => {
         try {
             const res = await deleteUserApi(id);
@@ -86,6 +110,7 @@ export const UserProvider = ({ children }) => {
                 activateAccount,
                 getUserById,
                 updateUser,
+                updateUserPartial, 
                 deleteUser,
                 deleteUserConfirmation,
             }}
@@ -94,3 +119,5 @@ export const UserProvider = ({ children }) => {
         </UserContext.Provider>
     );
 };
+
+export default UserProvider;

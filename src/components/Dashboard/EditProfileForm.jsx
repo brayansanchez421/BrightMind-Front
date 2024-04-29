@@ -1,18 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../../context/user/user.context';
-import userModel from '../../../../plataform-edu-back/src/models/user/user.model';
+import { useAuth } from '../../context/auth.context'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const ProfileForm = ({ name, email }) => {
-    
-      const handleSubmit async () => {
-        
-      }
+const ProfileForm = ({ name: initialName, email: initialEmail }) => {
+    const { updateUserPartial, getUserById } = useUserContext();
+    const { user } = useAuth();
+
+    const [name, setName] = useState(initialName);
+    const [email, setEmail] = useState(initialEmail);
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            if (user && user.data && user.data.id) {
+                const userData = await getUserById(user.data.id);
+                setUserId(userData._id);
+                setName(userData.username);
+                setEmail(userData.email);
+            }
+        };
+
+        fetchUserId();
+    }, [getUserById, user]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (userId) {
+            try {
+                await updateUserPartial(userId, { username: name, email });
+                toast.success('Changes saved successfully!', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } catch (error) {
+                toast.error('Failed to save changes. Please try again.', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        } else {
+            console.error("Couldn't get user ID");
+        }
+    };
 
     return (
         <div className="container mx-auto mt-10 md:mt-20 px-4 overflow-y-auto">
-            <div className="max-w-lg mx-auto  bg-gradient-to-r from-violet-500 to-fuchsia-400 rounded-lg shadow-lg py-10 px-6 md:px-10">
+            <ToastContainer />
+            <div className="max-w-lg mx-auto bg-gradient-to-r from-violet-500 to-fuchsia-400 rounded-lg shadow-lg py-10 px-6 md:px-10">
                 <h1 className="text-center font-black text-white text-4xl md:text-5xl mb-6">Edit Profile</h1>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label htmlFor="name" className="block text-lg font-semibold text-black">
                             Name
@@ -21,8 +72,8 @@ const ProfileForm = ({ name, email }) => {
                             type="text"
                             id="name"
                             className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
-                            value={name.userData}
-                            
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
@@ -33,15 +84,15 @@ const ProfileForm = ({ name, email }) => {
                             type="email"
                             id="email"
                             className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
-                            value={email. userData}
-                            
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="flex items-center justify-between">
                         <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             type="submit"
-                            
                         >
                             Save
                         </button>
