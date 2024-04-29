@@ -10,6 +10,7 @@ import {
 } from "@ant-design/icons"; // Import Ant Design icons
 import { useUserContext } from "../../context/user/user.context";
 import logo from "../../assets/img/hola.png";
+import { getUser } from "../../api/user/user.request";
 
 const { Option } = Select;
 
@@ -25,6 +26,7 @@ const DataTable = () => {
 
 
   const [selectedUser, setSelectedUser] = useState(null);
+  console.log("eyyy", getUser)
 
   
   useEffect(() => {
