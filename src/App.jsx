@@ -32,7 +32,7 @@ import Roles from "./components/Dashboard/Roltable";
 //Vista usuarios                
 import HomePage from "./views/HomePage";
 import ProfileUser from "./components/Home/ProfileUser"; 
-import AboutUs from "./components/Home/AboutUs";
+
 //Vista error
 import NotFoundPage from './views/Error/404Page'
 
@@ -70,7 +70,7 @@ function App() {
         
         <Routes>
 
-          <Route path="/Account" element={<ProfileUser/>} /> 
+         
           <Route path="/" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/reset" element={<ResetPasswordForm />} />
@@ -81,7 +81,7 @@ function App() {
           <Route path="/activate" element={<ActivationComponent />} />
           <Route path="/ChangePassword" element={<ChangePassword />} />
           <Route path="/roles" element={<Roles/>} />
-          <Route path="/AboutUs" element={<AboutUs/>}/>
+          
 
           
           
@@ -91,6 +91,7 @@ function App() {
           <Route path="/Usuarios" element={<Usuarios />} />
           <Route path="/Home" element={<HomePage />} />
           <Route path="/ProfileEditor" element={<ProfileEditor />} />
+          <Route path="/Account" element={<ProfileUser/>} /> 
           
           </Route>
           </Routes>
