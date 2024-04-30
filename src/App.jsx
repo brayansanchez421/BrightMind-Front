@@ -18,6 +18,7 @@ import RegisterForm from "./views/RegisterForm";
 import ResetPasswordForm from "./views/Password_change/ResetPassword";
 import ResetPasswordVerifyForm from './views/Password_change/codePassword'
 import NewPassword from "./views/Password_change/newPassword";
+import ChangePasswordUser from './components/Home/ChangePasswordUser';
 
 
 //Vista admin
@@ -81,7 +82,7 @@ function App() {
           <Route path="/activate" element={<ActivationComponent />} />
           <Route path="/ChangePassword" element={<ChangePassword />} />
           <Route path="/roles" element={<Roles/>} />
-          
+          <Route path="ChangePasswordUser" element={<ChangePasswordUser/>} />
 
           
           
@@ -92,7 +93,7 @@ function App() {
           <Route path="/Home" element={<HomePage />} />
           <Route path="/ProfileEditor" element={<ProfileEditor />} />
           <Route path="/Account" element={<ProfileUser/>} /> 
-          
+
           </Route>
           </Routes>
 </PermissionProvider>

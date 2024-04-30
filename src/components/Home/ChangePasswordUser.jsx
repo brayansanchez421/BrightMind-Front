@@ -50,7 +50,7 @@ function NewPassword() {
             <div className="flex w-1/2 mx-auto justify-center items-center ">
                 <div className="p-16 bg-white rounded-3xl shadow-2xl w-4/5 bg-gradient-to-r from-violet-600  to-rose-500  ">
                     <h2 className="text-5xl font-black text-center mb-10 text-white ">Change Password</h2>
-                    <form onSubmit={formik.handleSubmit} className="py-10 flex flex-col space-y-6">
+                    <form onSubmit={formik.handleSubmit} className=" flex flex-col space-y-6">
                         <div>
                             <label className="text-lg font-bold text-white block mb-4 mx-4">Email</label>
                             <input
@@ -101,11 +101,11 @@ function NewPassword() {
                     </form>
                     <div className="mt-4 text-center">
                         <Link
-                            to="/"
+                            to="/Account"
                             className="text-white hover:bg-gradient-to-r from-green-600 to-green-500 shadow-lg shadow-red-300 font-semibold inline-flex space-x-1 items-center"
                             style={{ textDecoration: 'none' }}
                         >
-                            Return to the login screen
+                            Return to Settings
                         </Link>
                     </div>
                 </div>

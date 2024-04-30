@@ -75,12 +75,12 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                     <SettingsBar />
                 </div>
 
-                <div className="max-w-96 mx-56 p-6 md:mt-36">
-                    <ToastContainer />
-                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-violet-500 to-fuchsia-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-violet-500 to-fuchsia-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div className="mx-36 p-6 md:mt-36 w-5/12">
+                    <ToastContainer />  
+                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-violet-500 to-fuchsia-400 shadow-lg shadow-pink-400 rounded px-10 pt-6 pb-8 mb-4 md:w-full ">
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                        <h1 className="text-center font-black text-white md:text-4xl mb-6">Edit Profile</h1>
+                            <label className="block text-black text-base font-bold mb-2" htmlFor="name">
                                 Name
                             </label>
                             <input
@@ -94,7 +94,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                            <label className="block text-black text-base font-bold mb-2" htmlFor="email">
                                 Email
                             </label>
                             <input
@@ -119,7 +119,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                             </button>
                         </div>
                     </form>
-                    </form>
+                    
                 </div>
             </div>
         </div>
