@@ -71,7 +71,9 @@ function HomePage() {
 
   return (
     <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen">
-      <NavigationBar />
+      <div>
+        <NavigationBar/>
+      </div>
       <QuoteCarousel phrases={phrases} />
       <CategorySection categories={categories} />
       <CourseSection courseItems={courseItems} />

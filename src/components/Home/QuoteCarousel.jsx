@@ -16,7 +16,7 @@ function QuoteCarousel({ phrases }) {
     };
 
     return (
-        <div className="mt-16 sm:mt-20 lg:mt-24"> {/* Ajuste del margen superior para dispositivos de diferentes tamaños */}
+        <div className=" lg:mt-10"> {/* Ajuste del margen superior para dispositivos de diferentes tamaños */}
             <Slider {...settings} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
                 {phrases.map((phrase, index) => (
                     <div key={index} className="flex items-center justify-center h-full">

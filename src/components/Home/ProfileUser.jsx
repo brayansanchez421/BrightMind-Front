@@ -1,43 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import NavigationBar from './NavigationBar';
+import { toast } from 'react-toastify';
+import NavigationBar from '../Home/NavigationBar';
 import SettingsBar from '../Home/SettingsUser';
 import { useUserContext } from '../../context/user/user.context';
+import { useAuth } from '../../context/auth.context';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const UserProfileSettings = () => {
-    const { getUserById, updateUser } = useUserContext();
-    const [userData, setUserData] = useState({
-        name: '',
-        email: ''
-    });
+const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
+    const { updateUserPartial, getUserById } = useUserContext();
+    const { user, logout } = useAuth();
+
+    const [name, setName] = useState(initialName);
+    const [email, setEmail] = useState(initialEmail);
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                // Reemplaza '_Id' con el ID real del usuario
-                const user = await getUserById('_id');
-                setUserData(user);
-            } catch (error) {
-                console.error(error);
+        const fetchUserId = async () => {
+            if (user && user.data && user.data.id) {
+                try {
+                    const userData = await getUserById(user.data.id);
+                    setUserId(userData._id);
+                    setName(userData.username);
+                    setEmail(userData.email);
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
             }
         };
 
-        fetchUserData();
-    }, [getUserById]);
+        fetchUserId();
+    }, [getUserById, user]);
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setUserData({ ...userData, [name]: value });
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            await updateUser('_id', userData);
-            console.log('Datos de usuario actualizados con éxito');
-        } catch (error) {
-            console.error('Error al actualizar los datos del usuario:', error);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (userId) {
+            try {
+                await updateUserPartial(userId, { username: name, email });
+                toast.success('Changes saved successfully!', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                // Cerrar sesión después de actualizar exitosamente
+                await logout(); // Esperar a que la sesión se cierre antes de recargar la página
+                localStorage.removeItem('token');
+                window.location.reload();
+            } catch (error) {
+                toast.error('Failed to save changes. Please try again.', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        } else {
+            console.error("Couldn't get user ID");
         }
     };
+    
 
     return (
         <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen">
@@ -46,7 +74,10 @@ const UserProfileSettings = () => {
                 <div>
                     <SettingsBar />
                 </div>
-                <div className="md:w-3/12 mx-56 p-6 md:mt-36">
+
+                <div className="max-w-96 mx-56 p-6 md:mt-36">
+                    <ToastContainer />
+                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-violet-500 to-fuchsia-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <form onSubmit={handleSubmit} className="bg-gradient-to-r from-violet-500 to-fuchsia-400 shadow-md rounded px-8 pt-6 pb-8 mb-4">
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
@@ -58,8 +89,8 @@ const UserProfileSettings = () => {
                                 type="text"
                                 name="name"
                                 placeholder="Name"
-                                defaultValue={userData.name}
-                                onChange={handleInputChange}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                             />
                         </div>
                         <div className="mb-4">
@@ -72,18 +103,22 @@ const UserProfileSettings = () => {
                                 type="email"
                                 name="email"
                                 placeholder="Email"
-                                defaultValue={userData.email}
-                                onChange={handleInputChange}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
                             />
                         </div>
+                        
                         <div className="flex items-center justify-between">
                             <button
+                                
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 type="submit"
                             >
                                 Save
                             </button>
                         </div>
+                    </form>
                     </form>
                 </div>
             </div>
