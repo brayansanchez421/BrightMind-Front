@@ -204,7 +204,7 @@ console.log("usuarios: ", filteredUsers)
             />
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto w-full">
             <table className="w-full">
               <thead>
                 <tr>

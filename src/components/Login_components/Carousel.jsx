@@ -34,13 +34,11 @@ function Carousel() {
         >
             <div className="text-center p-12">
                 {/* Imagen en la parte izquierda superior */}
-                <div className="absolute top-0 left-0 p-4">
-                    <img className="h-40" src={imagen} alt="Logo" />
+                <div className="absolute top-0 left-1/3 p-4 ">
+                    <img className="h-80" src={imagen} alt="Logo" />
                 </div>
                 {/* Imagen sobre las frases */}
-                <div className="absolute top-0 left-0 p-4">
-                    <img className="h-40" src={phrases[currentPhraseIndex].image} alt="" />
-                </div>
+               
                 <p className="font-bold text-white text-2xl">
                     "{phrases[currentPhraseIndex].text}" - {phrases[currentPhraseIndex].author}
                 </p>

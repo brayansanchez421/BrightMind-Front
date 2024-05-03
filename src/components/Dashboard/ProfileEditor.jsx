@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import LeftBar from './LeftBar';
 import SettingsBar from './SettingsBar';
-import ProfileForm from '../Dashboard/EditProfileForm';
+import ProfileForm from './EditProfileForm';
 
 const ProfileEditor = () => {
   const [name, setName] = useState('');

@@ -51,8 +51,8 @@ const LeftBar = () => {
 
   return (
     <div className=" bg-gradient-to-b from-purple-600 to-blue-600 text-white w- flex flex-col items-center justify-between w-2/12">
-      <div className="mt-10 mb-10 flex flex-col items-center">
-        <img src={logo} alt="Logo" className="h-32" />
+      <div className="-mt-10 mb-10 flex flex-col items-center">
+        <img src={logo} alt="Logo" className="h-80 " />
       </div>
       <div className="flex flex-col items-center w-full">
       

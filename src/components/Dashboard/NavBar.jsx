@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaBell } from 'react-icons/fa'; // Importa el ícono de campana de react-icons
-import SearchBar from './SearchBar';
+import SearchBar from './SearchBar.jsx';
 import { useUserContext } from '../../context/user/user.context.jsx';
 import { useAuth } from '../../context/auth.context.jsx'; 
 
