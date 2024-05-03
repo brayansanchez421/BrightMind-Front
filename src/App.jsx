@@ -84,13 +84,13 @@ function App() {
           <Route path="/roles" element={<Roles/>} />
           <Route path="ChangePasswordUser" element={<ChangePasswordUser/>} />
 
-          <Route path="/Home" element={<HomePage />} />
+          
           
           
           <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<Dashboard />} />
           <Route path="/Usuarios" element={<Usuarios />} />
-          
+          <Route path="/Home" element={<HomePage />} />
           <Route path="/ProfileEditor" element={<ProfileEditor />} />
           <Route path="/Account" element={<ProfileUser/>} /> 
 
