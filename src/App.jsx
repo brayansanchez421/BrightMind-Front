@@ -27,7 +27,7 @@ import Usuarios from "./components/Dashboard/Usuarios";
 import ChangePassword from "./components/Dashboard/Changepassword";
 import ProfileEditor from "./components/Dashboard/ProfileEditor";
 import Roles from "./components/Dashboard/Roltable";
-
+import CreateCourseForm from './components/Dashboard/CreateCourseForm';
 
 //Vista usuarios                
 import HomePage from "./views/HomePage";
@@ -54,8 +54,7 @@ import DeleteAccountConfirmation from "./components/Dashboard/eliminatedCode";
 // import ProfileUser from "./components/Dashboard/Profile-User";
 
 
-//teachers
-import TeachesHome from './components/tachers/TeacherHome';
+
 
 
 
@@ -80,8 +79,8 @@ function App() {
           <Route path="/ChangePassword" element={<ChangePassword />} />
           <Route path="/roles" element={<Roles/>} />
           <Route path="ChangePasswordUser" element={<ChangePasswordUser/>} />
-          <Route path="Teacher" element={<TeachesHome/>}/>
           <Route path="/MyCourses" element={<MyCourses/>} />
+          <Route path="/CreateCourse" element={<CreateCourseForm/>} />
           
           
           <Route element={<ProtectedRoute />}>

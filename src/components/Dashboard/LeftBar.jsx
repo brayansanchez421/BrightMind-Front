@@ -51,23 +51,23 @@ const LeftBar = () => {
 
   return (
     <div className=" bg-gradient-to-b from-purple-600 to-blue-600 text-white w- flex flex-col items-center justify-between w-2/12">
-      <div className="mt-10 mb-10 flex flex-col items-center">
-        <img src={logo} alt="Logo" className="h-32" />
+      <div className="-mt-10 mb-10 flex flex-col items-center">
+        <img src={logo} alt="Logo" className="h-80 " />
       </div>
       <div className="flex flex-col items-center w-full">
       
-          <button className="py-4 px-6 text-left text-lg font-semibold hover:bg-purple-500 w-full transition duration-300">  <Link to="/admin">Start </Link></button>
+      <Link to="/admin" className="py-4 px-6 text-left text-lg font-semibold hover:bg-purple-500 w-full transition duration-300" >  Start </Link>
         
         
-          <button className="py-4 px-6 text-left text-lg font-semibold hover:bg-purple-600 w-full transition duration-300"><Link to="/usuarios">Users </Link></button>
+      <Link to="/usuarios" className="py-4 px-6 text-left text-lg font-semibold hover:bg-purple-600 w-full transition duration-300">Users </Link>
         
         
-          <button className="py-4 px-6 text-left text-lg font-semibold hover:bg-blue-700 w-full transition duration-300"><Link to="/cursos">Courses </Link></button>
+      <Link to="/cursos" className="py-4 px-6 text-left text-lg font-semibold hover:bg-blue-700 w-full transition duration-300">Courses </Link>
         
         
-        <button className='py-4 px-6 text-left text-lg font-semibold hover:bg-blue-800 w-full transition duration-300'><Link to="/Roles">Roles</Link></button>
+      <Link to="/Roles" className='py-4 px-6 text-left text-lg font-semibold hover:bg-blue-800 w-full transition duration-300'>Roles</Link>
         
-        <button className="py-4 px-6 text-left text-lg font-semibold hover:bg-blue-900 w-full transition duration-300"> <Link to="/ProfileEditor">ProfileEditor</Link></button>
+      <Link to="/ProfileEditor" className="py-4 px-6 text-left text-lg font-semibold hover:bg-blue-900 w-full transition duration-300">ProfileEditor</Link>
         
       </div>
       <div className="mt-auto w-full ">
