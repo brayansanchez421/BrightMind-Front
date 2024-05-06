@@ -43,7 +43,7 @@ const DataTable = () => {
       username: selectedUser?.username,
       email: selectedUser?.email,
       role: selectedUser?.role,
-      state: selectedUser?.state ? "active" : "inactive",
+      state: selectedUser?.state ? true : false,
     });
   }, [selectedUser, form]);
   const [showForm, setShowForm] = useState(false);
