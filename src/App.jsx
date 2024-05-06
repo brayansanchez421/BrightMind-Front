@@ -26,13 +26,14 @@ import Dashboard from "./views/Dashboard";
 import Usuarios from "./components/Dashboard/Usuarios";
 import ChangePassword from "./components/Dashboard/Changepassword";
 import ProfileEditor from "./components/Dashboard/ProfileEditor";
-
 import Roles from "./components/Dashboard/Roltable";
 
 
 //Vista usuarios                
 import HomePage from "./views/HomePage";
 import ProfileUser from "./components/Home/ProfileUser"; 
+import MyCourses from './components/Home/MyCourses';
+
 
 //Vista error
 import NotFoundPage from './views/Error/404Page'
@@ -41,10 +42,7 @@ import NotFoundPage from './views/Error/404Page'
 import ProtectedRoute from './protectedRoute'
 
 
-
 import ActivationComponent from './components/Activate'
-
-
 
 //pages
 
@@ -56,9 +54,8 @@ import DeleteAccountConfirmation from "./components/Dashboard/eliminatedCode";
 // import ProfileUser from "./components/Dashboard/Profile-User";
 
 
-
-
-
+//teachers
+import TeachesHome from './components/tachers/TeacherHome';
 
 
 
@@ -83,8 +80,8 @@ function App() {
           <Route path="/ChangePassword" element={<ChangePassword />} />
           <Route path="/roles" element={<Roles/>} />
           <Route path="ChangePasswordUser" element={<ChangePasswordUser/>} />
-
-          
+          <Route path="Teacher" element={<TeachesHome/>}/>
+          <Route path="/MyCourses" element={<MyCourses/>} />
           
           
           <Route element={<ProtectedRoute />}>
