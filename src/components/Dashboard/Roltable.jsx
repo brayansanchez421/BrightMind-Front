@@ -329,7 +329,7 @@ const DataTable = () => {
     (selectedRole && selectedRole.permisos.includes(permission.nombre))
   }
   onChange={() => handleCheckboxChange(permission._id)}
-  disabled={selectedRole && selectedRole.permisos.includes(permission.nombre)}
+  
 >
   {permission.nombre}
 </Checkbox>
