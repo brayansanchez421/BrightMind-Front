@@ -31,8 +31,7 @@ const DataTable = () => {
 
 
   const [selectedUser, setSelectedUser] = useState(null);
-  console.log("eyyy", getUser)
-
+123
   
   useEffect(() => {
     if (selectedUserId) {
@@ -44,7 +43,7 @@ const DataTable = () => {
       username: selectedUser?.username,
       email: selectedUser?.email,
       role: selectedUser?.role,
-      state: selectedUser?.state ? "active" : "inactive",
+      state: selectedUser?.state ? true : false,
     });
   }, [selectedUser, form]);
   const [showForm, setShowForm] = useState(false);
@@ -165,6 +164,7 @@ console.log("usuarios: ", filteredUsers)
     setUpdatedDataFlag(true);
     setSelectedUser(null);
   };
+  
   
   const handleCloseUpdateModal = () => {
     console.log(

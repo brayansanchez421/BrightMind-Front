@@ -1,10 +1,12 @@
 import  { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/hola.png';
 import { useAuth } from '../../context/auth.context.jsx'; // Importa el contexto de autenticación
 
 const LeftBar = () => {
   const { logout } = useAuth(); 
+  const navigate = useNavigate();
+
   const [logoutTimer, setLogoutTimer] = useState(null);
   const logoutTimerRef = useRef(logoutTimer);
 
@@ -43,12 +45,14 @@ const LeftBar = () => {
     try {
       await logout(); 
       localStorage.removeItem('token');
-      window.location.href = '/'; 
+      setTimeout(() => {
+        navigate('/');
+      }, 5000); // Espera 5 segundos antes de redirigir al usuario al login
     } catch (error) {
       console.error('Error al hacer logout:', error);
     }
   };
-
+  
   return (
     <div className=" bg-gradient-to-b from-purple-600 to-blue-600 text-white w- flex flex-col items-center justify-between w-2/12">
       <div className="-mt-10 mb-10 flex flex-col items-center">

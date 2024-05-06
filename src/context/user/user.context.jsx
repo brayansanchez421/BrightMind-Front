@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { getAllUsers, ActivateAcc, getUser, updateUser as updateUserApi, deleteUser as deleteUserApi, deleteUserConfirmation as deleteUserConfirmationApi } from '../../api/user/user.request';
+import { getAllUsers, ActivateAcc, getUser, updateUser as updateUserApi, deleteUser as deleteUserApi, deleteUserConfirmation as deleteUserConfirmationApi, createUser as createUserApi } from '../../api/user/user.request';
 import { useAuth } from '../auth.context'; // Importa el contexto de autenticación
 
 export const UserContext = createContext();
@@ -54,29 +54,34 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-const updateUserPartial = async (_id, { username, email }) => {
-    try {
-        const currentUserData = await getUserById(_id);
-        console.log("pruebassss:",currentUserData )
+    const createUser = async (userData) => {
+        try {
+            const res = await createUserApi(userData);
+            console.log("Usuario creado:", res.data);
+            getUsers(); // Actualiza la lista de usuarios después de crear uno nuevo
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-        const updatedUserData = {
-            username: username || currentUserData.username,
-            email: email || currentUserData.email,
-            state: currentUserData.state,
-            role: currentUserData.role,
-        };
-        console.log("pruebas 2: ", updatedUserData)
+    const updateUserPartial = async (_id, { username, email }) => {
+        try {
+            const currentUserData = await getUserById(_id);
+            console.log("pruebassss:",currentUserData )
 
-       
+            const updatedUserData = {
+                username: username || currentUserData.username,
+                email: email || currentUserData.email,
+                state: currentUserData.state,
+                role: currentUserData.role,
+            };
+            console.log("pruebas 2: ", updatedUserData)
 
-        await updateUserApi(_id, updatedUserData);
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-    
-    
+            await updateUserApi(_id, updatedUserData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const deleteUser = async (id) => {
         try {
@@ -110,6 +115,7 @@ const updateUserPartial = async (_id, { username, email }) => {
                 activateAccount,
                 getUserById,
                 updateUser,
+                createUser,
                 updateUserPartial, 
                 deleteUser,
                 deleteUserConfirmation,
