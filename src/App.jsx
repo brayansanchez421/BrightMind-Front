@@ -26,8 +26,9 @@ import Dashboard from "./views/Dashboard";
 import Usuarios from "./components/Dashboard/Usuarios";
 import ChangePassword from "./components/Dashboard/Changepassword";
 import ProfileEditor from "./components/Dashboard/ProfileEditor";
+import Courses from "./components/Dashboard/Courses";
 import Roles from "./components/Dashboard/Roltable";
-import CreateCourseForm from './components/Dashboard/CreateCourseForm';
+
 
 //Vista usuarios                
 import HomePage from "./views/HomePage";
@@ -67,7 +68,7 @@ function App() {
         
         <Routes>
 
-         
+        
           <Route path="/" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/reset" element={<ResetPasswordForm />} />
@@ -80,7 +81,6 @@ function App() {
           <Route path="/roles" element={<Roles/>} />
           <Route path="ChangePasswordUser" element={<ChangePasswordUser/>} />
           <Route path="/MyCourses" element={<MyCourses/>} />
-          <Route path="/CreateCourse" element={<CreateCourseForm/>} />
           
           
           <Route element={<ProtectedRoute />}>
@@ -88,7 +88,8 @@ function App() {
           <Route path="/Usuarios" element={<Usuarios />} />
           <Route path="/Home" element={<HomePage />} />
           <Route path="/ProfileEditor" element={<ProfileEditor />} />
-          <Route path="/Account" element={<ProfileUser/>} /> 
+          <Route path="/Account" element={<ProfileUser/>} />
+          <Route path="/Courses" element={<Courses />} />
 
           </Route>
           </Routes>
