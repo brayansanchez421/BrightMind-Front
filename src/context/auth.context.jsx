@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
         setRole(null);
       
         // Redireccionar a la página de login
-        window.location.replace("/login");
+        window.location.replace("/");
       };
       
 
