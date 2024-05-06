@@ -22,6 +22,10 @@ export const AuthProvider = ({ children }) => {
         try {
           const user = await loginRequest(credentials);
           console.log("Respuesta de loginRequest:", user);
+        console.log(user.data.token)
+          // Guardar la cookie de autenticación en el localStorage
+          localStorage.setItem("authToken", user.data.token);
+      
           setUser(user);
           setLoading(false);
       
@@ -36,13 +40,17 @@ export const AuthProvider = ({ children }) => {
         }
       };
       
-    
-    const logout = () => {
+      
+      const logout = () => {
+        localStorage.removeItem("authToken");
+      
         setUser(null);
-        window.location.reload(); // Recargar la página al hacer logout
-
-
-    };
+        setRole(null);
+      
+        // Redireccionar a la página de login
+        window.location.replace("/login");
+      };
+      
 
     const isAuthenticated = () => {
         return !!user;

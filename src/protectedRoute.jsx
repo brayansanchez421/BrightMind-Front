@@ -14,7 +14,9 @@ function ProtectedRoute() {
     }, [isAuthenticated, navigate]);
 
     if (!isAuthenticated()) {
-        return null; // No renderizar nada si no está autenticado
+        // Redireccionar a la página de login si no está autenticado
+        navigate('/');
+        return null; // No renderizar nada
     }
 
     return <Outlet />;

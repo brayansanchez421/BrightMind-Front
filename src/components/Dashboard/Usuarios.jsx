@@ -26,8 +26,7 @@ const DataTable = () => {
 
 
   const [selectedUser, setSelectedUser] = useState(null);
-  console.log("eyyy", getUser)
-
+123
   
   useEffect(() => {
     if (selectedUserId) {
@@ -155,11 +154,14 @@ console.log("usuarios: ", filteredUsers)
 
   const handleUpdateUser = (values) => {
     const { username, email, role, state } = values;
-    updateUser(selectedUser._id, { username, email, role, state: state === 'true' });
+    console.log("Updating user with ID:", selectedUser._id);
+    console.log("New user data:", { username, email, role, state });
+    updateUser(selectedUser._id, { username, email, role, state });
     setShowUpdateModal(false);
     setUpdatedDataFlag(true);
     setSelectedUser(null);
   };
+  
   
   const handleCloseUpdateModal = () => {
     console.log(

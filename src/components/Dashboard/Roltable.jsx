@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import LeftBar from "./LeftBar"; // Import Sidebar component
-import { Button, Modal, Form, Input, Select, Checkbox } from "antd"; // Import Ant Design components
+import { Button, Modal, Form, Input, Select, Checkbox, Pagination  } from "antd"; // Import Ant Design components
 import {
   ReloadOutlined,
   CheckOutlined,
@@ -17,8 +17,6 @@ const { Option } = Select;
 const DataTable = () => {
   const { rolesData, updateRole } = useRoleContext();
   const { permissionsData } = usePermissionContext();
-  console.log("rolesData", rolesData);
-  console.log("permissionData", permissionsData);
 
   const [updatedDataFlag, setUpdatedDataFlag] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -116,6 +114,10 @@ const DataTable = () => {
     return sortableData;
   };
 
+  const generateIds = () => {
+    return rolesData.map((_, index) => index + 1);
+  };
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = sortedData()
@@ -124,10 +126,6 @@ const DataTable = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const generateIds = () => {
-    return currentItems.map((_, index) => index + 1 + (currentPage - 1) * itemsPerPage);
-  };
-
   const handleViewPermissions = (role) => {
     setShowDetailsModal(true);
     setSelectedRoleId(role._id);
@@ -135,14 +133,11 @@ const DataTable = () => {
 
   const [selectedPermissions, setSelectedPermissions] = useState([]);
 
-  // Función para manejar el cambio en el checkbox
   const handleCheckboxChange = (permissionId) => {
     setSelectedPermissions((prevPermissions) => {
       if (prevPermissions.includes(permissionId)) {
-        // Si el permiso ya está seleccionado, se elimina
         return prevPermissions.filter((id) => id !== permissionId);
       } else {
-        // Si el permiso no está seleccionado, se agrega
         return [...prevPermissions, permissionId];
       }
     });
@@ -150,35 +145,33 @@ const DataTable = () => {
 
   const handleAssignPermissionsSubmit = async () => {
     try {
-      const permissionIdMap = {};
-      permissionsData.info.forEach(permission => {
-        permissionIdMap[permission.nombre] = permission._id;
-      });
-
-      const updatedPermissions = [
-        ...new Set([
-          ...selectedRole.permisos.map(nombre => permissionIdMap[nombre]),
-          ...selectedPermissions
-        ]),
-      ];
-
-      console.log("Datos a enviar:", {
-        nombre: selectedRole?.nombre,
-        permissions: updatedPermissions,
-      });
-
-      const updatedRole = await updateRole(selectedRoleId, {
-        nombre: selectedRole?.nombre,
-        permisos: updatedPermissions,
-      });
-
-      console.log("Role updated:", updatedRole);
-      setSelectedPermissions(updatedPermissions); // Actualizar el estado con todos los permisos
-      setShowAssignModal(false);
+      if (selectedRole) {
+        const permissionIdMap = {};
+        permissionsData.info.forEach(permission => {
+          permissionIdMap[permission.nombre] = permission._id;
+        });
+  
+        const updatedPermissions = [
+          ...new Set([
+            ...(selectedRole.permissions || []).map(nombre => permissionIdMap[nombre]),
+            ...selectedPermissions
+          ]),
+        ];
+        
+  
+        const updatedRole = await updateRole(selectedRoleId, {
+          nombre: selectedRole?.nombre,
+          permisos: updatedPermissions,
+        });
+  
+        setSelectedPermissions(updatedPermissions);
+        setShowAssignModal(false);
+      }
     } catch (error) {
       console.error("Error updating role:", error);
     }
   };
+  
 
   const handleAssignPermissions = (role) => {
     setShowAssignModal(true);
@@ -189,6 +182,7 @@ const DataTable = () => {
     setShowDetailsModal(false);
     setShowAssignModal(false);
     setSelectedRoleId(null);
+    setSelectedPermissions([]);
   };
 
   return (
@@ -239,97 +233,108 @@ const DataTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentItems.map((role, index) => (
-                  <tr key={role._id}>
-                    <td className="px-6 py-4 border-b border-gray-300">
-                      {generateIds()[index]}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-300">
-                      {role.nombre}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-300">
-                      <Button
-                        type="success"
-                        onClick={() => handleViewPermissions(role)}
-                        className="mr-2"
-                      >
-                        Ver Permisos
-                      </Button>
-                      <Button
-                        type="success"
-                        onClick={() => handleAssignPermissions(role)}
-                      >
-                        Asignar Permisos
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
+                {rolesData &&
+                  currentItems.map((role, index) => (
+                    <tr key={role._id}>
+                      <td className="border px-6 py-4">{generateIds()[index]}</td>
+                      <td className="border px-6 py-4">{role.nombre}</td>
+                      <td className="border px-6 py-4">
+                        <Button
+                          type="primary"
+                          onClick={() => handleViewPermissions(role)}
+                        >
+                          Ver
+                        </Button>{" "}
+                        <Button
+                          type="primary"
+                          onClick={() => handleAssignPermissions(role)}
+                        >
+                          Asignar
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
-          </div>
-          <div className="flex justify-end mt-4">
-            <Button
-              type="default"
-              icon={<ReloadOutlined />}
-              onClick={() => setUpdatedDataFlag(true)}
-            >
-              Recargar
-            </Button>
+            <div className="flex justify-end mt-4">
+              <Pagination
+                current={currentPage}
+                total={filteredRoles.length}
+                pageSize={itemsPerPage}
+                onChange={paginate}
+                showSizeChanger={false}
+              />
+            </div>
           </div>
         </div>
         <Modal
-          title="Detalles del Rol"
+          title={
+            selectedRole
+              ? `Permisos para ${selectedRole.nombre}`
+              : "Detalles del Rol"
+          }
           visible={showDetailsModal}
           onCancel={handleModalClose}
-          footer={[
-            <Button key="close" onClick={handleModalClose}>
-              Cerrar
-            </Button>,
-          ]}
+          footer={null}
+          centered
+          maskStyle={{ backdropFilter: "blur(10px)" }}
         >
-          <Form
-            form={form}
-            layout="vertical"
-            initialValues={{
-              nombre: selectedRole?.nombre,
-              permisos: selectedRole?.permisos,
-            }}
-          >
-            <Form.Item label="Nombre" name="nombre">
-              <Input disabled />
-            </Form.Item>
-            <Form.Item label="Permisos" name="permisos">
-              <Select mode="multiple" disabled>
-                {permissionsData.info.map((permission) => (
-                  <Option key={permission._id} value={permission._id}>
-                    {permission.nombre}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Form>
+          {selectedRole && (
+            <div className="bg-white p-4 rounded-md shadow-orange">
+              <p>
+                <b>ID del Rol:</b> {selectedRole._id}
+              </p>
+              <p>
+                <b>Nombre:</b> {selectedRole.nombre}
+              </p>
+              <p>
+                <b>Permisos:</b>
+              </p>
+              <ul>
+                {selectedRole &&
+                  selectedRole.permisos &&
+                  selectedRole.permisos.map((permiso) => (
+                    <li key={permiso._id}>{permiso.nombre}</li>
+                  ))}
+              </ul>
+            </div>
+          )}
         </Modal>
         <Modal
           title="Asignar Permisos"
           visible={showAssignModal}
-          onOk={handleAssignPermissionsSubmit}
           onCancel={handleModalClose}
-          okButtonProps={{ type: "success" }} // Cambiar el tipo de botón a success
+          footer={[
+            <Button key="cancel" onClick={handleModalClose}>
+              Cancelar
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              onClick={handleAssignPermissionsSubmit}
+            >
+              Asignar Permisos
+            </Button>,
+          ]}
+          centered
+          maskStyle={{ backdropFilter: "blur(10px)" }}
         >
-          <Form layout="vertical">
-            <Form.Item label="Permisos" name="permisos">
-              {permissionsData.info.map((permission) => (
-                <Checkbox
-                  key={permission._id}
-                  value={permission._id}
-                  onChange={() => handleCheckboxChange(permission._id)}
-                  checked={selectedPermissions.includes(permission._id)}
-                >
-                  {permission.nombre}
-                </Checkbox>
-              ))}
-            </Form.Item>
-          </Form>
+          {permissionsData &&
+            permissionsData.info &&
+            permissionsData.info.map((permission) => (
+              <div key={permission._id}>
+                 <Checkbox
+  checked={
+    selectedPermissions.includes(permission._id) ||
+    (selectedRole && selectedRole.permisos.includes(permission.nombre))
+  }
+  onChange={() => handleCheckboxChange(permission._id)}
+  disabled={selectedRole && selectedRole.permisos.includes(permission.nombre)}
+>
+  {permission.nombre}
+</Checkbox>
+              </div>
+            ))}
         </Modal>
       </div>
     </div>
