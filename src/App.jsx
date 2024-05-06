@@ -33,6 +33,8 @@ import Roles from "./components/Dashboard/Roltable";
 //Vista usuarios                
 import HomePage from "./views/HomePage";
 import ProfileUser from "./components/Home/ProfileUser"; 
+import MyCourses from './components/Home/MyCourses';
+
 
 //Vista error
 import NotFoundPage from './views/Error/404Page'
@@ -41,10 +43,7 @@ import NotFoundPage from './views/Error/404Page'
 import ProtectedRoute from './protectedRoute'
 
 
-
 import ActivationComponent from './components/Activate'
-
-
 
 //pages
 
@@ -60,8 +59,6 @@ import DeleteAccountConfirmation from "./components/Dashboard/eliminatedCode";
 
 
 
-
-
 function App() {
   return (
     <AuthProvider>
@@ -71,7 +68,7 @@ function App() {
         
         <Routes>
 
-         
+        
           <Route path="/" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/reset" element={<ResetPasswordForm />} />
@@ -83,8 +80,7 @@ function App() {
           <Route path="/ChangePassword" element={<ChangePassword />} />
           <Route path="/roles" element={<Roles/>} />
           <Route path="ChangePasswordUser" element={<ChangePasswordUser/>} />
-
-          
+          <Route path="/MyCourses" element={<MyCourses/>} />
           
           
           <Route element={<ProtectedRoute />}>
