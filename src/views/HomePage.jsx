@@ -47,18 +47,9 @@ function HomePage() {
     }
   ];
 
-  // Categorías para la sección de categorías
-  const categories = [
-    { name: 'Next.js', link: '#' },
-    { name: 'Docker', link: '#' },
-    { name: 'Node.Js: From Zero to Expert', link: '#' },
-    { name: 'S.O.L.I.D.', link: '#' },
-    { name: 'Next.js: The React Framework Docker - Practical Usage Guide for Production', link: '#' },
-    { name: 'SOLID Principles and Clean Code', link: '#' },
-    { name: 'Modern JavaScript: Guide to Mastering the Language', link: '#' },
-  ];
+  
 
-  // Elementos de curso para la sección de cursos
+
  
 
 
@@ -70,13 +61,13 @@ function HomePage() {
       <QuoteCarousel phrases={phrases} />
       
      <div className="grid grid-cols-3 ">
-     <HoverCard title="NodeJs" description="Node.js es un entorno de ejecución de JavaScript en el lado del servidor que utiliza un modelo asíncrono y dirigido por eventos. Es ideal para construir aplicaciones escalables en tiempo real." ruta={imgNode} />
-<HoverCard title="JavaScript" description="JavaScript es un lenguaje de programación utilizado principalmente en el desarrollo web. Es conocido por su versatilidad y se utiliza tanto en el lado del cliente como en el servidor."ruta={imgJs} />
-<HoverCard title="GitHub" description="GitHub es una plataforma de desarrollo colaborativo de software que utiliza el sistema de control de versiones Git. Es ampliamente utilizado para alojar proyectos de código abierto y colaborar en código." ruta={imgGit}  />
-<HoverCard title="React" description="React es una biblioteca de JavaScript utilizada para construir interfaces de usuario interactivas y de una sola página. Es mantenido por Facebook y una comunidad de desarrolladores." ruta={imgReact}/>
-<HoverCard title="Python" description="Python es un lenguaje de programación de alto nivel conocido por su sintaxis clara y legible. Es ampliamente utilizado en desarrollo web, análisis de datos, inteligencia artificial y más." ruta={imgPython} />
-<HoverCard title="MongoDB" description="MongoDB es una base de datos NoSQL orientada a documentos que utiliza un modelo de datos flexible y escalable. Es popular en el desarrollo de aplicaciones web modernas." ruta={imgMongo} />
-<HoverCard title="Express" description="Express es un marco de aplicación web de back-end para Node.js, diseñado para crear aplicaciones web y APIs de manera sencilla y rápida. Es minimalista y flexible." ruta={imgExpress} />
+    <HoverCard title="NodeJs" description="Node.js es un entorno de ejecución de JavaScript en el lado del servidor que utiliza un modelo asíncrono y dirigido por eventos. Es ideal para construir aplicaciones escalables en tiempo real." ruta={imgNode} />
+    <HoverCard title="JavaScript" description="JavaScript es un lenguaje de programación utilizado principalmente en el desarrollo web. Es conocido por su versatilidad y se utiliza tanto en el lado del cliente como en el servidor."ruta={imgJs} />
+    <HoverCard title="GitHub" description="GitHub es una plataforma de desarrollo colaborativo de software que utiliza el sistema de control de versiones Git. Es ampliamente utilizado para alojar proyectos de código abierto y colaborar en código." ruta={imgGit}  />
+    <HoverCard title="React" description="React es una biblioteca de JavaScript utilizada para construir interfaces de usuario interactivas y de una sola página. Es mantenido por Facebook y una comunidad de desarrolladores." ruta={imgReact}/>
+    <HoverCard title="Python" description="Python es un lenguaje de programación de alto nivel conocido por su sintaxis clara y legible. Es ampliamente utilizado en desarrollo web, análisis de datos, inteligencia artificial y más." ruta={imgPython} />
+    <HoverCard title="MongoDB" description="MongoDB es una base de datos NoSQL orientada a documentos que utiliza un modelo de datos flexible y escalable. Es popular en el desarrollo de aplicaciones web modernas." ruta={imgMongo} />
+    <HoverCard title="Express" description="Express es un marco de aplicación web de back-end para Node.js, diseñado para crear aplicaciones web y APIs de manera sencilla y rápida. Es minimalista y flexible." ruta={imgExpress} />
 
 </div>
 
