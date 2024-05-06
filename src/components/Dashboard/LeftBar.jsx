@@ -66,7 +66,7 @@ const LeftBar = () => {
       <Link to="/usuarios" className="py-4 px-6 text-left text-lg font-semibold hover:bg-purple-600 w-full transition duration-300">Users </Link>
         
         
-      <Link to="/cursos" className="py-4 px-6 text-left text-lg font-semibold hover:bg-blue-700 w-full transition duration-300">Courses </Link>
+      <Link to="/Courses" className="py-4 px-6 text-left text-lg font-semibold hover:bg-blue-700 w-full transition duration-300">Courses </Link>
         
         
       <Link to="/Roles" className='py-4 px-6 text-left text-lg font-semibold hover:bg-blue-800 w-full transition duration-300'>Roles</Link>

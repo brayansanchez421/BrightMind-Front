@@ -26,7 +26,7 @@ import Dashboard from "./views/Dashboard";
 import Usuarios from "./components/Dashboard/Usuarios";
 import ChangePassword from "./components/Dashboard/Changepassword";
 import ProfileEditor from "./components/Dashboard/ProfileEditor";
-
+import Courses from "./components/Dashboard/Courses";
 import Roles from "./components/Dashboard/Roltable";
 
 
@@ -92,7 +92,8 @@ function App() {
           <Route path="/Usuarios" element={<Usuarios />} />
           <Route path="/Home" element={<HomePage />} />
           <Route path="/ProfileEditor" element={<ProfileEditor />} />
-          <Route path="/Account" element={<ProfileUser/>} /> 
+          <Route path="/Account" element={<ProfileUser/>} />
+          <Route path="/Courses" element={<Courses />} />
 
           </Route>
           </Routes>
