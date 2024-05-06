@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import LeftBar from "./LeftBar"; // Import Sidebar component
 import { Button, Modal, Form, Input, Select } from "antd"; // Import Ant Design components
+
 import {
   ReloadOutlined,
   CheckOutlined,
@@ -11,10 +12,14 @@ import {
 import { useUserContext } from "../../context/user/user.context";
 import logo from "../../assets/img/hola.png";
 import { getUser } from "../../api/user/user.request";
+import { useRoleContext } from '../../context/user/role.context';
+
 
 const { Option } = Select;
 
 const DataTable = () => {
+  const { rolesData } = useRoleContext(); // Obtén los roles del contexto
+
   const { getUsers, usersData, activateAccount, updateUser } = useUserContext();
   const [updatedDataFlag, setUpdatedDataFlag] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -154,8 +159,6 @@ console.log("usuarios: ", filteredUsers)
 
   const handleUpdateUser = (values) => {
     const { username, email, role, state } = values;
-    console.log("Updating user with ID:", selectedUser._id);
-    console.log("New user data:", { username, email, role, state });
     updateUser(selectedUser._id, { username, email, role, state });
     setShowUpdateModal(false);
     setUpdatedDataFlag(true);
@@ -427,13 +430,24 @@ console.log("usuarios: ", filteredUsers)
     >
       <Input style={{ marginLeft: "8px" }} />
     </Form.Item>
+
+
     <Form.Item
       label="Role"
       name="role"
-      rules={[{ required: true, message: "Please enter the role" }]}
+      rules={[{ required: true, message: "Please select the role" }]}
     >
-      <Input style={{ marginLeft: "8px" }} />
+      <Select style={{ width: "100%" }}>
+        {rolesData.map(role => (
+          <Option key={role._id} value={role.nombre}>
+            {role.nombre}
+          </Option>
+        ))}
+      </Select>
     </Form.Item>
+
+
+
     <Form.Item
       label="Status"
       name="state"

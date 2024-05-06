@@ -1,15 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaBell } from 'react-icons/fa'; // Importa el ícono de campana de react-icons
 import SearchBar from './SearchBar.jsx';
 import { useUserContext } from '../../context/user/user.context.jsx';
 import { useAuth } from '../../context/auth.context.jsx'; 
+import { Link } from 'react-router-dom';
 
-const Navbar = ({ userImage, onLogout }) => {
+
+const Navbar = ({ userImage }) => {
+  const { logout } = useAuth(); 
+
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const menuRef = useRef(null);
   const { getUserById } = useUserContext(); 
   const { user } = useAuth(); 
   const [username, setUsername] = useState("Cargando...");
+
+  const handleLogout = async () => {
+    try {
+      await logout(); 
+      localStorage.removeItem('token');
+      window.location.href = '/'; 
+    } catch (error) {
+      console.error('Error al hacer logout:', error);
+    }
+  };
 
   const handleMenuClick = () => {
     // Esto alterna la visibilidad del menú desplegable
@@ -43,6 +57,7 @@ const Navbar = ({ userImage, onLogout }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [getUserById, user]);
+  
 
   return (
     <nav className=" bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-3 flex items-center justify-between"> {/* Ajusta py-3 aquí para aumentar la altura */}
@@ -65,8 +80,9 @@ const Navbar = ({ userImage, onLogout }) => {
       {/* Menú desplegable */}
       <div ref={menuRef} className={`${isMenuVisible ? 'block' : 'hidden'} absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md z-50`}>
         <ul className="py-2">
-          <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={onLogout}>Go out</li>
-          <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">Configure profile</li>
+          <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={handleLogout}>Go out</li>
+          
+          <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer"><Link to="/ProfileEditor">Configure profile</Link></li>
         </ul>
       </div>
     </nav>
