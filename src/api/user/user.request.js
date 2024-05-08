@@ -9,4 +9,4 @@ export const ActivateAcc = (_id) => axios.get(`${api}/activation/${_id}`,{withCr
 export const deleteUser = (id) => axios.delete(`${api}/users/delete/${id}`,{withCredentials: true});
 
 export const deleteUserConfirmation = (id, confirmationCode) => axios.delete(`${api}/users/delete/${id}/confirm`, { data: { confirmationCode } },{withCredentials: true});
-export const createUser = (userData) => axios.post(`${api}/users/create`, userData, { withCredentials: true });
+export const createUser = (userData) => axios.post(`${api}/users/createUser`, userData, { withCredentials: true });

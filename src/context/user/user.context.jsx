@@ -57,6 +57,7 @@ export const UserProvider = ({ children }) => {
     const createUser = async (userData) => {
         try {
             const res = await createUserApi(userData);
+            console.log(userData)
             console.log("Usuario creado:", res.data);
             getUsers(); // Actualiza la lista de usuarios después de crear uno nuevo
         } catch (error) {
