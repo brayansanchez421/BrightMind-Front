@@ -81,7 +81,7 @@ function App() {
           <Route path="/roles" element={<Roles/>} />
           <Route path="ChangePasswordUser" element={<ChangePasswordUser/>} />
           <Route path="/MyCourses" element={<MyCourses/>} />
-          
+          <Route path="/Courses" element={<Courses />} />
           
           <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<Dashboard />} />
@@ -89,7 +89,7 @@ function App() {
           <Route path="/Home" element={<HomePage />} />
           <Route path="/ProfileEditor" element={<ProfileEditor />} />
           <Route path="/Account" element={<ProfileUser/>} />
-          <Route path="/Courses" element={<Courses />} />
+          
 
           </Route>
           </Routes>

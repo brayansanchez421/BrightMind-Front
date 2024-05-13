@@ -4,6 +4,8 @@ import { ReloadOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import LeftBar from "./LeftBar";
 import { useUserContext } from "../../context/user/user.context";
 import CreateCourseForm from './CreateCourseForm';
+import CreateCategoryForm from './CreateCategoryForm';
+
 
 const DataTablete = () => {
   const { getUsers, usersData } = useUserContext();
@@ -12,10 +14,28 @@ const DataTablete = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
 
   useEffect(() => {
     getUsers();
   }, []);
+
+  const handleCreateCategory = (categoryData) => {
+    // Aquí puedes manejar la lógica para crear una nueva categoría
+    console.log("Nueva categoría:", categoryData);
+    // Puedes enviar los datos de la categoría al servidor, etc.
+    // Luego de realizar las acciones necesarias, cierra el formulario
+    setShowCategoryForm(false);
+  };
+  
+
+  const handleCreateCategoryClick = () => {
+    setShowCategoryForm(true);
+  };
+  const handleCategoryFormClose = () => {
+    setShowCategoryForm(false);
+  };
+  
 
   const handleUpdateButtonClick = (item) => {
     setSelectedUser(item);
@@ -60,13 +80,24 @@ const DataTablete = () => {
             >
               <b>Create Course</b>
             </Button>
+            <Button
+            type="primary"
+             style={{ backgroundColor: "green" }}
+              onClick={handleCreateCategoryClick}
+            >
+               <b>Create Category</b>
+              </Button>
+
             <Input
               placeholder="Search by Name"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="w-40"
+              className="w-40 left-2"
             />
+             
           </div>
+          
+          
           <div className="overflow-x-auto w-full">
             <table className="w-full">
               <thead>
@@ -130,11 +161,21 @@ const DataTablete = () => {
             </table>
           </div>
           {/* Paginación */}
+         
+
+
           <CreateCourseForm
             visible={showForm}
             onClose={handleFormClose}
             onCreate={handleCreateCourse}
           />
+
+          <CreateCategoryForm
+            visible={showCategoryForm}
+            onClose={handleCategoryFormClose}
+            onCreate={handleCreateCategory}
+          />
+
           <div className="mt-2 ml-2">
             {Array.from(
               { length: Math.ceil(usersData.length / itemsPerPage) },
