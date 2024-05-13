@@ -38,7 +38,11 @@ export const RoleProvider = ({ children }) => {
     };
     const updateRole = async (id, data) => {
         try {
+            console.log("este es el id: ", id )
+            console.log("este es la data: ", data )
             const res = await updateRoleApi(id, data);
+            
+
             console.log("paso por aqui");
             console.log("Datos obtenidos:", res.data); // Mostrar los datos obtenidos
             return res.data;
