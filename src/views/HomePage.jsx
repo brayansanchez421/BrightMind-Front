@@ -66,6 +66,7 @@ function HomePage() {
     <HoverCard title="Python" description="Python es un lenguaje de programación de alto nivel conocido por su sintaxis clara y legible. Es ampliamente utilizado en desarrollo web, análisis de datos, inteligencia artificial y más." ruta={imgPython} />
     <HoverCard title="MongoDB" description="MongoDB es una base de datos NoSQL orientada a documentos que utiliza un modelo de datos flexible y escalable. Es popular en el desarrollo de aplicaciones web modernas." ruta={imgMongo} />
     <HoverCard title="Express" description="Express es un marco de aplicación web de back-end para Node.js, diseñado para crear aplicaciones web y APIs de manera sencilla y rápida. Es minimalista y flexible." ruta={imgExpress} />
+    
 
 </div>
 
