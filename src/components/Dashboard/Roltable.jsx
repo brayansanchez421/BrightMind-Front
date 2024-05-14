@@ -18,7 +18,7 @@ const DataTable = () => {
   const [updatedDataFlag, setUpdatedDataFlag] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [showAssignModal, setShowAssignModal] = useState(false);
-  const [showForm, setShowForm] = useState(false); // Estado para controlar la visibilidad del formulario de creación de roles
+  const [showForm, setShowForm] = useState(false);
 
   const [form] = useForm();
 
@@ -129,7 +129,6 @@ const DataTable = () => {
     setSelectedRoleId(role._id);
   };
 
-  // Estado para almacenar los permisos seleccionados de cada rol
   const [selectedPermissionsMap, setSelectedPermissionsMap] = useState({});
 
   const handleCheckboxChange = (roleId, permissionId) => {
@@ -139,12 +138,26 @@ const DataTable = () => {
         ? selectedPermissions.filter((id) => id !== permissionId)
         : [...selectedPermissions, permissionId];
 
+      // Guardar los permisos seleccionados en el almacenamiento local
+      localStorage.setItem(roleId, JSON.stringify(updatedPermissions));
+
       return {
         ...prevMap,
         [roleId]: updatedPermissions,
       };
     });
   };
+
+  useEffect(() => {
+    const storedPermissionsMap = {};
+    rolesData.forEach((role) => {
+      const storedPermissions = JSON.parse(localStorage.getItem(role._id));
+      if (storedPermissions) {
+        storedPermissionsMap[role._id] = storedPermissions;
+      }
+    });
+    setSelectedPermissionsMap(storedPermissionsMap);
+  }, [rolesData]);
 
   const handleAssignPermissions = (role) => {
     setSelectedRoleId(role._id);
@@ -155,7 +168,6 @@ const DataTable = () => {
     setShowDetailsModal(false);
     setShowAssignModal(false);
     setSelectedRoleId(null);
-    // No necesitamos restaurar los permisos seleccionados aquí
   };
 
   const handleFormClose = () => {
@@ -181,7 +193,7 @@ const DataTable = () => {
         const updatedPermissions = [
           ...new Set([
             ...(selectedRole.permissions || []).map(nombre => permissionIdMap[nombre]),
-            ...(selectedPermissionsMap[selectedRoleId] || [])
+            ...selectedPermissionsMap[selectedRoleId] || []
           ]),
         ];
         
@@ -191,7 +203,7 @@ const DataTable = () => {
           permisos: updatedPermissions,
         });
   
-        // No necesitamos actualizar los permisos seleccionados aquí
+        // No es necesario actualizar los permisos seleccionados aquí
         setShowAssignModal(false);
       }
     } catch (error) {
@@ -206,7 +218,7 @@ const DataTable = () => {
         <div>
           <h2 className="text-2xl font-bold mb-4">Roles</h2>
           <div className="flex items-center mb-4">
-          <Button
+            <Button
               type="primary"
               style={{ backgroundColor: "green" }}
               onClick={() => setShowForm(true)}
@@ -345,10 +357,7 @@ const DataTable = () => {
                 permissionsData.info.map((permission) => (
                   <div key={permission._id}>
                     <Checkbox
-                      checked={
-                        selectedPermissionsMap[selectedRoleId] &&
-                        selectedPermissionsMap[selectedRoleId].includes(permission._id)
-                      }
+                      checked={selectedPermissionsMap[selectedRoleId]?.includes(permission._id)}
                       onChange={() => handleCheckboxChange(selectedRoleId, permission._id)}
                       style={{ color: selectedPermissionsMap[selectedRoleId]?.includes(permission._id) ? 'green' : 'red' }}
                     >
@@ -357,7 +366,6 @@ const DataTable = () => {
                   </div>
                 ))}
         </Modal>
-          {/* Paginación */}
           <CreateRolForm
             visible={showForm}
             onClose={handleFormClose}
