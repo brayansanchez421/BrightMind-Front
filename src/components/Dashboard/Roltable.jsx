@@ -177,8 +177,6 @@ const DataTable = () => {
   const handleCreateRol = (curso) => {
     // Aquí puedes manejar la lógica para crear un nuevo curso
     console.log("Nuevo curso:", curso);
-    // Aquí podrías enviar los datos del curso al servidor, etc.
-    // Luego de realizar las acciones necesarias, cierra el formulario
     setShowForm(false);
   };
 
@@ -212,11 +210,11 @@ const DataTable = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
       <LeftBar />
-      <div className="ml-10 flex flex-col w-full">
+      <div className="ml-10 flex flex-col w-full mr-10">
         <div>
-          <h2 className="text-2xl font-bold mb-4">Roles</h2>
+          <h2 className="text-3xl font-bold mb-4 text-white">Roles</h2>
           <div className="flex items-center mb-4">
             <Button
               type="primary"
@@ -233,12 +231,12 @@ const DataTable = () => {
               className="w-40"
             />
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="">
+            <table className="w-full bg-gray-400">
               <thead>
                 <tr>
                   <th
-                    className="px-6 py-3 bg-blue-500 text-white border-b border-gray-300 cursor-pointer"
+                    className="px-6 py-3 bg-yellow-400 text-white border border-black cursor-pointer"
                     onClick={() => orderBy("id")}
                   >
                     ID{" "}
@@ -250,10 +248,10 @@ const DataTable = () => {
                       ))}
                   </th>
                   <th
-                    className="px-6 py-3 bg-blue-500 text-white border-b border-gray-300 cursor-pointer"
+                    className="px-6 py-3 bg-fuchsia-600 text-white border border-black cursor-pointer"
                     onClick={() => orderBy("nombre")}
                   >
-                    Nombre{" "}
+                    Name{" "}
                     {sortConfig.key === "nombre" &&
                       (sortConfig.direction === "ascending" ? (
                         <CaretUpOutlined />
@@ -261,8 +259,8 @@ const DataTable = () => {
                         <CaretDownOutlined />
                       ))}
                   </th>
-                  <th className="px-6 py-3 bg-blue-500 text-white border-b border-gray-300">
-                    Acciones
+                  <th className="px-6 py-3 bg-pink-500 text-white border border-black">
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -270,27 +268,27 @@ const DataTable = () => {
                 {rolesData &&
                   currentItems.map((role, index) => (
                     <tr key={role._id}>
-                      <td className="border px-6 py-4">{generateIds()[index]}</td>
-                      <td className="border px-6 py-4">{role.nombre}</td>
-                      <td className="border px-6 py-4">
-                        <Button
+                      <td className="border border-gray-700 px-6 text-white text-center font-bold py-2 ">{generateIds()[index]}</td>
+                      <td className="border border-gray-700 px-6 text-white text-center font-bold py-2 ">{role.nombre}</td>
+                      <td className="border border-gray-700 px-6 text-white text-center py-2 ">
+                        <Button 
                           type="primary"
                           onClick={() => handleViewPermissions(role)}
                         >
-                          Ver
+                          View
                         </Button>{" "}
                         <Button
                           type="primary"
                           onClick={() => handleAssignPermissions(role)}
                         >
-                          Asignar
+                          Assign
                         </Button>
                       </td>
                     </tr>
                   ))}
               </tbody>
             </table>
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end mt-10">
               <Pagination
                 current={currentPage}
                 total={filteredRoles.length}
@@ -301,11 +299,11 @@ const DataTable = () => {
             </div>
           </div>
         </div>
-        <Modal
+        <Modal className="shadow-md shadow-pink-400"
           title={
             selectedRole
-              ? `Permisos para ${selectedRole.nombre}`
-              : "Detalles del Rol"
+              ? `Permissions for ${selectedRole.nombre}`
+              : "Role Details"
           }
           visible={showDetailsModal}
           onCancel={handleModalClose}
@@ -314,15 +312,15 @@ const DataTable = () => {
           maskStyle={{ backdropFilter: "blur(10px)" }}
         >
           {selectedRole && (
-            <div className="bg-white p-4 rounded-md shadow-orange">
+            <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
               <p>
-                <b>ID del Rol:</b> {selectedRole._id}
+                <b>Role ID:</b> {selectedRole._id}
               </p>
               <p>
-                <b>Nombre:</b> {selectedRole.nombre}
+                <b>Name:</b> {selectedRole.nombre}
               </p>
               <p>
-                <b>Permisos:</b>
+                <b>Permisions:</b>
               </p>
               <ul>
                 {selectedRole &&
@@ -334,17 +332,17 @@ const DataTable = () => {
             </div>
           )}
         </Modal>
-        <Modal
-              title="Asignar Permisos"
+        <Modal className="shadow-2xl shadow-pink-400 "
+              title="Assign Permissions"
               visible={showAssignModal}
-              closable={false}
+              onCancel={handleModalClose}
               footer={[
-                <Button
+                <Button className="bg-sky-700 font-medium"
                   key="submit"
                   type="primary"
                   onClick={handleAssignPermissionsSubmit}
                 >
-                  Asignar Permisos
+                  Assign Permissions
                 </Button>,
               ]}
               centered
@@ -371,25 +369,6 @@ const DataTable = () => {
             onClose={handleFormClose}
             onCreate={handleCreateRol}
           />
-          <div className="mt-2 ml-2">
-            {Array.from(
-              { length: Math.ceil(filteredRoles.length / itemsPerPage) },
-              (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => paginate(index + 1)}
-                  className={`px-3 py-1 mx-1 ${
-                    currentPage === index + 1
-                      ? "bg-black border text-white"
-                      : "bg-gray-200 text-gray-800 border"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              )
-            )}
-          </div>
-
       </div>
     </div>
   );

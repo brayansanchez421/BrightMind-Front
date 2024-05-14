@@ -31,7 +31,7 @@ const CreateRolForm = ({ visible, onClose, onCreate }) => {
           <h1 className="text-4xl font-black text-center mb-4 text-white">Create Rol</h1>
           <div className="mb-4">
             <label className="block text-zinc-100 text-lg font-medium mb-4">
-              Nombre: <br />
+              Name: <br />
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline mt-2"
                 type="text"
