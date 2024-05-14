@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import { useRoleContext } from "../../context/user/role.context";
 import { usePermissionContext } from "../../context/user/permissions.context";
+import CreateRolForm from './CreateRolForm';
 
 const { useForm } = Form;
 
@@ -17,6 +18,7 @@ const DataTable = () => {
   const [updatedDataFlag, setUpdatedDataFlag] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showForm, setShowForm] = useState(false); // Estado para controlar la visibilidad del formulario de creación de roles
 
   const [form] = useForm();
 
@@ -152,6 +154,18 @@ const DataTable = () => {
     setSelectedPermissions([...previousSelectedPermissions]); // Restaurar los permisos seleccionados
   };
 
+  const handleFormClose = () => {
+    setShowForm(false);
+  };
+
+  const handleCreateRol = (curso) => {
+    // Aquí puedes manejar la lógica para crear un nuevo curso
+    console.log("Nuevo curso:", curso);
+    // Aquí podrías enviar los datos del curso al servidor, etc.
+    // Luego de realizar las acciones necesarias, cierra el formulario
+    setShowForm(false);
+  };
+
   const handleAssignPermissionsSubmit = async () => {
     try {
       if (selectedRole) {
@@ -188,6 +202,14 @@ const DataTable = () => {
         <div>
           <h2 className="text-2xl font-bold mb-4">Roles</h2>
           <div className="flex items-center mb-4">
+          <Button
+              type="primary"
+              style={{ backgroundColor: "green" }}
+              onClick={() => setShowForm(true)}
+              className="mr-4"
+            >
+              <b>Create Rol</b>
+            </Button>
             <Input
               placeholder="Search by roles"
               value={searchValue}
@@ -297,38 +319,61 @@ const DataTable = () => {
           )}
         </Modal>
         <Modal
-  title="Asignar Permisos"
-  visible={showAssignModal}
-  closable={false}
-  footer={[
-    <Button
-      key="submit"
-      type="primary"
-      onClick={handleAssignPermissionsSubmit}
-    >
-      Asignar Permisos
-    </Button>,
-  ]}
-  centered
-  maskStyle={{ backdropFilter: "blur(10px)" }}
-  maskClosable={false}
-  keyboard={false}
->
-  {permissionsData &&
-    permissionsData.info &&
-    permissionsData.info.map((permission) => (
-      <div key={permission._id}>
-        <Checkbox
-          checked={selectedPermissions.includes(permission._id)}
-          onChange={() => handleCheckboxChange(permission._id)}
-          style={{ color: selectedPermissions.includes(permission._id) ? 'green' : 'red' }}
-        >
-          {permission.nombre}
-        </Checkbox>
-      </div>
-    ))}
-</Modal>
-
+              title="Asignar Permisos"
+              visible={showAssignModal}
+              closable={false}
+              footer={[
+                <Button
+                  key="submit"
+                  type="primary"
+                  onClick={handleAssignPermissionsSubmit}
+                >
+                  Asignar Permisos
+                </Button>,
+              ]}
+              centered
+              maskStyle={{ backdropFilter: "blur(10px)" }}
+              maskClosable={false}
+              keyboard={false}
+            >
+              {permissionsData &&
+                permissionsData.info &&
+                permissionsData.info.map((permission) => (
+                  <div key={permission._id}>
+                    <Checkbox
+                      checked={selectedPermissions.includes(permission._id)}
+                      onChange={() => handleCheckboxChange(permission._id)}
+                      style={{ color: selectedPermissions.includes(permission._id) ? 'green' : 'red' }}
+                    >
+                      {permission.nombre}
+                    </Checkbox>
+                  </div>
+                ))}
+        </Modal>
+          {/* Paginación */}
+          <CreateRolForm
+            visible={showForm}
+            onClose={handleFormClose}
+            onCreate={handleCreateRol}
+          />
+          <div className="mt-2 ml-2">
+            {Array.from(
+              { length: Math.ceil(filteredRoles.length / itemsPerPage) },
+              (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => paginate(index + 1)}
+                  className={`px-3 py-1 mx-1 ${
+                    currentPage === index + 1
+                      ? "bg-black border text-white"
+                      : "bg-gray-200 text-gray-800 border"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              )
+            )}
+          </div>
 
       </div>
     </div>
