@@ -12,10 +12,9 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (categoryName.trim() !== "") {
-      // Aquí puedes manejar la lógica para crear una nueva categoría
       console.log("Nueva categoría:", { nombre: categoryName.trim() });
-      onCreate({ nombre: categoryName.trim() }); // Llama a la función onCreate con los datos de la categoría
-      onClose(); // Cierra el formulario después de la creación
+      onCreate({ nombre: categoryName.trim() });
+      onClose();
     } else {
       setErrorMessage("Please enter a valid category name.");
     }
@@ -54,13 +53,13 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
         </div>
         <div className="flex items-center justify-center mt-10">
           <Button
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold  px-4 rounded focus:outline-none focus:shadow-outline mr-2 flex flex-col items-center"
             onClick={onClose}
           >
             Close
           </Button>
           <Button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold  px-4 rounded focus:outline-none focus:shadow-outline ml-4 flex flex-col items-center"
             type="submit"
           >
             Create Category

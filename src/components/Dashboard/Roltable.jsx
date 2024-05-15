@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import { useRoleContext } from "../../context/user/role.context";
 import { usePermissionContext } from "../../context/user/permissions.context";
+import CreateRolForm from './CreateRolForm';
 
 const { useForm } = Form;
 
@@ -17,6 +18,7 @@ const DataTable = () => {
   const [updatedDataFlag, setUpdatedDataFlag] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   const [form] = useForm();
 
@@ -127,18 +129,35 @@ const DataTable = () => {
     setSelectedRoleId(role._id);
   };
 
-  const [selectedPermissions, setSelectedPermissions] = useState([]);
-  const [previousSelectedPermissions, setPreviousSelectedPermissions] = useState([]);
+  const [selectedPermissionsMap, setSelectedPermissionsMap] = useState({});
 
-  const handleCheckboxChange = (permissionId) => {
-    setSelectedPermissions((prevPermissions) => {
-      if (prevPermissions.includes(permissionId)) {
-        return prevPermissions.filter((id) => id !== permissionId);
-      } else {
-        return [...prevPermissions, permissionId];
-      }
+  const handleCheckboxChange = (roleId, permissionId) => {
+    setSelectedPermissionsMap((prevMap) => {
+      const selectedPermissions = prevMap[roleId] || [];
+      const updatedPermissions = selectedPermissions.includes(permissionId)
+        ? selectedPermissions.filter((id) => id !== permissionId)
+        : [...selectedPermissions, permissionId];
+
+      // Guardar los permisos seleccionados en el almacenamiento local
+      localStorage.setItem(roleId, JSON.stringify(updatedPermissions));
+
+      return {
+        ...prevMap,
+        [roleId]: updatedPermissions,
+      };
     });
   };
+
+  useEffect(() => {
+    const storedPermissionsMap = {};
+    rolesData.forEach((role) => {
+      const storedPermissions = JSON.parse(localStorage.getItem(role._id));
+      if (storedPermissions) {
+        storedPermissionsMap[role._id] = storedPermissions;
+      }
+    });
+    setSelectedPermissionsMap(storedPermissionsMap);
+  }, [rolesData]);
 
   const handleAssignPermissions = (role) => {
     setSelectedRoleId(role._id);
@@ -149,7 +168,16 @@ const DataTable = () => {
     setShowDetailsModal(false);
     setShowAssignModal(false);
     setSelectedRoleId(null);
-    setSelectedPermissions([...previousSelectedPermissions]); // Restaurar los permisos seleccionados
+  };
+
+  const handleFormClose = () => {
+    setShowForm(false);
+  };
+
+  const handleCreateRol = (curso) => {
+    // Aquí puedes manejar la lógica para crear un nuevo curso
+    console.log("Nuevo curso:", curso);
+    setShowForm(false);
   };
 
   const handleAssignPermissionsSubmit = async () => {
@@ -163,7 +191,7 @@ const DataTable = () => {
         const updatedPermissions = [
           ...new Set([
             ...(selectedRole.permissions || []).map(nombre => permissionIdMap[nombre]),
-            ...selectedPermissions
+            ...selectedPermissionsMap[selectedRoleId] || []
           ]),
         ];
         
@@ -173,7 +201,7 @@ const DataTable = () => {
           permisos: updatedPermissions,
         });
   
-        setSelectedPermissions(updatedPermissions);
+        // No es necesario actualizar los permisos seleccionados aquí
         setShowAssignModal(false);
       }
     } catch (error) {
@@ -182,12 +210,20 @@ const DataTable = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
       <LeftBar />
-      <div className="ml-10 flex flex-col w-full">
+      <div className="ml-10 flex flex-col w-full mr-10">
         <div>
-          <h2 className="text-2xl font-bold mb-4">Roles</h2>
+          <h2 className="text-3xl font-bold mb-4 text-white">Roles</h2>
           <div className="flex items-center mb-4">
+            <Button
+              type="primary"
+              style={{ backgroundColor: "green" }}
+              onClick={() => setShowForm(true)}
+              className="mr-4"
+            >
+              <b>Create Rol</b>
+            </Button>
             <Input
               placeholder="Search by roles"
               value={searchValue}
@@ -195,12 +231,12 @@ const DataTable = () => {
               className="w-40"
             />
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="">
+            <table className="w-full bg-gray-400">
               <thead>
                 <tr>
                   <th
-                    className="px-6 py-3 bg-blue-500 text-white border-b border-gray-300 cursor-pointer"
+                    className="px-6 py-3 bg-yellow-400 text-white border border-black cursor-pointer"
                     onClick={() => orderBy("id")}
                   >
                     ID{" "}
@@ -212,10 +248,10 @@ const DataTable = () => {
                       ))}
                   </th>
                   <th
-                    className="px-6 py-3 bg-blue-500 text-white border-b border-gray-300 cursor-pointer"
+                    className="px-6 py-3 bg-fuchsia-600 text-white border border-black cursor-pointer"
                     onClick={() => orderBy("nombre")}
                   >
-                    Nombre{" "}
+                    Name{" "}
                     {sortConfig.key === "nombre" &&
                       (sortConfig.direction === "ascending" ? (
                         <CaretUpOutlined />
@@ -223,8 +259,8 @@ const DataTable = () => {
                         <CaretDownOutlined />
                       ))}
                   </th>
-                  <th className="px-6 py-3 bg-blue-500 text-white border-b border-gray-300">
-                    Acciones
+                  <th className="px-6 py-3 bg-pink-500 text-white border border-black">
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -232,27 +268,27 @@ const DataTable = () => {
                 {rolesData &&
                   currentItems.map((role, index) => (
                     <tr key={role._id}>
-                      <td className="border px-6 py-4">{generateIds()[index]}</td>
-                      <td className="border px-6 py-4">{role.nombre}</td>
-                      <td className="border px-6 py-4">
-                        <Button
+                      <td className="border border-gray-700 px-6 text-white text-center font-bold py-2 ">{generateIds()[index]}</td>
+                      <td className="border border-gray-700 px-6 text-white text-center font-bold py-2 ">{role.nombre}</td>
+                      <td className="border border-gray-700 px-6 text-white text-center py-2 ">
+                        <Button 
                           type="primary"
                           onClick={() => handleViewPermissions(role)}
                         >
-                          Ver
+                          View
                         </Button>{" "}
                         <Button
                           type="primary"
                           onClick={() => handleAssignPermissions(role)}
                         >
-                          Asignar
+                          Assign
                         </Button>
                       </td>
                     </tr>
                   ))}
               </tbody>
             </table>
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end mt-10">
               <Pagination
                 current={currentPage}
                 total={filteredRoles.length}
@@ -263,11 +299,11 @@ const DataTable = () => {
             </div>
           </div>
         </div>
-        <Modal
+        <Modal className="shadow-md shadow-pink-400"
           title={
             selectedRole
-              ? `Permisos para ${selectedRole.nombre}`
-              : "Detalles del Rol"
+              ? `Permissions for ${selectedRole.nombre}`
+              : "Role Details"
           }
           visible={showDetailsModal}
           onCancel={handleModalClose}
@@ -276,15 +312,15 @@ const DataTable = () => {
           maskStyle={{ backdropFilter: "blur(10px)" }}
         >
           {selectedRole && (
-            <div className="bg-white p-4 rounded-md shadow-orange">
+            <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
               <p>
-                <b>ID del Rol:</b> {selectedRole._id}
+                <b>Role ID:</b> {selectedRole._id}
               </p>
               <p>
-                <b>Nombre:</b> {selectedRole.nombre}
+                <b>Name:</b> {selectedRole.nombre}
               </p>
               <p>
-                <b>Permisos:</b>
+                <b>Permisions:</b>
               </p>
               <ul>
                 {selectedRole &&
@@ -296,40 +332,43 @@ const DataTable = () => {
             </div>
           )}
         </Modal>
-        <Modal
-  title="Asignar Permisos"
-  visible={showAssignModal}
-  closable={false}
-  footer={[
-    <Button
-      key="submit"
-      type="primary"
-      onClick={handleAssignPermissionsSubmit}
-    >
-      Asignar Permisos
-    </Button>,
-  ]}
-  centered
-  maskStyle={{ backdropFilter: "blur(10px)" }}
-  maskClosable={false}
-  keyboard={false}
->
-  {permissionsData &&
-    permissionsData.info &&
-    permissionsData.info.map((permission) => (
-      <div key={permission._id}>
-        <Checkbox
-          checked={selectedPermissions.includes(permission._id)}
-          onChange={() => handleCheckboxChange(permission._id)}
-          style={{ color: selectedPermissions.includes(permission._id) ? 'green' : 'red' }}
-        >
-          {permission.nombre}
-        </Checkbox>
-      </div>
-    ))}
-</Modal>
-
-
+        <Modal className="shadow-2xl shadow-pink-400 "
+              title="Assign Permissions"
+              visible={showAssignModal}
+              onCancel={handleModalClose}
+              footer={[
+                <Button className="bg-sky-700 font-medium"
+                  key="submit"
+                  type="primary"
+                  onClick={handleAssignPermissionsSubmit}
+                >
+                  Assign Permissions
+                </Button>,
+              ]}
+              centered
+              maskStyle={{ backdropFilter: "blur(10px)" }}
+              maskClosable={false}
+              keyboard={false}
+            >
+              {permissionsData &&
+                permissionsData.info &&
+                permissionsData.info.map((permission) => (
+                  <div key={permission._id}>
+                    <Checkbox
+                      checked={selectedPermissionsMap[selectedRoleId]?.includes(permission._id)}
+                      onChange={() => handleCheckboxChange(selectedRoleId, permission._id)}
+                      style={{ color: selectedPermissionsMap[selectedRoleId]?.includes(permission._id) ? 'green' : 'red' }}
+                    >
+                      {permission.nombre}
+                    </Checkbox>
+                  </div>
+                ))}
+        </Modal>
+          <CreateRolForm
+            visible={showForm}
+            onClose={handleFormClose}
+            onCreate={handleCreateRol}
+          />
       </div>
     </div>
   );
