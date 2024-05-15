@@ -16,6 +16,8 @@ export const CategoryProvider = ({ children }) => {
 
     const createCategory = async (categoryData) => {
         try {
+            console.log("categoryData:", categoryData);
+
             const { data } = await createCategory(categoryData);
             setCategories([...categories, data]);
         } catch (error) {

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getAllRoles as getAllRolesApi, getRole as getRoleApi, updateRole as updateRoleApi } from '../../api/user/role.request'; 
+import { getAllRoles as getAllRolesApi, getRole as getRoleApi, updateRole as updateRoleApi,  createRole as createRoleApi } from '../../api/user/role.request'; 
 
 
 export const RoleContext = createContext();
@@ -51,11 +51,23 @@ export const RoleProvider = ({ children }) => {
             return null;
         }
     };
+    const createRole = async (roleData) => {
+        try {
+            const res = await createRoleApi(roleData);
+            setRolesData(prevRoles => [...prevRoles, res.data]);
+            return res.data;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    };
+
     
 
     return (
         <RoleContext.Provider
             value={{
+                createRole,
                 rolesData,
                 getRole,
                 updateRole,

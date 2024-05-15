@@ -6,6 +6,7 @@ import { AuthProvider } from "./context/auth.context";
 import { UserProvider } from "./context/user/user.context";
 import { RoleProvider } from "./context/user/role.context";
 import {PermissionProvider} from "./context/user/permissions.context"
+import {CategoryProvider} from "./context/courses/category.context"
 
 
 
@@ -65,6 +66,8 @@ function App() {
       <UserProvider>
         <RoleProvider>
           <PermissionProvider>
+            <CategoryProvider>
+
         
         <Routes>
 
@@ -93,6 +96,8 @@ function App() {
 
           </Route>
           </Routes>
+          </CategoryProvider>
+
 </PermissionProvider>
         
         </RoleProvider>
