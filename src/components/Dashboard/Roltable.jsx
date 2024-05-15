@@ -12,6 +12,8 @@ import CreateRolForm from './CreateRolForm';
 const { useForm } = Form;
 
 const DataTable = () => {
+  const [permissionsUpdated, setPermissionsUpdated] = useState(false);
+
   const { rolesData, updateRole } = useRoleContext();
   const { permissionsData } = usePermissionContext();
 
@@ -174,11 +176,9 @@ const DataTable = () => {
     setShowForm(false);
   };
 
-
-
-  const handleCreateRol = (curso) => {
+  const handleCreateRol = (role) => {
     // Aquí puedes manejar la lógica para crear un nuevo curso
-    console.log("Nuevo curso:", curso);
+    console.log("Nuevo curso:", role);
     setShowForm(false);
   };
 
@@ -191,7 +191,11 @@ const DataTable = () => {
         const permissionIdMap = {};
         permissionsData.info.forEach(permission => {
           permissionIdMap[permission.nombre] = permission._id;
-        });
+          setPermissionsUpdated(true);
+
+        } );
+      
+      
   
         const updatedPermissions = [
           ...new Set([
@@ -308,35 +312,38 @@ const DataTable = () => {
            title={
               selectedRole
               ? `Permissions for ${selectedRole.nombre}`
-                : "Role Details"
-                }
-            visible={showDetailsModal}
-  onCancel={handleModalClose}
-  footer={null}
-  centered
-  maskStyle={{ backdropFilter: "blur(10px)" }}
->
-  {selectedRole && (
-    <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
-      <p>
-        <b>Role ID:</b> {selectedRole._id}
-      </p>
-      <p>
-        <b>Name:</b> {selectedRole.nombre}
-      </p>
-      <p>
-        <b>Permissions:</b>
-      </p>
-      <ul>
-        {selectedRole.permisos &&
-          selectedRole.permisos.map((permiso) => (
-            <li key={permiso._id}>{permiso.nombre}</li>
-          ))}
-      </ul>
-    </div>
-  )}
-</Modal>
+              : "Role Details"
+          }
+          visible={showDetailsModal}
+          onCancel={handleModalClose}
+          footer={null}
+          centered
+          maskStyle={{ backdropFilter: "blur(10px)" }}
+        >
+{selectedRole && (
+  <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
+    <p>
+      <b>Role ID:</b> {selectedRole._id}
+    </p>
+    <p>
+      <b>Name:</b> {selectedRole.nombre}
+    </p>
+    <p>
+      <b>Permissions:</b>
+    </p>
+    <ul>
+      {selectedRole &&
+        selectedRole.permisos &&
+        selectedRole.permisos.map((permiso) => (
+          <li key={permiso}>{permiso}</li> // Cambia esta línea para mostrar el nombre del permiso
+        ))}
+    </ul>
+  </div>
+)}
 
+
+
+        </Modal>
         <Modal className="shadow-2xl shadow-pink-400 "
               title="Assign Permissions"
               visible={showAssignModal}
