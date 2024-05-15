@@ -51,16 +51,21 @@ export const RoleProvider = ({ children }) => {
             return null;
         }
     };
-    const createRole = async (roleData) => {
+    const createRole = async (data) => {
         try {
-            const res = await createRoleApi(roleData);
-            setRolesData(prevRoles => [...prevRoles, res.data]);
+            console.log("hajkskj: ", data)
+
+            const res = await createRoleApi(data);
+            setRolesData([...rolesData, res.data]);
+            console.log("hajkskj2: ", res.data)
+
             return res.data;
         } catch (error) {
             console.log(error);
             return null;
         }
     };
+    
 
     
 
