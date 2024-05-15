@@ -1,17 +1,32 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Modal, Button, Input } from "antd";
+import { useRoleContext } from "../../context/user/role.context"; // Importa el contexto de roles
 
-const CreateRolForm = ({ visible, onClose, onCreate }) => {
-  const [curso, setCurso] = useState({ nombre: "" });
+const CreateRolForm = ({ visible, onClose }) => {
+  const { createRole } = useRoleContext();  // Obtiene la función createRole del contexto de roles
+  
+  
+  const [role, setRole] = useState({ nombre: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCurso({ ...curso, [name]: value });
+    setRole({ ...role, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onCreate(curso);
+    try {
+      console.log("esto: ", role)
+      await createRole(role);
+
+      onClose(); 
+      window.location.reload(); 
+
+    } catch (error) {
+      console.error("Error creating role:", error);
+    }
   };
 
   return (
@@ -36,7 +51,7 @@ const CreateRolForm = ({ visible, onClose, onCreate }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline mt-2"
                 type="text"
                 name="nombre"
-                value={curso.nombre}
+                value={role.nombre}
                 onChange={handleChange}
               />
             </label>

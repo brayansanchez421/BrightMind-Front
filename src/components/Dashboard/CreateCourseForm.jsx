@@ -1,7 +1,16 @@
 import React, { useState, useRef } from "react";
 import { Modal, Button, Input } from "antd";
+import { useCategoryContext } from "../../context/courses/category.context";
+
+import { Select } from "antd";
+
+
+const { Option } = Select;
+
 
 const CreateCourseForm = ({ visible, onClose, onCreate }) => {
+  const { categories } = useCategoryContext(); // Obtiene la lista de categorías desde el contexto
+
   const [curso, setCurso] = useState({
     nombre: "",
     categoria: "",
@@ -78,19 +87,23 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
           </div>
           <div className="mb-4 ">
             <label className="block text-zinc-100 text-lg font-bold mb-4">
-              Categoria:
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                type="text"
-                name="categoria"
+              Categoría:
+              <Select
+                style={{ width: "100%" }}
                 value={curso.categoria}
-                onChange={handleChange}
-              />
+                onChange={(value) => setCurso({ ...curso, categoria: value })}
+              >
+                {categories.map(category => (
+                  <Option key={category._id} value={category.nombre}>
+                    {category.nombre}
+                  </Option>
+                ))}
+              </Select>
             </label>
           </div>
           <div className="mb-4">
             <label className="block text-zinc-100 text-lg font-bold mb-4">
-              Descripcion:
+              Descripción:
               <textarea
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline mt-2 resize-none"
                 name="descripcion"

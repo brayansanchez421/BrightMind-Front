@@ -20,13 +20,14 @@ const DataTablete = () => {
     getUsers();
   }, []);
 
-  const handleCreateCategory = (categoryData) => {
-    // Aquí puedes manejar la lógica para crear una nueva categoría
-    console.log("Nueva categoría:", categoryData);
-    // Puedes enviar los datos de la categoría al servidor, etc.
-    // Luego de realizar las acciones necesarias, cierra el formulario
-    setShowCategoryForm(false);
-  };
+  
+  const handleCreateCategory =  (category) => {
+       
+      console.log("Nueva categoría:", category);
+  
+      setShowCategoryForm(false);
+     };
+  
   
 
   const handleCreateCategoryClick = () => {

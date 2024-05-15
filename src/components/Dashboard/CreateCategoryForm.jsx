@@ -1,37 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Input } from "antd";
+import { useCategoryContext } from "../../context/courses/category.context";
 
-const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
-  const [categoryName, setCategoryName] = useState("");
+const CreateCategoryForm = ({ visible, onClose }) => {
+  const { createCategory } = useCategoryContext();
+
+  const [category, setCategory] = useState({ name: "" });
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
-    setCategoryName(e.target.value);
+    const { name, value } = e.target;
+    setCategory({ ...category, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (categoryName.trim() !== "") {
-      console.log("Nueva categoría:", { nombre: categoryName.trim() });
-      onCreate({ nombre: categoryName.trim() });
+    try {
+      console.log("esto: ", category);
+      await createCategory(category);
       onClose();
-    } else {
-      setErrorMessage("Please enter a valid category name.");
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Failed to create category.");
     }
   };
+
+  useEffect(() => {
+    if (visible) {
+      setCategory({ name: "" }); // Restablece el estado del formulario cuando se abre
+    }
+  }, [visible]);
 
   return (
     <Modal visible={visible} footer={null} closable={false}>
       <form
-        onSubmit={handleSubmit}
         className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded "
+        onSubmit={handleSubmit}
       >
-        <button
-          className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400 rounded-full flex items-center justify-center"
-          onClick={onClose}
-        >
-          X
-        </button>
         <div>
           <h1 className="text-4xl font-black text-center mb-4 text-white">
             Create Category
@@ -42,7 +47,8 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
               <Input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline mt-2"
                 type="text"
-                value={categoryName}
+                name="name"
+                value={category.name}
                 onChange={handleChange}
               />
             </label>
@@ -60,7 +66,7 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
           </Button>
           <Button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold  px-4 rounded focus:outline-none focus:shadow-outline ml-4 flex flex-col items-center"
-            type="submit"
+            onClick={handleSubmit}
           >
             Create Category
           </Button>

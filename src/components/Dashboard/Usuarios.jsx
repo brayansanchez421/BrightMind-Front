@@ -518,4 +518,4 @@ console.log("usuarios: ", filteredUsers)
   );
 };
 
-export default DataTable;
+export default DataTable;

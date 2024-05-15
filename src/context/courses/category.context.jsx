@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext } from 'react';
-import { createCategory } from '../../api/courses/category.request'; // Importa la función createCategory de tu archivo api/category.request.js
+import { createCategory as createCategoryApi } from '../../api/courses/category.request'; // Importa la función createCategory de tu archivo api/category.request.js
 
 export const CategoryContext = createContext();
 
@@ -14,16 +14,22 @@ export const useCategoryContext = () => {
 export const CategoryProvider = ({ children }) => {
     const [categories, setCategories] = useState([]);
 
-    const createCategory = async (categoryData) => {
+    const createCategory = async (data) => {
         try {
-            console.log("categoryData:", categoryData);
+            console.log("categoryData:", data);
 
-            const { data } = await createCategory(categoryData);
-            setCategories([...categories, data]);
+            const res = await createCategoryApi(data);
+            setCategories([...categories, res.data]);
+            return res.data;
+
         } catch (error) {
             console.error(error);
+            return null;
+
         }
     };
+
+
 
     return (
         <CategoryContext.Provider value={{ categories, createCategory }}>

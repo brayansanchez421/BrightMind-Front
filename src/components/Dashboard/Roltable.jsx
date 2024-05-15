@@ -174,12 +174,17 @@ const DataTable = () => {
     setShowForm(false);
   };
 
+
+
   const handleCreateRol = (curso) => {
     // Aquí puedes manejar la lógica para crear un nuevo curso
     console.log("Nuevo curso:", curso);
     setShowForm(false);
   };
 
+
+
+  
   const handleAssignPermissionsSubmit = async () => {
     try {
       if (selectedRole) {
@@ -300,38 +305,38 @@ const DataTable = () => {
           </div>
         </div>
         <Modal className="shadow-md shadow-pink-400"
-          title={
-            selectedRole
+           title={
+              selectedRole
               ? `Permissions for ${selectedRole.nombre}`
-              : "Role Details"
-          }
-          visible={showDetailsModal}
-          onCancel={handleModalClose}
-          footer={null}
-          centered
-          maskStyle={{ backdropFilter: "blur(10px)" }}
-        >
-          {selectedRole && (
-            <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
-              <p>
-                <b>Role ID:</b> {selectedRole._id}
-              </p>
-              <p>
-                <b>Name:</b> {selectedRole.nombre}
-              </p>
-              <p>
-                <b>Permisions:</b>
-              </p>
-              <ul>
-                {selectedRole &&
-                  selectedRole.permisos &&
-                  selectedRole.permisos.map((permiso) => (
-                    <li key={permiso._id}>{permiso.nombre}</li>
-                  ))}
-              </ul>
-            </div>
-          )}
-        </Modal>
+                : "Role Details"
+                }
+            visible={showDetailsModal}
+  onCancel={handleModalClose}
+  footer={null}
+  centered
+  maskStyle={{ backdropFilter: "blur(10px)" }}
+>
+  {selectedRole && (
+    <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
+      <p>
+        <b>Role ID:</b> {selectedRole._id}
+      </p>
+      <p>
+        <b>Name:</b> {selectedRole.nombre}
+      </p>
+      <p>
+        <b>Permissions:</b>
+      </p>
+      <ul>
+        {selectedRole.permisos &&
+          selectedRole.permisos.map((permiso) => (
+            <li key={permiso._id}>{permiso.nombre}</li>
+          ))}
+      </ul>
+    </div>
+  )}
+</Modal>
+
         <Modal className="shadow-2xl shadow-pink-400 "
               title="Assign Permissions"
               visible={showAssignModal}
