@@ -187,8 +187,8 @@ console.log("usuarios: ", filteredUsers)
   return (
     <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 ">
       <div className="flex h-screen overflow-hidden ">
-        <LeftBar />
-        <div className="ml-10 flex flex-col ">
+        <LeftBar className="flex h-screen overflow-hidden"/>
+        <div className="ml-10 flex flex-col w-3/4 ">
           <div>
             <h2 className="text-4xl font-bold mb-4 text-white ">Users</h2>
             <div className="flex items-center mb-4">

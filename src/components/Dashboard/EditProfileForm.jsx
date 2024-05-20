@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../../context/user/user.context';
-import { useAuth } from '../../context/auth.context'; 
+import { useAuth } from '../../context/auth.context';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +11,8 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
     const [name, setName] = useState(initialName);
     const [email, setEmail] = useState(initialEmail);
     const [userId, setUserId] = useState(null);
+    const [profileImage, setProfileImage] = useState(null);
+    const [previewProfileImage, setPreviewProfileImage] = useState(null);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -58,6 +60,14 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
         }
     };
 
+    const handleImageChange = (e) => {
+        const imageFile = e.target.files[0];
+        if (imageFile) {
+            setProfileImage(imageFile);
+            setPreviewProfileImage(URL.createObjectURL(imageFile));
+        }
+    };
+
     return (
         <div className="container mx-auto mt-10 md:mt-20 px-4 overflow-y-auto">
             <ToastContainer />
@@ -89,6 +99,23 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
                             required
                         />
                     </div>
+                    <div className="mb-4">
+                        <label htmlFor="profileImage" className="block text-lg font-semibold text-black">
+                            Profile Image
+                        </label>
+                        <input
+                            type="file"
+                            id="profileImage"
+                            accept="image/*"
+                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
+                            onChange={handleImageChange}
+                        />
+                    </div>
+                    {previewProfileImage && (
+                        <div className="mb-4">
+                            <img src={previewProfileImage} alt="Preview" className="w-20 h-20 rounded-full mx-auto mb-4" />
+                        </div>
+                    )}
                     <div className="flex items-center justify-between">
                         <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

@@ -54,7 +54,7 @@ const LeftBar = () => {
   };
   
   return (
-    <div className=" bg-gradient-to-b from-purple-600 to-blue-600 text-white w- flex flex-col items-center justify-between w-2/12">
+    <div className=" bg-gradient-to-t from-purple-800 to-teal-400 text-white w- flex flex-col items-center justify-between w-2/12 border-r border-black">
       <div className="-mt-10 mb-10 flex flex-col items-center">
         <img src={logo} alt="Logo" className="h-80 " />
       </div>

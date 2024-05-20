@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LeftBar from "./LeftBar";
 import { Button, Modal, Checkbox, Pagination, Input, Form } from "antd";
-import {
-  CaretUpOutlined,
-  CaretDownOutlined,
-} from "@ant-design/icons";
+import { CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { useRoleContext } from "../../context/user/role.context";
 import { usePermissionContext } from "../../context/user/permissions.context";
 import CreateRolForm from './CreateRolForm';
@@ -13,7 +10,6 @@ const { useForm } = Form;
 
 const DataTable = () => {
   const [permissionsUpdated, setPermissionsUpdated] = useState(false);
-
   const { rolesData, updateRole } = useRoleContext();
   const { permissionsData } = usePermissionContext();
 
@@ -21,29 +17,27 @@ const DataTable = () => {
   const [searchValue, setSearchValue] = useState("");
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showForm, setShowForm] = useState(false);
-
   const [form] = useForm();
-
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState(null);
-
   const [selectedRole, setSelectedRole] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "ascending" });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [selectedPermissionsMap, setSelectedPermissionsMap] = useState({});
+
   useEffect(() => {
     if (selectedRoleId) {
       setSelectedRole(rolesData.find((role) => role._id === selectedRoleId));
     }
   }, [selectedRoleId, rolesData]);
+
   useEffect(() => {
     form.setFieldsValue({
       name: selectedRole?.name,
       permissions: selectedRole?.permissions,
     });
   }, [selectedRole, form]);
-
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: "ascending",
-  });
 
   const filteredRoles = rolesData.filter((role) =>
     Object.values(role).some(
@@ -53,9 +47,6 @@ const DataTable = () => {
         value.toLowerCase().includes(searchValue.toLowerCase())
     )
   );
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,10 +61,7 @@ const DataTable = () => {
     };
 
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, [updatedDataFlag]);
 
   useEffect(() => {
@@ -88,11 +76,7 @@ const DataTable = () => {
 
   const orderBy = (key) => {
     let direction = "ascending";
-    if (
-      sortConfig &&
-      sortConfig.key === key &&
-      sortConfig.direction === "ascending"
-    ) {
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
     }
     setSortConfig({ key, direction });
@@ -131,8 +115,6 @@ const DataTable = () => {
     setSelectedRoleId(role._id);
   };
 
-  const [selectedPermissionsMap, setSelectedPermissionsMap] = useState({});
-
   const handleCheckboxChange = (roleId, permissionId) => {
     setSelectedPermissionsMap((prevMap) => {
       const selectedPermissions = prevMap[roleId] || [];
@@ -140,13 +122,8 @@ const DataTable = () => {
         ? selectedPermissions.filter((id) => id !== permissionId)
         : [...selectedPermissions, permissionId];
 
-      // Guardar los permisos seleccionados en el almacenamiento local
       localStorage.setItem(roleId, JSON.stringify(updatedPermissions));
-
-      return {
-        ...prevMap,
-        [roleId]: updatedPermissions,
-      };
+      return { ...prevMap, [roleId]: updatedPermissions };
     });
   };
 
@@ -177,14 +154,10 @@ const DataTable = () => {
   };
 
   const handleCreateRol = (role) => {
-    // Aquí puedes manejar la lógica para crear un nuevo curso
     console.log("Nuevo curso:", role);
     setShowForm(false);
   };
 
-
-
-  
   const handleAssignPermissionsSubmit = async () => {
     try {
       if (selectedRole) {
@@ -192,25 +165,20 @@ const DataTable = () => {
         permissionsData.info.forEach(permission => {
           permissionIdMap[permission.nombre] = permission._id;
           setPermissionsUpdated(true);
+        });
 
-        } );
-      
-      
-  
         const updatedPermissions = [
           ...new Set([
             ...(selectedRole.permissions || []).map(nombre => permissionIdMap[nombre]),
             ...selectedPermissionsMap[selectedRoleId] || []
           ]),
         ];
-        
-  
-        const updatedRole = await updateRole(selectedRoleId, {
+
+        await updateRole(selectedRoleId, {
           nombre: selectedRole?.nombre,
           permisos: updatedPermissions,
         });
-  
-        // No es necesario actualizar los permisos seleccionados aquí
+
         setShowAssignModal(false);
       }
     } catch (error) {
@@ -220,8 +188,8 @@ const DataTable = () => {
 
   return (
     <div className="flex h-screen bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
-      <LeftBar />
-      <div className="ml-10 flex flex-col w-full mr-10">
+      <LeftBar className="flex h-screen overflow-hidden" />
+      <div className="ml-10 flex flex-col w-3/4 mr-10">
         <div>
           <h2 className="text-3xl font-bold mb-4 text-white">Roles</h2>
           <div className="flex items-center mb-4">
@@ -240,12 +208,12 @@ const DataTable = () => {
               className="w-40"
             />
           </div>
-          <div className="">
-            <table className="w-full bg-gray-400">
+          <div className="overflow-x-auto w-full">
+            <table className="w-full bg-gray-300">
               <thead>
                 <tr>
                   <th
-                    className="px-6 py-3 bg-yellow-400 text-white border border-black cursor-pointer"
+                    className="px-6 py-3 bg-yellow-400 text-white border border-blue-800 cursor-pointer"
                     onClick={() => orderBy("id")}
                   >
                     ID{" "}
@@ -257,7 +225,7 @@ const DataTable = () => {
                       ))}
                   </th>
                   <th
-                    className="px-6 py-3 bg-fuchsia-600 text-white border border-black cursor-pointer"
+                    className="px-6 py-3 bg-fuchsia-600 text-white border border-blue-800 cursor-pointer"
                     onClick={() => orderBy("nombre")}
                   >
                     Name{" "}
@@ -268,7 +236,7 @@ const DataTable = () => {
                         <CaretDownOutlined />
                       ))}
                   </th>
-                  <th className="px-6 py-3 bg-pink-500 text-white border border-black">
+                  <th className="px-6 py-4 bg-pink-500 text-white border border-blue-800">
                     Actions
                   </th>
                 </tr>
@@ -277,16 +245,16 @@ const DataTable = () => {
                 {rolesData &&
                   currentItems.map((role, index) => (
                     <tr key={role._id}>
-                      <td className="border border-gray-700 px-6 text-white text-center font-bold py-2 ">{generateIds()[index]}</td>
-                      <td className="border border-gray-700 px-6 text-white text-center font-bold py-2 ">{role.nombre}</td>
-                      <td className="border border-gray-700 px-6 text-white text-center py-2 ">
-                        <Button 
+                      <td className="border border-blue-800 px-6 text-black text-center font-semibold py-2 ">{generateIds()[index]}</td>
+                      <td className="border border-blue-800 px-6 text-black text-center font-semibold py-2 ">{role.nombre}</td>
+                      <td className="border border-blue-800 px-6 text-black text-center py-4 ">
+                        <Button className="text-black font-semibold"
                           type="primary"
                           onClick={() => handleViewPermissions(role)}
                         >
                           View
                         </Button>{" "}
-                        <Button
+                        <Button className="text-black font-semibold"
                           type="primary"
                           onClick={() => handleAssignPermissions(role)}
                         >
@@ -296,94 +264,63 @@ const DataTable = () => {
                     </tr>
                   ))}
               </tbody>
-            </table>
-            <div className="flex justify-end mt-10">
-              <Pagination
-                current={currentPage}
-                total={filteredRoles.length}
-                pageSize={itemsPerPage}
-                onChange={paginate}
-                showSizeChanger={false}
-              />
-            </div>
+              </table>
+          </div>
+          <div className="flex justify-center mt-4">
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={filteredRoles.length}
+              onChange={paginate}
+            />
           </div>
         </div>
-        <Modal className="shadow-md shadow-pink-400"
-           title={
-              selectedRole
-              ? `Permissions for ${selectedRole.nombre}`
-              : "Role Details"
-          }
-          visible={showDetailsModal}
-          onCancel={handleModalClose}
-          footer={null}
-          centered
-          maskStyle={{ backdropFilter: "blur(10px)" }}
-        >
-{selectedRole && (
-  <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
-    <p>
-      <b>Role ID:</b> {selectedRole._id}
-    </p>
-    <p>
-      <b>Name:</b> {selectedRole.nombre}
-    </p>
-    <p>
-      <b>Permissions:</b>
-    </p>
-    <ul>
-      {selectedRole &&
-        selectedRole.permisos &&
-        selectedRole.permisos.map((permiso) => (
-          <li key={permiso}>{permiso}</li> // Cambia esta línea para mostrar el nombre del permiso
-        ))}
-    </ul>
-  </div>
-)}
-
-
-
-        </Modal>
-        <Modal className="shadow-2xl shadow-pink-400 "
-              title="Assign Permissions"
-              visible={showAssignModal}
-              onCancel={handleModalClose}
-              footer={[
-                <Button className="bg-sky-700 font-medium"
-                  key="submit"
-                  type="primary"
-                  onClick={handleAssignPermissionsSubmit}
-                >
-                  Assign Permissions
-                </Button>,
-              ]}
-              centered
-              maskStyle={{ backdropFilter: "blur(10px)" }}
-              maskClosable={false}
-              keyboard={false}
-            >
-              {permissionsData &&
-                permissionsData.info &&
-                permissionsData.info.map((permission) => (
-                  <div key={permission._id}>
-                    <Checkbox
-                      checked={selectedPermissionsMap[selectedRoleId]?.includes(permission._id)}
-                      onChange={() => handleCheckboxChange(selectedRoleId, permission._id)}
-                      style={{ color: selectedPermissionsMap[selectedRoleId]?.includes(permission._id) ? 'green' : 'red' }}
-                    >
-                      {permission.nombre}
-                    </Checkbox>
-                  </div>
-                ))}
-        </Modal>
-          <CreateRolForm
-            visible={showForm}
-            onClose={handleFormClose}
-            onCreate={handleCreateRol}
-          />
       </div>
+
+      <Modal
+        title="Assign Permissions"
+        visible={showAssignModal}
+        onCancel={handleModalClose}
+        onOk={handleAssignPermissionsSubmit}
+      >
+        <h2>Role: {selectedRole?.nombre}</h2>
+        {permissionsData?.info?.map((permission) => (
+          <Checkbox
+            key={permission._id}
+            checked={selectedPermissionsMap[selectedRoleId]?.includes(permission._id)}
+            onChange={() => handleCheckboxChange(selectedRoleId, permission._id)}
+          >
+            {permission.nombre}
+          </Checkbox>
+        ))}
+      </Modal>
+
+      <Modal
+        title="Role Permissions"
+        visible={showDetailsModal}
+        onCancel={handleModalClose}
+        footer={null}
+      >
+        <h2>Role: {selectedRole?.nombre}</h2>
+        <ul>
+          {selectedRole?.permissions?.map((permissionId) => {
+            const permission = permissionsData?.info?.find((perm) => perm._id === permissionId);
+            return permission ? <li key={permissionId}>{permission.nombre}</li> : null;
+          })}
+        </ul>
+      </Modal>
+
+      <Modal
+        title="Create Rol"
+        visible={showForm}
+        onCancel={handleFormClose}
+        footer={null}
+      >
+        <CreateRolForm onSubmit={handleCreateRol} onClose={handleFormClose} />
+      </Modal>
     </div>
   );
 };
 
 export default DataTable;
+
