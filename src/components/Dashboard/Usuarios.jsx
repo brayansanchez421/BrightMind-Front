@@ -5,8 +5,7 @@ import { ReloadOutlined, CheckOutlined, InfoCircleOutlined, CaretUpOutlined, Car
 import { useUserContext } from "../../context/user/user.context";
 import logo from "../../assets/img/hola.png";
 import { useRoleContext } from '../../context/user/role.context';
-
-
+import Navbar from "./NavBar";
 
 const { Option } = Select;
 
@@ -18,7 +17,6 @@ const DataTable = () => {
   const [form] = Form.useForm();
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const [selectedUserNumericId, setSelectedUserNumericId] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
@@ -42,41 +40,21 @@ const DataTable = () => {
     key: null,
     direction: "ascending",
   });
-  
-  const generateIds = () => {
-    return currentItems.map((_, index) => index + 1 + (currentPage - 1) * itemsPerPage);
-  };
+
   const filteredUsers = usersData.filter((user) =>
-  Object.values(user).some(
-    (value) =>
-      value &&
-      typeof value === "string" &&
-      value.toLowerCase().includes(searchValue.toLowerCase())
-  )
-);
-console.log("usuarios: ", filteredUsers)
+    Object.values(user).some(
+      (value) =>
+        value &&
+        typeof value === "string" &&
+        value.toLowerCase().includes(searchValue.toLowerCase())
+    )
+  );
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     getUsers();
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width < 1600) {
-        setItemsPerPage(6);
-      } else if (width < 2000) {
-        setItemsPerPage(8);
-      } else {
-        setItemsPerPage(10);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, [updatedDataFlag]);
 
   useEffect(() => {
@@ -89,10 +67,6 @@ console.log("usuarios: ", filteredUsers)
     setUpdatedDataFlag(true);
     activateAccount(userId);
   };
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [itemsPerPage]);
 
   const orderBy = (key) => {
     let direction = "ascending";
@@ -142,6 +116,7 @@ console.log("usuarios: ", filteredUsers)
   useEffect(() => {
     console.log("ID del usuario a actualizar:", selectedUser?._id);
   }, [selectedUser]);
+  
   const handleUpdateButtonClick = (item) => {
     console.log("ID del usuario seleccionado para actualizar:", item._id);
     setSelectedUser(item);
@@ -155,13 +130,9 @@ console.log("usuarios: ", filteredUsers)
     setUpdatedDataFlag(true);
     setSelectedUser(null);
   };
-  
-  
+
   const handleCloseUpdateModal = () => {
-    console.log(
-      "ID del usuario al cerrar el modal de actualización:",
-      selectedUser?._id
-    );
+    console.log("ID del usuario al cerrar el modal de actualización:", selectedUser?._id);
     if (selectedUser) {
       updateUser(selectedUser._id, { ...selectedUser });
     }
@@ -169,351 +140,317 @@ console.log("usuarios: ", filteredUsers)
     setSelectedUser(null);
   };
 
-  useEffect(() => {
-    console.log("ID del usuario a actualizar:", selectedUser?._id);
-  }, [selectedUser]);
-
   const handleCreateFormSubmit = async (values) => {
     try {
-      console.log(values)
-      await createUser(values); // Llama a la función createUser con los datos del formulario
-      form.resetFields(); // Reinicia el formulario después de enviar
-      setShowForm(false); // Cierra el modal
+      console.log(values);
+      await createUser(values);
+      form.resetFields();
+      setShowForm(false);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const generateIds = () => {
+    return currentItems.map((_, index) => index + 1 + (currentPage - 1) * itemsPerPage);
+  };
+
   return (
     <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 ">
-      <div className="flex h-screen overflow-hidden ">
-        <LeftBar className="flex h-screen overflow-hidden"/>
-        <div className="ml-10 flex flex-col w-3/4 ">
-          <div>
-            <h2 className="text-4xl font-bold mb-4 text-white ">Users</h2>
-            <div className="flex items-center mb-4">
-              <Button
-                type="primary"
-                style={{ backgroundColor: "green" }}
-                onClick={() => setShowForm(true)}
-                className="mr-4"
-              >
-                <b>Create User</b>
-              </Button>
-              <Input
-                placeholder="Search by Name"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                className="w-40"
-              />
-            </div>
-
-          <div className="overflow-x-auto w-full">
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th
-                    className="text-xl px-6 py-3 bg-blue-500 text-white border  cursor-pointer  border-blue-800"
-                    onClick={() => orderBy("id")}
-                  >
-                    ID{" "}
-                    {sortConfig.key === "id" &&
-                      (sortConfig.direction === "ascending" ? (
-                        <CaretUpOutlined />
-                      ) : (
-                        <CaretDownOutlined />
-                      ))}
-                  </th>
-                  <th
-                    className="text-xl px-6 py-3 bg-yellow-500 text-white  border cursor-pointer  border-blue-800"
-                    onClick={() => orderBy("role")}
-                  >
-                    Role{" "}
-                    {sortConfig.key === "role" &&
-                      (sortConfig.direction === "ascending" ? (
-                        <CaretUpOutlined />
-                      ) : (
-                        <CaretDownOutlined />
-                      ))}
-                  </th>
-                  <th
-                    className="text-xl px-6 py-3 bg-green-500 text-white  border cursor-pointer  border-blue-800"
-                    onClick={() => orderBy("username")}
-                  >
-                    Name{" "}
-                    {sortConfig.key === "username" &&
-                      (sortConfig.direction === "ascending" ? (
-                        <CaretUpOutlined />
-                      ) : (
-                        <CaretDownOutlined />
-                      ))}
-                  </th>
-                  <th
-                    className="text-xl px-6 py-3 bg-purple-500 text-white  border cursor-pointer  border-blue-800"
-                    onClick={() => orderBy("email")}
-                  >
-                    Email{" "}
-                    {sortConfig.key === "email" &&
-                      (sortConfig.direction === "ascending" ? (
-                        <CaretUpOutlined />
-                      ) : (
-                        <CaretDownOutlined />
-                      ))}
-                  </th>
-                  <th
-                    className="text-xl px-6 py-3 bg-red-500 text-white border  border-blue-800"
-                    onClick={() => orderBy("state")}
-                  >
-                    Status{" "}
-                    {sortConfig.key === "state" &&
-                      (sortConfig.direction === "ascending" ? (
-                        <CaretUpOutlined />
-                      ) : (
-                        <CaretDownOutlined />
-                      ))}
-                  </th>
-                  <th className="px-6 py-3 bg-gray-500 text-white text-xl border border-blue-800">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((item, index) => (
-                  <tr key={index}>
-                    <td className="border border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">{generateIds()[index]}</td>
-                    <td className="border border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">{item.role}</td>
-                    <td className="border border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">{item.username}</td>
-                    <td className="border border-blue-800 px-6 py-4 bg-gray-300 tet-lg text-black mt-1">{item.email}</td>
-                    <td className="border border-blue-800 px-6 py-4 bg-gray-300 tet-lg text-black mt-1">
-                      {item.state ? "Active" : "Inactive"}
-                  </td>
-                  <td className="border border-blue-800 px-6 py-4 bg-gray-300 text-lg">
-                      <Button
-                        type="primary"
-                        icon={<ReloadOutlined />}
-                        className="mr-2 bg-blue-900 border-0 hover:bg-blue-300 border-blue-800
-                        "
-                        onClick={() => handleUpdateButtonClick(item)}
-                      >
-                        Update
-                      </Button>
-
-                      <Button
-                        icon={<CheckOutlined />}
-                        onClick={() => handleActivateAccount(item._id)}
-                        className="mr-2 bg-blue-900 hover:bg-blue-300 border-slate-300 text-white"
-                      >
-                        Status
-                      </Button>
-                      <Button
-                        icon={<InfoCircleOutlined />}
-                        onClick={() => {
-                          setShowDetailsModal(true);
-                          setSelectedUser(item);
-                          
-                        }}
-                      >
-                        Details
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="mt-2 ml-2">
-          {Array.from(
-            { length: Math.ceil(usersData.length / itemsPerPage) },
-            (_, index) => (
-              <button
-                key={index}
-                onClick={() => paginate(index + 1)}
-                className={`px-3 py-1 mx-1 ${
-                  currentPage === index + 1
-                    ? "bg-black border text-white"
-                    : "bg-gray-200 text-gray-800 border"
-                }`}
-              >
-                {index + 1}
-              </button>
-            )
-          )}
-        </div>
-        <Modal
-              title="Create User"
-              visible={showForm}
-              onCancel={() => setShowForm(false)}
-              footer={null}
-            >
-              <Form
-                name="createUserForm"
-                initialValues={{ remember: true }}
-                onFinish={handleCreateFormSubmit}
-              >
-                <Form.Item
-                  label="Name"
-                  name="username" // Cambiado de "name" a "username"
-                  rules={[{ required: true, message: "Please enter the name" }]}
+      <div className="flex h-screen overflow-hidden">
+        <LeftBar />
+        <div className="w-full">
+          <Navbar />
+          <div className="flex flex-col mt-10">
+            <div>
+              <h2 className="text-4xl font-bold mb-4 text-white text-center">Users</h2>
+              <div className="flex items-center mb-4 mt-10 justify-center">
+                <Button
+                  type="primary"
+                  style={{ backgroundColor: "green" }}
+                  onClick={() => setShowForm(true)}
+                  className="mr-4"
                 >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  label="Email"
-                  name="email"
-                  rules={[{ required: true, message: "Please enter the email" }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-      label="Role"
-      name="role"
-      rules={[{ required: true, message: "Please select the role" }]}
-    >
-      <Select style={{ width: "100%" }}>
-        {rolesData.map(role => (
-          <Option key={role._id} value={role.nombre}>
-            {role.nombre}
-          </Option>
-        ))}
-      </Select>
-    </Form.Item>
-                
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{ backgroundColor: "blue" }}
-                  >
-                    Create
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Modal>
-        <Modal
-  title={<span className="font-bold text-orange-500 flex items-center justify-center h-full">Update User</span>}
-  visible={showUpdateModal}
-  onCancel={handleCloseUpdateModal}
-  footer={null}
-  centered
-  maskStyle={{ backdropFilter: "blur(10px)" }}
->
-  <Form
-    form={form}
-    name="updateUserForm"
-    initialValues={{
-      username: selectedUser?.username,
-      email: selectedUser?.email,
-      role: selectedUser?.role,
-      state: selectedUser?.state ? "true" : "false",
-    }}
-    onFinish={handleUpdateUser}
-    labelAlign="right"  
-    labelCol={{ span: 6 }}  
-    wrapperCol={{ span: 14 }}  
-  >
-    <Form.Item
-      label="username"
-      name="username"
-      rules={[{ required: true, message: "Please enter the username" }]}
-    >
-      <Input style={{ marginLeft: "8px" }} /> 
-    </Form.Item>
-    <Form.Item
-      label="Email"
-      name="email"
-      rules={[{ required: true, message: "Please enter the email" }]}
-    >
-      <Input style={{ marginLeft: "8px" }} />
-    </Form.Item>
-
-
-    <Form.Item
-      label="Role"
-      name="role"
-      rules={[{ required: true, message: "Please select the role" }]}
-    >
-      <Select style={{ width: "100%" }}>
-        {rolesData.map(role => (
-          <Option key={role._id} value={role.nombre}>
-            {role.nombre}
-          </Option>
-        ))}
-      </Select>
-    </Form.Item>
-
-
-
-    <Form.Item
-      label="Status"
-      name="state"
-      rules={[{ required: true, message: "Please select the state" }]}
-    >
-      <Select style={{ marginLeft: "8px" }}>
-        <Option value={true}>Active</Option>
-        <Option value={false}>Inactive</Option>
-      </Select>
-    </Form.Item>
-
-    <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: "center" }}>
-      <Button
-        type="primary"
-        htmlType="submit"
-        style={{ backgroundColor: "orange", marginLeft: "auto", marginRight: 0 }}
-      >
-        Update
-      </Button>
-    </Form.Item>
-  </Form>
-</Modal>
-
-
-
-        <Modal
-          title={
-            <span className="font-bold text-orange-500">User Details</span>
-          }
-          visible={showDetailsModal}
-          onCancel={() => setShowDetailsModal(false)}
-          footer={null}
-          centered
-          maskStyle={{ backdropFilter: "blur(10px)" }}
-        >
-          {selectedUser && (
-            <div className="bg-white p-4 rounded-md shadow-orange">
-              <p>
-              <b>ID:</b> {generateIds()[filteredUsers.indexOf(selectedUser)]}
-              </p>
-              <p>
-                <b>Role:</b> {selectedUser.role}
-              </p>
-              <p>
-                <b>Name:</b> {selectedUser.username}
-              </p>
-              <p>
-                <b>Email:</b> {selectedUser.email}
-              </p>
-              <div className="flex items-center justify-end">
-                <img
-                  src={logo}
-                  alt="Inactive"
-                  className={`w-8 h-8 inline ${
-                    selectedUser.state ? "" : "opacity-50"
-                  }`}
-                  style={{ cursor: "help" }}
+                  <b>Create User</b>
+                </Button>
+                <Input
+                  placeholder="Search by Name"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  className="w-40"
                 />
-                <span className="ml-1">
-                  {selectedUser.state ? "Active" : "Inactive"}
-                </span>
               </div>
+              <div className="overflow-x-auto mt-10 flex justify-center">
+                <table className="w-10/12">
+                  <thead>
+                    <tr>
+                      <th
+                        className="text-xl px-6 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800"
+                        onClick={() => orderBy("id")}
+                      >
+                        ID{" "}
+                        {sortConfig.key === "id" &&
+                          (sortConfig.direction === "ascending" ? (
+                            <CaretUpOutlined />
+                          ) : (
+                            <CaretDownOutlined />
+                          ))}
+                      </th>
+                      <th
+                        className="text-xl px-6 py-3 bg-yellow-500 text-white border-2 cursor-pointer border-blue-800"
+                        onClick={() => orderBy("role")}
+                      >
+                        Role{" "}
+                        {sortConfig.key === "role" &&
+                          (sortConfig.direction === "ascending" ? (
+                            <CaretUpOutlined />
+                          ) : (
+                            <CaretDownOutlined />
+                          ))}
+                      </th>
+                      <th
+                        className="text-xl px-6 py-3 bg-green-500 text-white border-2 cursor-pointer border-blue-800"
+                        onClick={() => orderBy("username")}
+                      >
+                        Name{" "}
+                        {sortConfig.key === "username" &&
+                          (sortConfig.direction === "ascending" ? (
+                            <CaretUpOutlined />
+                          ) : (
+                            <CaretDownOutlined />
+                          ))}
+                      </th>
+                      <th
+                        className="text-xl px-6 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800"
+                        onClick={() => orderBy("email")}
+                      >
+                        Email{" "}
+                        {sortConfig.key === "email" &&
+                          (sortConfig.direction === "ascending" ? (
+                            <CaretUpOutlined />
+                          ) : (
+                            <CaretDownOutlined />
+                          ))}
+                      </th>
+                      <th
+                        className="text-xl px-6 py-3 bg-red-500 text-white border-2 border-blue-800"
+                        onClick={() => orderBy("state")}
+                      >
+                        Status{" "}
+                        {sortConfig.key === "state" &&
+                          (sortConfig.direction === "ascending" ? (
+                            <CaretUpOutlined />
+                          ) : (
+                            <CaretDownOutlined />
+                          ))}
+                      </th>
+                      <th className="px-6 py-3 bg-gray-500 text-white text-xl border-2 border-blue-800">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentItems.map((item, index) => (
+                      <tr key={index}>
+                        <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">{generateIds()[index]}</td>
+                        <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">{item.role}</td>
+                        <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">{item.username}</td>
+                        <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">{item.email}</td>
+                        <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
+                          {item.state ? "Active" : "Inactive"}
+                        </td>
+                        <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
+                          <button
+                            onClick={() => handleActivateAccount(item._id)}
+                            className={`${
+                              item.state ? "bg-red-500 hover:bg-red-700" : "bg-green-500 hover:bg-green-700"
+                            } text-white font-bold py-2 px-4 rounded`}
+                          >
+                            {item.state ? "Deactivate" : "Activate"}
+                          </button>
+                          <button
+                            onClick={() => handleUpdateButtonClick(item)}
+                            className="bg-blue-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded ml-2"
+                          >
+                            Update
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedUserId(item._id);
+                              setShowDetailsModal(true);
+                            }}
+                            className="bg-purple-500 hover:bg-zinc-300 text-white font-bold py-2 px-4 rounded ml-2"
+                          >
+                            <InfoCircleOutlined />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {filteredUsers.length > itemsPerPage && (
+                <div className="flex justify-center mt-4">
+                  <Button
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="mr-2"
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentItems.length < itemsPerPage}
+                  >
+                    Next
+                  </Button>
+                </div>
+              )}
             </div>
-            
-          )}
-            {console.log("Selected User:", selectedUser)}
+          </div>
 
-        </Modal>
+          {/* Create User Modal */}
+          <Modal
+            title="Create User"
+            visible={showForm}
+            onCancel={() => setShowForm(false)}
+            footer={null}
+          >
+            <Form form={form} onFinish={handleCreateFormSubmit}>
+              <Form.Item
+                name="username"
+                label="Username"
+                rules={[{ required: true, message: "Please enter a username" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[{ required: true, message: "Please enter an email" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="role"
+                label="Role"
+                rules={[{ required: true, message: "Please select a role" }]}
+              >
+                <Select>
+                  {rolesData.map((role) => (
+                    <Option key={role.id} value={role.name}>
+                      {role.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                name="state"
+                label="State"
+                valuePropName="checked"
+                rules={[{ required: true, message: "Please select a state" }]}
+              >
+                <Select>
+                  <Option value={true}>Active</Option>
+                  <Option value={false}>Inactive</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
+
+          {/* Update User Modal */}
+          <Modal
+            title="Update User"
+            visible={showUpdateModal}
+            onCancel={handleCloseUpdateModal}
+            footer={null}
+          >
+            <Form form={form} onFinish={handleUpdateUser}>
+              <Form.Item
+                name="username"
+                label="Username"
+                rules={[{ required: true, message: "Please enter a username" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[{ required: true, message: "Please enter an email" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="role"
+                label="Role"
+                rules={[{ required: true, message: "Please select a role" }]}
+              >
+                <Select>
+                  {rolesData.map((role) => (
+                    <Option key={role.id} value={role.name}>
+                      {role.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                name="state"
+                label="State"
+                valuePropName="checked"
+                rules={[{ required: true, message: "Please select a state" }]}
+              >
+                <Select>
+                  <Option value={true}>Active</Option>
+                  <Option value={false}>Inactive</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Update
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
+
+          {/* User Details Modal */}
+          <Modal
+            title="User Details"
+            visible={showDetailsModal}
+            onCancel={() => setShowDetailsModal(false)}
+            footer={[
+              <Button key="close" onClick={() => setShowDetailsModal(false)}>
+                Close
+              </Button>,
+            ]}
+          >
+            {selectedUser && (
+              <div>
+                <p>
+                  <strong>ID:</strong> {selectedUser._id}
+                </p>
+                <p>
+                  <strong>Name:</strong> {selectedUser.username}
+                </p>
+                <p>
+                  <strong>Email:</strong> {selectedUser.email}
+                </p>
+                <p>
+                  <strong>Role:</strong> {selectedUser.role}
+                </p>
+                <p>
+                  <strong>Status:</strong>{" "}
+                  {selectedUser.state ? "Active" : "Inactive"}
+                </p>
+              </div>
+            )}
+          </Modal>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

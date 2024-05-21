@@ -4,12 +4,14 @@ import { Button, Modal, Checkbox, Pagination, Input, Form } from "antd";
 import { CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { useRoleContext } from "../../context/user/role.context";
 import { usePermissionContext } from "../../context/user/permissions.context";
-import CreateRolForm from './CreateRolForm';
+import CreateRolForm from "./CreateRolForm";
+import Navbar from "./NavBar";
 
 const { useForm } = Form;
 
 const DataTable = () => {
   const [permissionsUpdated, setPermissionsUpdated] = useState(false);
+
   const { rolesData, updateRole } = useRoleContext();
   const { permissionsData } = usePermissionContext();
 
@@ -17,15 +19,13 @@ const DataTable = () => {
   const [searchValue, setSearchValue] = useState("");
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
   const [form] = useForm();
+
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState(null);
-  const [selectedRole, setSelectedRole] = useState(null);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "ascending" });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [selectedPermissionsMap, setSelectedPermissionsMap] = useState({});
 
+  const [selectedRole, setSelectedRole] = useState(null);
   useEffect(() => {
     if (selectedRoleId) {
       setSelectedRole(rolesData.find((role) => role._id === selectedRoleId));
@@ -39,6 +39,11 @@ const DataTable = () => {
     });
   }, [selectedRole, form]);
 
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
+
   const filteredRoles = rolesData.filter((role) =>
     Object.values(role).some(
       (value) =>
@@ -47,6 +52,9 @@ const DataTable = () => {
         value.toLowerCase().includes(searchValue.toLowerCase())
     )
   );
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,7 +69,11 @@ const DataTable = () => {
     };
 
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    handleResize(); // Initial call to set the correct itemsPerPage
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [updatedDataFlag]);
 
   useEffect(() => {
@@ -108,12 +120,16 @@ const DataTable = () => {
     .filter((item) => filteredRoles.includes(item))
     .slice(indexOfFirstItem, indexOfLastItem);
 
+  const totalPages = Math.ceil(filteredRoles.length / itemsPerPage);
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleViewPermissions = (role) => {
     setShowDetailsModal(true);
     setSelectedRoleId(role._id);
   };
+
+  const [selectedPermissionsMap, setSelectedPermissionsMap] = useState({});
 
   const handleCheckboxChange = (roleId, permissionId) => {
     setSelectedPermissionsMap((prevMap) => {
@@ -123,7 +139,11 @@ const DataTable = () => {
         : [...selectedPermissions, permissionId];
 
       localStorage.setItem(roleId, JSON.stringify(updatedPermissions));
-      return { ...prevMap, [roleId]: updatedPermissions };
+
+      return {
+        ...prevMap,
+        [roleId]: updatedPermissions,
+      };
     });
   };
 
@@ -154,7 +174,7 @@ const DataTable = () => {
   };
 
   const handleCreateRol = (role) => {
-    console.log("Nuevo curso:", role);
+    console.log("Nuevo rol:", role);
     setShowForm(false);
   };
 
@@ -162,15 +182,17 @@ const DataTable = () => {
     try {
       if (selectedRole) {
         const permissionIdMap = {};
-        permissionsData.info.forEach(permission => {
+        permissionsData.info.forEach((permission) => {
           permissionIdMap[permission.nombre] = permission._id;
           setPermissionsUpdated(true);
         });
 
         const updatedPermissions = [
           ...new Set([
-            ...(selectedRole.permissions || []).map(nombre => permissionIdMap[nombre]),
-            ...selectedPermissionsMap[selectedRoleId] || []
+            ...(selectedRole.permissions || []).map(
+              (nombre) => permissionIdMap[nombre]
+            ),
+            ...(selectedPermissionsMap[selectedRoleId] || []),
           ]),
         ];
 
@@ -188,139 +210,185 @@ const DataTable = () => {
 
   return (
     <div className="flex h-screen bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
-      <LeftBar className="flex h-screen overflow-hidden" />
-      <div className="ml-10 flex flex-col w-3/4 mr-10">
-        <div>
-          <h2 className="text-3xl font-bold mb-4 text-white">Roles</h2>
-          <div className="flex items-center mb-4">
-            <Button
-              type="primary"
-              style={{ backgroundColor: "green" }}
-              onClick={() => setShowForm(true)}
-              className="mr-4"
-            >
-              <b>Create Rol</b>
-            </Button>
-            <Input
-              placeholder="Search by roles"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              className="w-40"
-            />
-          </div>
-          <div className="overflow-x-auto w-full">
-            <table className="w-full bg-gray-300">
-              <thead>
-                <tr>
-                  <th
-                    className="px-6 py-3 bg-yellow-400 text-white border border-blue-800 cursor-pointer"
-                    onClick={() => orderBy("id")}
-                  >
-                    ID{" "}
-                    {sortConfig.key === "id" &&
-                      (sortConfig.direction === "ascending" ? (
-                        <CaretUpOutlined />
-                      ) : (
-                        <CaretDownOutlined />
-                      ))}
-                  </th>
-                  <th
-                    className="px-6 py-3 bg-fuchsia-600 text-white border border-blue-800 cursor-pointer"
-                    onClick={() => orderBy("nombre")}
-                  >
-                    Name{" "}
-                    {sortConfig.key === "nombre" &&
-                      (sortConfig.direction === "ascending" ? (
-                        <CaretUpOutlined />
-                      ) : (
-                        <CaretDownOutlined />
-                      ))}
-                  </th>
-                  <th className="px-6 py-4 bg-pink-500 text-white border border-blue-800">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {rolesData &&
-                  currentItems.map((role, index) => (
-                    <tr key={role._id}>
-                      <td className="border border-blue-800 px-6 text-black text-center font-semibold py-2 ">{generateIds()[index]}</td>
-                      <td className="border border-blue-800 px-6 text-black text-center font-semibold py-2 ">{role.nombre}</td>
-                      <td className="border border-blue-800 px-6 text-black text-center py-4 ">
-                        <Button className="text-black font-semibold"
-                          type="primary"
-                          onClick={() => handleViewPermissions(role)}
-                        >
-                          View
-                        </Button>{" "}
-                        <Button className="text-black font-semibold"
-                          type="primary"
-                          onClick={() => handleAssignPermissions(role)}
-                        >
-                          Assign
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
+      <LeftBar />
+      <div className="w-full">
+        <Navbar />
+        <div className="flex flex-col mt-10">
+          <div>
+            <h2 className="text-3xl font-bold mb-4 text-white text-center">Roles</h2>
+            <div className="flex items-center mb-4 mt-10 justify-center">
+              <Button
+                type="primary"
+                style={{ backgroundColor: "green" }}
+                onClick={() => setShowForm(true)}
+                className="mr-4"
+              >
+                <b>Create Rol</b>
+              </Button>
+              <Input
+                placeholder="Search by roles"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                className="w-40"
+              />
+            </div>
+            <div className="overflow-x-auto mt-10 flex justify-center">
+              <table className="md:w-10/12 bg-gray-300">
+                <thead>
+                  <tr>
+                    <th
+                      className="px-6 py-4 bg-blue-500 text-white border-2 border-blue-800 cursor-pointer"
+                      onClick={() => orderBy("id")}
+                    >
+                      ID{" "}
+                      {sortConfig.key === "id" &&
+                        (sortConfig.direction === "ascending" ? (
+                          <CaretUpOutlined />
+                        ) : (
+                          <CaretDownOutlined />
+                        ))}
+                    </th>
+                    <th
+                      className="px-6 py-4 bg-yellow-500 text-white border-2 border-blue-800 cursor-pointer"
+                      onClick={() => orderBy("nombre")}
+                    >
+                      Name{" "}
+                      {sortConfig.key === "nombre" &&
+                        (sortConfig.direction === "ascending" ? (
+                          <CaretUpOutlined />
+                        ) : (
+                          <CaretDownOutlined />
+                        ))}
+                    </th>
+                    <th className="w-72 py-4 bg-green-500 text-white border-2 border-blue-800">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rolesData &&
+                    currentItems.map((role, index) => (
+                      <tr key={role._id}>
+                        <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg">
+                          {generateIds()[index]}
+                        </td>
+                        <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg">
+                          {role.nombre}
+                        </td>
+                        <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg">
+                          <Button
+                            className="bg-blue-900 h-10 "
+                            type="primary"
+                            onClick={() => handleViewPermissions(role)}
+                          >
+                            View
+                          </Button>{" "}
+                          <Button
+                            className="bg-cyan-800 h-10"
+                            type="primary"
+                            onClick={() => handleAssignPermissions(role)}
+                          >
+                            Assign
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
               </table>
-          </div>
-          <div className="flex justify-center mt-4">
-            <Pagination
-              current={currentPage}
-              pageSize={itemsPerPage}
-              total={filteredRoles.length}
-              onChange={paginate}
-            />
+            </div>
+            {totalPages > 1 && (
+              <div className="flex justify-end mr-32 mt-6">
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => paginate(index + 1)}
+                    className={`px-3 py-1 mx-1 ${
+                      currentPage === index + 1
+                        ? "bg-black border text-white"
+                        : "bg-gray-200 text-gray-800 border"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
+        <Modal
+          className="shadow-md shadow-pink-400"
+          title={
+            selectedRole ? `Permissions for ${selectedRole.nombre}` : "Role Details"
+          }
+          visible={showDetailsModal}
+          onCancel={handleModalClose}
+          footer={null}
+          centered
+          maskStyle={{ backdropFilter: "blur(10px)" }}
+        >
+          {selectedRole && (
+            <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
+              <p>
+                <b>Role ID:</b> {selectedRole._id}
+              </p>
+              <p>
+                <b>Name:</b> {selectedRole.nombre}
+              </p>
+              <p>
+                <b>Permissions:</b>
+              </p>
+              <ul>
+                {selectedRole &&
+                  selectedRole.permisos &&
+                  selectedRole.permisos.map((permiso) => (
+                    <li key={permiso}>{permiso}</li>
+                  ))}
+              </ul>
+            </div>
+          )}
+        </Modal>
+        <Modal
+          className="shadow-2xl shadow-pink-400"
+          title="Assign Permissions"
+          visible={showAssignModal}
+          onCancel={handleModalClose}
+          footer={[
+            <Button
+              className="bg-sky-700 font-medium"
+              key="submit"
+              type="primary"
+              onClick={handleAssignPermissionsSubmit}
+            >
+              Assign Permissions
+            </Button>,
+          ]}
+          centered
+          maskStyle={{ backdropFilter: "blur(10px)" }}
+          maskClosable={false}
+          keyboard={false}
+        >
+          {permissionsData &&
+            permissionsData.info &&
+            permissionsData.info.map((permission) => (
+              <div key={permission._id}>
+                <Checkbox
+                  checked={selectedPermissionsMap[selectedRoleId]?.includes(permission._id)}
+                  onChange={() => handleCheckboxChange(selectedRoleId, permission._id)}
+                  style={{
+                    color: selectedPermissionsMap[selectedRoleId]?.includes(permission._id)
+                      ? "green"
+                      : "red",
+                  }}
+                >
+                  {permission.nombre}
+                </Checkbox>
+              </div>
+            ))}
+        </Modal>
+        <CreateRolForm visible={showForm} onClose={handleFormClose} onCreate={handleCreateRol} />
       </div>
-
-      <Modal
-        title="Assign Permissions"
-        visible={showAssignModal}
-        onCancel={handleModalClose}
-        onOk={handleAssignPermissionsSubmit}
-      >
-        <h2>Role: {selectedRole?.nombre}</h2>
-        {permissionsData?.info?.map((permission) => (
-          <Checkbox
-            key={permission._id}
-            checked={selectedPermissionsMap[selectedRoleId]?.includes(permission._id)}
-            onChange={() => handleCheckboxChange(selectedRoleId, permission._id)}
-          >
-            {permission.nombre}
-          </Checkbox>
-        ))}
-      </Modal>
-
-      <Modal
-        title="Role Permissions"
-        visible={showDetailsModal}
-        onCancel={handleModalClose}
-        footer={null}
-      >
-        <h2>Role: {selectedRole?.nombre}</h2>
-        <ul>
-          {selectedRole?.permissions?.map((permissionId) => {
-            const permission = permissionsData?.info?.find((perm) => perm._id === permissionId);
-            return permission ? <li key={permissionId}>{permission.nombre}</li> : null;
-          })}
-        </ul>
-      </Modal>
-
-      <Modal
-        title="Create Rol"
-        visible={showForm}
-        onCancel={handleFormClose}
-        footer={null}
-      >
-        <CreateRolForm onSubmit={handleCreateRol} onClose={handleFormClose} />
-      </Modal>
     </div>
   );
 };
 
 export default DataTable;
-

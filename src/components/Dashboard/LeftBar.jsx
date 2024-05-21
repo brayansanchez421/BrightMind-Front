@@ -54,8 +54,8 @@ const LeftBar = () => {
   };
   
   return (
-    <div className=" bg-gradient-to-t from-purple-800 to-teal-400 text-white w- flex flex-col items-center justify-between w-2/12 border-r border-black">
-      <div className="-mt-10 mb-10 flex flex-col items-center">
+    <div className=" bg-gradient-to-t from-purple-800 to-teal-400 text-white  flex flex-col items-center border-r border-black h-screen">
+      <div className="-mt-10 mb-10">
         <img src={logo} alt="Logo" className="h-80 " />
       </div>
       <div className="flex flex-col items-center w-full">
@@ -72,7 +72,7 @@ const LeftBar = () => {
       <Link to="/Roles" className='py-4 px-6 text-left text-lg font-semibold hover:bg-blue-800 w-full transition duration-300'>Roles</Link>
         
       <Link to="/ProfileEditor" className="py-4 px-6 text-left text-lg font-semibold hover:bg-blue-900 w-full transition duration-300">ProfileEditor</Link>
-        
+    
       </div>
       <div className="mt-auto w-full ">
         <button onClick={handleLogout} className="py-4 px-6 text-lg font-semibold hover:bg-red-500 w-full text-center transition duration-300">Sign off </button>

@@ -24,7 +24,7 @@ const Cards = () => {
 
   return (
     
-    <div className="flex flex-wrap justify-center gap-10">
+    <div className="flex justify-center gap-3 mt-36">
       <div className="bg-green-200  border-green-400 border-2 p-6 rounded-lg shadow-md flex items-center justify-center h-56 w-80 hover:shadow-lg hover:bg-gray-100 transition duration-300">
         <div className="w-20 h-16 bg-green-300 rounded-full flex items-center justify-center mr-4">
           <span className="text-2xl">{stats.usuariosActivos}</span>

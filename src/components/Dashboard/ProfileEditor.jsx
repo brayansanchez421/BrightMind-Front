@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LeftBar from '././LeftBar';
 import SettingsBar from '././SettingsBar';
 import ProfileForm from '././EditProfileForm';
+import Navbar from './NavBar';
 
 const ProfileEditor = () => {
   const [name, setName] = useState('');
@@ -31,9 +32,12 @@ const ProfileEditor = () => {
   return (
     <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
       <div className="flex h-screen overflow-hidden">
-        {/* LeftBar */}
+        
         <LeftBar />
 
+        <div className='md:w-full'>
+          <Navbar/>
+        
         {/* ProfileForm and SettingsBar */}
         <div className="flex-1 flex">
           {/* SettingsBar */}
@@ -55,6 +59,7 @@ const ProfileEditor = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
 
