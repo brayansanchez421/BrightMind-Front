@@ -25,6 +25,7 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
                 
                 // Verificar si el usuario tiene una imagen de perfil almacenada
                 if (userData.userImage) {
+                    // Establecer la URL de la imagen almacenada como la vista previa de la imagen
                     setPreviewProfileImage(userData.userImage);
                 }
             }

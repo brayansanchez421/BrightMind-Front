@@ -65,7 +65,7 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-  const updateUserPartial = async (_id, { username, email, image }) => {
+  const updateUserPartial = async (_id, { username, email, userImage }) => {
     try {
         const { data: currentUserData } = await getUser(_id);
         console.log("pruebassss:", currentUserData);
@@ -75,7 +75,7 @@ export const UserProvider = ({ children }) => {
             email: email || currentUserData.email,
             state: currentUserData.state,
             role: currentUserData.role,
-            image: image || currentUserData.image, // Asegurarse de manejar la imagen
+            userImage: userImage || currentUserData.userImage, // Asegurarse de manejar la imagen
         };
 
         console.log("pruebas 2:", updatedUserData);
