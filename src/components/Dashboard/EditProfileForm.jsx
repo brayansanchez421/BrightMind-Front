@@ -18,9 +18,15 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
         const fetchUserId = async () => {
             if (user && user.data && user.data.id) {
                 const userData = await getUserById(user.data.id);
+                console.log("tra: ", userData)
                 setUserId(userData._id);
                 setName(userData.username);
                 setEmail(userData.email);
+                
+                // Verificar si el usuario tiene una imagen de perfil almacenada
+                if (userData.userImage) {
+                    setPreviewProfileImage(userData.userImage);
+                }
             }
         };
 
@@ -31,7 +37,16 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
         e.preventDefault();
         if (userId) {
             try {
-                await updateUserPartial(userId, { username: name, email });
+                const userData = {
+                    username: name,
+                    email,
+                };
+
+                if (profileImage) {
+                    userData.userImage = profileImage;
+                }
+
+                await updateUserPartial(userId, userData);
                 toast.success('Changes saved successfully!', {
                     position: 'top-right',
                     autoClose: 3000,
@@ -41,9 +56,7 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
                     draggable: true,
                     progress: undefined,
                 });
-                setTimeout(() => {
-                    window.location.reload();
-                }, 3000);
+               
             } catch (error) {
                 toast.error('Failed to save changes. Please try again.', {
                     position: 'top-right',
