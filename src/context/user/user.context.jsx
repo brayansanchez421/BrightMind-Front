@@ -65,24 +65,31 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    const updateUserPartial = async (_id, { username, email }) => {
-        try {
-            const currentUserData = await getUserById(_id);
-            console.log("pruebassss:",currentUserData )
+  const updateUserPartial = async (_id, { username, email, userImage }) => {
+    try {
+        const { data: currentUserData } = await getUser(_id);
+        console.log("pruebassss:", currentUserData);
 
-            const updatedUserData = {
-                username: username || currentUserData.username,
-                email: email || currentUserData.email,
-                state: currentUserData.state,
-                role: currentUserData.role,
-            };
-            console.log("pruebas 2: ", updatedUserData)
+        const updatedUserData = {
+            username: username || currentUserData.username,
+            email: email || currentUserData.email,
+            state: currentUserData.state,
+            role: currentUserData.role,
+            userImage: userImage || currentUserData.userImage, // Asegurarse de manejar la imagen
+        };
 
-            await updateUserApi(_id, updatedUserData);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+        console.log("pruebas 2:", updatedUserData);
+
+        const formData = new FormData();
+        Object.keys(updatedUserData).forEach(key => {
+            formData.append(key, updatedUserData[key]);
+        });
+
+        await updateUserApi(_id, formData);
+    } catch (error) {
+        console.error(error);
+    }
+};
 
     const deleteUser = async (id) => {
         try {

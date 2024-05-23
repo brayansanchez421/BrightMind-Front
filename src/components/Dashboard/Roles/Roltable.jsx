@@ -205,6 +205,7 @@ const DataTable = () => {
         });
 
         setShowAssignModal(false);
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error updating role:", error);

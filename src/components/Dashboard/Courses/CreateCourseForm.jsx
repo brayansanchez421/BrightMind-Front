@@ -94,8 +94,8 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                 onChange={(value) => setCurso({ ...curso, categoria: value })}
               >
                 {categories.map(category => (
-                  <Option key={category._id} value={category.nombre}>
-                    {category.nombre}
+                  <Option key={category._id} value={category.name}>
+                    {category.name}
                   </Option>
                 ))}
               </Select>

@@ -5,13 +5,14 @@ import { useAuth } from '../../context/auth.context.jsx';
 import { Link } from 'react-router-dom';
 import LeftBar from './LeftBar'; // Importa el componente LeftBar
 
-const Navbar = ({ userImage }) => {
+const Navbar = () => {
   const { logout } = useAuth(); 
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const menuRef = useRef(null);
   const { getUserById } = useUserContext(); 
   const { user } = useAuth(); 
   const [username, setUsername] = useState("Cargando...");
+  const [userImage, setUserImage] = useState(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const handleLogout = async () => {
@@ -25,18 +26,21 @@ const Navbar = ({ userImage }) => {
   };
 
   useEffect(() => {
-    const fetchUsername = async () => {
-      if (user) {
+    const fetchUserData = async () => {
+      if (user && user.data && user.data.id) {
         try {
           const userData = await getUserById(user.data.id);
           setUsername(userData.username); 
+          if (userData.userImage) {
+            setUserImage(userData.userImage);
+          }
         } catch (error) {
           console.error(error);
         }
       }
     };
 
-    fetchUsername();
+    fetchUserData();
 
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
