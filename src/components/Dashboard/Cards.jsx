@@ -27,7 +27,6 @@ const Cards = ({ isLeftBarVisible }) => {
 
   const containerClass = `flex justify-center gap-3 mt-36 ${isLeftBarVisible ? 'ml-44 w-full' : ''}`;
 
-  const maxUsers = Math.max(stats.usuariosRegistrados, stats.usuariosActivos, stats.usuariosInactivos, stats.cursos);
 
   return (
     <div className="container mx-auto p-8 flex flex-row items-start justify-center">

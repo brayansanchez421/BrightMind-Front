@@ -14,8 +14,7 @@ const Navbar = () => {
   const [username, setUsername] = useState("Cargando...");
   const [userImage, setUserImage] = useState(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [userImage, setUserImage] = useState(null);
-
+  
   const handleLogout = async () => {
     try {
       await logout(); 
