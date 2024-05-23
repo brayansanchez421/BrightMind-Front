@@ -71,7 +71,7 @@ const Navbar = () => {
         <img
           src={userImage}
           alt="UserImage"
-          className="h-12 w-12 cursor-pointer mr-10 border "
+          className="h-12 w-12 cursor-pointer mr-10 rounded-full "
           onClick={handleMenuClick}
         />
       )}
