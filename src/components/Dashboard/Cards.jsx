@@ -1,7 +1,8 @@
+// Cards.jsx
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../../context/user/user.context.jsx'; 
 
-const Cards = () => {
+const Cards = ({ isLeftBarVisible }) => {
   const { usersData } = useUserContext(); 
   const [stats, setStats] = useState({
     cursos: 0,
@@ -23,6 +24,9 @@ const Cards = () => {
   }, [usersData]);
 
   const maxUsers = Math.max(stats.usuariosRegistrados, stats.usuariosActivos, stats.usuariosInactivos, stats.cursos);
+
+  const containerClass = `flex justify-center gap-3 mt-36 ${isLeftBarVisible ? 'ml-44 w-full' : ''}`;
+
 
   return (
     <div className="container mx-auto p-8 flex flex-row items-start justify-center">

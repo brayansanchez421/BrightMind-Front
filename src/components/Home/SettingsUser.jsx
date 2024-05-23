@@ -1,5 +1,5 @@
 import React from 'react';
-import LanguagePreferences from '../Dashboard/Languaje'
+import LanguagePreferences from '../Dashboard/ProfileAdmin/Languaje'
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useNavigate } from 'react-router-dom';

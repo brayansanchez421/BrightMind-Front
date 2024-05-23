@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button, Input, Modal } from "antd";
 import { ReloadOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import LeftBar from "./LeftBar";
-import { useUserContext } from "../../context/user/user.context";
-import CreateCourseForm from "./CreateCourseForm";
-import CreateCategoryForm from "./CreateCategoryForm";
-import Navbar from "./NavBar";
+import LeftBar from "../../Dashboard/LeftBar";
+import { useUserContext } from "../../../context/user/user.context";
+import CreateCourseForm from "../Courses/CreateCourseForm";
+import CreateCategoryForm from "../Courses/CreateCategoryForm";
+import Navbar from "../NavBar";
 
 const DataTablete = () => {
   const { getUsers, usersData } = useUserContext();
@@ -13,9 +13,10 @@ const DataTablete = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(5);
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
+  const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
 
   useEffect(() => {
     getUsers();
@@ -59,11 +60,16 @@ const DataTablete = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 h-screen flex">
-      <LeftBar />
-      <div className="md:w-full">
-        <Navbar />
-        <div className="flex flex-col mt-10">
+    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 ">
+      <div className="flex h-screen overflow-hidden">
+      <LeftBar onVisibilityChange={setIsLeftBarVisible}/> 
+      <div
+          className={`w-full transition-all duration-300 ${
+            isLeftBarVisible ? "ml-80 max-w-full" : ""
+          }`}
+        >
+        <Navbar  />
+        <div className="flex flex-col mt-20 p-4">
           <div>
             <h2 className="text-4xl font-bold mb-4 text-white text-center">Courses</h2>
             <div className="flex items-center mb-4 justify-center mt-10">
@@ -154,7 +160,9 @@ const DataTablete = () => {
                     ))}
                 </tbody>
               </table>
+              </div>
             </div>
+          </div>
           </div>
 
           <CreateCourseForm
@@ -202,7 +210,7 @@ const DataTablete = () => {
           )}
         </div>
       </div>
-    </div>
+    
   );
 };
 

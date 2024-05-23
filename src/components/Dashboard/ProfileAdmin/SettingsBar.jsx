@@ -3,8 +3,8 @@ import LanguagePreferences from './Languaje';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useNavigate } from 'react-router-dom';
-import { useUserContext } from "../../context/user/user.context";
-import { useAuth } from "../../context/auth.context";
+import { useUserContext } from "../../../context/user/user.context";
+import { useAuth } from "../../../context/auth.context";
 
 const MySwal = withReactContent(Swal);
 
@@ -45,7 +45,7 @@ const SettingsBar = () => {
   };
 
   return (
-    <div className="max-w-auto w-10/12 mt-36 md:ml-24 md:mr-28 bg-gradient-to-r from-violet-500 to-fuchsia-400 rounded-lg shadow-2xl shadow-rose-400 md:px-10 py-4">
+    <div className="max-w-auto w-10/12 mt-60 md:ml-52 md:mr-28 bg-gradient-to-r from-violet-500 to-fuchsia-400 rounded-lg shadow-2xl shadow-rose-400 md:px-10 py-4">
       <h2 className="text-center font-black text-white p-3 text-lg md:text-xl">Account Setting</h2>
       <ul className="list-disc pl-2 md:pl-4">
         <li className=''>

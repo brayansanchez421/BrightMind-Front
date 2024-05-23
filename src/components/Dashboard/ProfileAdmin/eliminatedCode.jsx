@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useUserContext } from "../../context/user/user.context";
-import { useAuth } from "../../context/auth.context"; 
+import { useUserContext } from "../../../context/user/user.context";
+import { useAuth } from "../../../context/auth.context"; 
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import logo from '../../assets/img/hola.png';
+import logo from '../../../assets/img/hola.png';
 
 const DeleteAccountConfirmation = () => {
     const navigate = useNavigate();

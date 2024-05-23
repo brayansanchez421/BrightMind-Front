@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import LeftBar from "./LeftBar";
+import LeftBar from "../../Dashboard/LeftBar";
 import { Button, Modal, Checkbox, Pagination, Input, Form } from "antd";
 import { CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
-import { useRoleContext } from "../../context/user/role.context";
-import { usePermissionContext } from "../../context/user/permissions.context";
-import CreateRolForm from "./CreateRolForm";
-import Navbar from "./NavBar";
+import { useRoleContext } from "../../../context/user/role.context";
+import { usePermissionContext } from "../../../context/user/permissions.context";
+import CreateRolForm from "../Roles/CreateRolForm";
+import Navbar from "../../Dashboard/NavBar";
 
 const { useForm } = Form;
 
@@ -26,6 +26,8 @@ const DataTable = () => {
   const [selectedRoleId, setSelectedRoleId] = useState(null);
 
   const [selectedRole, setSelectedRole] = useState(null);
+  const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
+
   useEffect(() => {
     if (selectedRoleId) {
       setSelectedRole(rolesData.find((role) => role._id === selectedRoleId));
@@ -60,13 +62,14 @@ const DataTable = () => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width < 1600) {
-        setItemsPerPage(6);
+        setItemsPerPage(5);
       } else if (width < 2000) {
-        setItemsPerPage(8);
+        setItemsPerPage(5);
       } else {
-        setItemsPerPage(10);
+        setItemsPerPage(5);
       }
     };
+    
 
     window.addEventListener("resize", handleResize);
     handleResize(); // Initial call to set the correct itemsPerPage
@@ -210,9 +213,15 @@ const DataTable = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
-      <LeftBar />
-      <div className="w-full">
+    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
+      <div className="flex h-screen overflow-hidden">
+      <LeftBar onVisibilityChange={setIsLeftBarVisible} />
+      <div
+          className={`w-full transition-all duration-300 ${
+            isLeftBarVisible ? "ml-80 max-w-full" : ""
+          }`}
+        >
+
         <Navbar />
         <div className="flex flex-col mt-10">
           <div>
@@ -298,7 +307,7 @@ const DataTable = () => {
               </table>
             </div>
             {totalPages > 1 && (
-              <div className="flex justify-end mr-32 mt-6">
+              <div className="flex justify-end mr-40 mt-6">
                 {Array.from({ length: totalPages }, (_, index) => (
                   <button
                     key={index}
@@ -316,6 +325,8 @@ const DataTable = () => {
             )}
           </div>
         </div>
+      </div>
+      </div>  
         <Modal
           className="shadow-md shadow-pink-400"
           title={
@@ -388,7 +399,7 @@ const DataTable = () => {
         </Modal>
         <CreateRolForm visible={showForm} onClose={handleFormClose} onCreate={handleCreateRol} />
       </div>
-    </div>
+    
   );
 };
 

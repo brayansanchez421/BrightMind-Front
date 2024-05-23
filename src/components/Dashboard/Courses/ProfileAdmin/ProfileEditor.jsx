@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import LeftBar from '././LeftBar';
-import SettingsBar from '././SettingsBar';
-import ProfileForm from '././EditProfileForm';
+import LeftBar from './LeftBar';
+import SettingsBar from './SettingsBar';
+import ProfileForm from './EditProfileForm';
 import Navbar from './NavBar';
 
 const ProfileEditor = () => {
