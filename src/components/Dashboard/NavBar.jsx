@@ -14,6 +14,7 @@ const Navbar = () => {
   const [username, setUsername] = useState("Cargando...");
   const [userImage, setUserImage] = useState(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [userImage, setUserImage] = useState(null);
 
   const handleLogout = async () => {
     try {
@@ -31,6 +32,9 @@ const Navbar = () => {
         try {
           const userData = await getUserById(user.data.id);
           setUsername(userData.username); 
+          if (userData.userImage) {
+            setUserImage(userData.userImage);
+          }
           if (userData.userImage) {
             setUserImage(userData.userImage);
           }
