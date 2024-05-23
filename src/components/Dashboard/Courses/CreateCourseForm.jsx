@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Modal, Button, Input } from "antd";
-import { useCategoryContext } from "../../context/courses/category.context";
+import { useCategoryContext } from "../../../context/courses/category.context";
 
 import { Select } from "antd";
 

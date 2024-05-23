@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Input } from "antd";
-import { useCategoryContext } from "../../context/courses/category.context";
+import { useCategoryContext } from "../../../context/courses/category.context";
 
 const CreateCategoryForm = ({ visible, onClose }) => {
   const { createCategory } = useCategoryContext();

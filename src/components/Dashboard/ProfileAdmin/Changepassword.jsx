@@ -3,8 +3,10 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
 import { Link, useParams, useNavigate } from 'react-router-dom'; // Importa useParams
-import { passwordReset } from '../../api/auth'; // Debes implementar esta función en tu API
-import LeftBar from './LeftBar';
+import { passwordReset } from '../../../api/auth'; // Debes implementar esta función en tu API
+import LeftBar from './../../Dashboard/LeftBar';
+import Navbar from './../../Dashboard/NavBar';
+
 
 function Changepassword() {
     const { token } = useParams(); // Obtiene el token de los parámetros de la URL
@@ -45,11 +47,24 @@ function Changepassword() {
         setPasswordsMatch(formik.values.password === formik.values.confirmPassword);
     }, [formik.values.password, formik.values.confirmPassword]);
 
+    const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
+
+  
+    const handleLeftBarVisibilityChange = (isVisible) => {
+      setIsLeftBarVisible(isVisible);
+    };
+  
+
     return (
         <div className="flex min-h-screen bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600">
-            <LeftBar/>
+             <div className="flex h-screen overflow-hidden flex-1">
+            <LeftBar onVisibilityChange={handleLeftBarVisibilityChange}/>
+            <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? 'ml-80' : ''}`}>
+
+            <Navbar/>
+            
             <ToastContainer />
-            <div className="flex w-1/2 mx-auto justify-center items-center ">
+            <div className="flex w-1/2 mx-auto justify-center items-center mt-20 ">
                 <div className="p-6 bg-white rounded-3xl shadow-2xl w-4/5 bg-gradient-to-r from-violet-600  to-rose-500  ">
                     <h2 className="text-5xl font-black text-center mb-2 text-white ">Change Password</h2>
                     <form onSubmit={formik.handleSubmit} className="py-10 flex flex-col space-y-6">
@@ -104,6 +119,8 @@ function Changepassword() {
                     
                 </div>
             </div>
+            </div>
+        </div>
         </div>
     );
 }

@@ -1,7 +1,8 @@
+// Cards.jsx
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../../context/user/user.context.jsx'; 
 
-const Cards = () => {
+const Cards = ({ isLeftBarVisible }) => {
   const { usersData } = useUserContext(); 
   const [stats, setStats] = useState({
     cursos: 0,
@@ -22,10 +23,11 @@ const Cards = () => {
     });
   }, [usersData]);
 
+  const containerClass = `flex justify-center gap-3 mt-36 ${isLeftBarVisible ? 'ml-44 w-full' : ''}`;
+
   return (
-    
-    <div className="flex justify-center gap-3 mt-36">
-      <div className="bg-green-200  border-green-400 border-2 p-6 rounded-lg shadow-md flex items-center justify-center h-56 w-80 hover:shadow-lg hover:bg-gray-100 transition duration-300">
+    <div className={containerClass}>
+      <div className="bg-green-200  border-green-400 border-2 p-6 rounded-lg shadow-md flex items-center justify-center h-56 w-80 hover:shadow-lg hover:bg-gray-100 transition duration-600">
         <div className="w-20 h-16 bg-green-300 rounded-full flex items-center justify-center mr-4">
           <span className="text-2xl">{stats.usuariosActivos}</span>
         </div>

@@ -1,6 +1,6 @@
 import  { useState } from "react";
 import { Modal, Button, Input } from "antd";
-import { useRoleContext } from "../../context/user/role.context"; // Importa el contexto de roles
+import { useRoleContext } from "../../../context/user/role.context"; // Importa el contexto de roles
 
 const CreateRolForm = ({ visible, onClose }) => {
   const { createRole, rolesData } = useRoleContext(); // Obtiene la función createRole del contexto de roles

@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaBell } from 'react-icons/fa';
+import { FaBell, FaBars } from 'react-icons/fa'; // Importa el icono de menú
 import { useUserContext } from '../../context/user/user.context.jsx';
 import { useAuth } from '../../context/auth.context.jsx'; 
 import { Link } from 'react-router-dom';
+import LeftBar from './LeftBar'; // Importa el componente LeftBar
 
 const Navbar = ({ userImage }) => {
   const { logout } = useAuth(); 
-
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const menuRef = useRef(null);
   const { getUserById } = useUserContext(); 
   const { user } = useAuth(); 
   const [username, setUsername] = useState("Cargando...");
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -21,10 +22,6 @@ const Navbar = ({ userImage }) => {
     } catch (error) {
       console.error('Error al hacer logout:', error);
     }
-  };
-
-  const handleMenuClick = () => {
-    setIsMenuVisible(!isMenuVisible);
   };
 
   useEffect(() => {
@@ -53,30 +50,54 @@ const Navbar = ({ userImage }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [getUserById, user]);
-  
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
 
   return (
-    <nav className=" bg-teal-400 px-4 py-2 flex items-center justify-between shadow-lg shadow-teal-200 rounded-md border-l-2 border-teal-200  "> 
-      <div className=" items-center">
-        <FaBell className="text-white mr-4 text-lg ml-10 mt-1" /> 
-        <span className="text-white mr-4 text-xl font-bold">{username}</span>
-      </div >
-      <Link to="/admin" className="text-white text-2xl font-black flex items-center justify-center h-full">
-        <h1 className="m-0 flex justify-center  mr-8">BrightMind</h1>
-      </Link>
-      <img
-        src={userImage}
-        alt="UserImage"
-        className="h-12 w-12 cursor-pointer mr-10  border "
-        onClick={handleMenuClick}
-      />
-      <div ref={menuRef} className={`${isMenuVisible ? 'block' : 'hidden'} absolute right-12 mt-52 w-56 bg-gradient-to-r from-purple-700 to-pink-600 shadow-orange shadow-teal-200 rounded-md `}>
-        <ul className="py-2">
-          <li className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded "><Link to="/ProfileEditor">Configure profile</Link></li>
-          <li className="px-4 py-3 hover:bg-red-600 cursor-pointer text-white rounded" onClick={handleLogout}>Go out</li>
-        </ul>
-      </div>
-    </nav>
+    <>
+      <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
+      <nav className={`shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 flex items-center  justify-between transition-all duration-600 ${isSidebarVisible ? 'pl-10' : 'pl-10'}`}> 
+        <div className="flex justify-center items-center">
+          <FaBars className="text-white  text-lg absolute mr-56" /> 
+          <FaBell className="text-white mr-2 text-lg ml-10 " /> 
+          <span className="text-white mr-10 text-xl font-bold">{username}</span>
+        </div>
+        <Link to="/admin" className="text-white text-2xl font-black flex items-center justify-center h-full">
+          <h1 className=" flex justify-center absolute mr-40">BrightMind</h1>
+        </Link>
+        <div className="relative">
+          <img
+            src={userImage}
+            alt="UserImage"
+            className="h-12 w-12 cursor-pointer mr-10 border"
+            onMouseEnter={() => setIsMenuVisible(true)}
+            onMouseLeave={() => setIsMenuVisible(false)}
+          />
+          <div
+            ref={menuRef}
+            onMouseEnter={() => setIsMenuVisible(true)}
+            onMouseLeave={() => setIsMenuVisible(false)}
+            className={`${
+              isMenuVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
+            } absolute right-0 mt-5 w-56 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-300 ease-in-out`}
+          >
+            <ul className="py-2">
+              <li className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded">
+                <Link to="/ProfileEditor">Configure profile</Link>
+              </li>
+              <li
+                className="px-4 py-3 hover:bg-red-600 cursor-pointer text-white rounded"
+                onClick={handleLogout}
+              >
+                Go out
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 };
 

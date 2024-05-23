@@ -24,11 +24,11 @@ import ChangePasswordUser from './components/Home/ChangePasswordUser';
 
 //Vista admin
 import Dashboard from "./views/Dashboard";
-import Usuarios from "./components/Dashboard/Usuarios";
-import ChangePassword from "./components/Dashboard/Changepassword";
-import ProfileEditor from "./components/Dashboard/ProfileEditor";
-import Courses from "./components/Dashboard/Courses";
-import Roles from "./components/Dashboard/Roltable";
+import Usuarios from "./components/Dashboard/Usuarios/Usuarios";
+import ChangePassword from "./components/Dashboard/ProfileAdmin/Changepassword";
+import ProfileEditor from "./components/Dashboard/ProfileAdmin/ProfileEditor";
+import Courses from "./components/Dashboard/Courses/Courses";
+import Roles from "./components/Dashboard/Roles/Roltable";
 
 
 //Vista usuarios                
@@ -52,7 +52,7 @@ import ActivationComponent from './components/Activate'
 
 
 
-import DeleteAccountConfirmation from "./components/Dashboard/eliminatedCode";
+import DeleteAccountConfirmation from "./components/Dashboard/ProfileAdmin/eliminatedCode";
 // import ProfileUser from "./components/Dashboard/Profile-User";
 
 
