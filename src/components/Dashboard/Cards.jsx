@@ -25,11 +25,11 @@ const Cards = ({ isLeftBarVisible }) => {
 
   const maxUsers = Math.max(stats.usuariosRegistrados, stats.usuariosActivos, stats.usuariosInactivos, stats.cursos);
 
-  const containerClass = `flex justify-center gap-3 mt-36 ${isLeftBarVisible ? 'ml-44 w-full' : ''}`;
+
 
 
   return (
-    <div className="container mx-auto p-8 flex flex-row items-start justify-center">
+    <div className="container mx-auto p-8 flex flex-row items-start justify-center mt-20">
       <div className="flex flex-col items-center mr-8 p-6">
         <div className="bg-green-200 border-green-400 border-2 p-9 rounded-lg shadow-md mb-8 hover:shadow-lg hover:bg-gray-100 transition duration-300">
           <div className="w-16 h-16 bg-green-300 rounded-full flex items-center justify-center mb-4">

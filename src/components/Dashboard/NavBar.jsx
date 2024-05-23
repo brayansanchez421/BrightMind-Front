@@ -75,13 +75,15 @@ const Navbar = () => {
           <h1 className=" flex justify-center absolute mr-40">BrightMind</h1>
         </Link>
         <div className="relative">
-          <img
-            src={userImage}
-            alt="UserImage"
-            className="h-12 w-12 cursor-pointer mr-10 border"
-            onMouseEnter={() => setIsMenuVisible(true)}
-            onMouseLeave={() => setIsMenuVisible(false)}
-          />
+        <Link to="/ProfileEditor">
+            <img 
+              src={userImage}
+              alt="UserImage"
+              className="h-14 w-14 cursor-pointer mr-10 border rounded-full"
+              onMouseEnter={() => setIsMenuVisible(true)}
+              onMouseLeave={() => setIsMenuVisible(false)}
+            />
+          </Link>
           <div
             ref={menuRef}
             onMouseEnter={() => setIsMenuVisible(true)}
