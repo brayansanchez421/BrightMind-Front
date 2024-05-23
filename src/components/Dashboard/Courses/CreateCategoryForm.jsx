@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Input } from "antd";
+import { Modal, Button, Input, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { useCategoryContext } from "../../../context/courses/category.context";
 
 const CreateCategoryForm = ({ visible, onClose }) => {
   const { createCategory } = useCategoryContext();
 
-  const [category, setCategory] = useState({ name: "" });
+  const [category, setCategory] = useState({ name: "", description: "", image: null });
+  const [imagePreview, setImagePreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCategory({ ...category, [name]: value });
+  };
+
+  const handleImageChange = ({ file }) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreview(e.target.result);
+    };
+    reader.readAsDataURL(file.originFileObj);
+    setCategory({ ...category, image: file.originFileObj });
   };
 
   const handleSubmit = async (e) => {
@@ -27,7 +38,8 @@ const CreateCategoryForm = ({ visible, onClose }) => {
 
   useEffect(() => {
     if (visible) {
-      setCategory({ name: "" }); // Restablece el estado del formulario cuando se abre
+      setCategory({ name: "", description: "", image: null });
+      setImagePreview(null); // Restablece la previsualización de la imagen cuando se abre el formulario
     }
   }, [visible]);
 
@@ -52,10 +64,39 @@ const CreateCategoryForm = ({ visible, onClose }) => {
                 onChange={handleChange}
               />
             </label>
-            {errorMessage && (
-              <p className="text-red-500 text-sm">{errorMessage}</p>
-            )}
           </div>
+          <div className="mb-4">
+            <label className="block text-zinc-100 text-lg font-medium mb-4">
+              Descripción: <br />
+              <Input.TextArea
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                name="description"
+                value={category.description}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-zinc-100 text-lg font-medium mb-4">
+              Imagen: <br />
+              <Upload
+                listType="picture"
+                maxCount={1}
+                beforeUpload={() => false}
+                onChange={handleImageChange}
+              >
+                <Button icon={<UploadOutlined />}>Seleccionar archivo</Button>
+              </Upload>
+              {imagePreview && (
+                <div className="mt-4">
+                  <img src={imagePreview} alt="preview" style={{ width: '100%', maxHeight: '200px' }} />
+                </div>
+              )}
+            </label>
+          </div>
+          {errorMessage && (
+            <p className="text-red-500 text-sm">{errorMessage}</p>
+          )}
         </div>
         <div className="flex items-center justify-center mt-10">
           <Button

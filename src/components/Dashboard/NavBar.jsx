@@ -34,9 +34,6 @@ const Navbar = () => {
           if (userData.userImage) {
             setUserImage(userData.userImage);
           }
-          if (userData.userImage) {
-            setUserImage(userData.userImage);
-          }
         } catch (error) {
           console.error(error);
         }
@@ -65,21 +62,21 @@ const Navbar = () => {
   return (
     <>
       <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
-      <nav className={`shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 flex items-center  justify-between transition-all duration-600 ${isSidebarVisible ? 'pl-10' : 'pl-10'}`}> 
-        <div className="flex justify-center items-center">
-          <FaBars className="text-white  text-lg absolute mr-56" /> 
-          <FaBell className="text-white mr-2 text-lg ml-10 " /> 
-          <span className="text-white mr-10 text-xl font-bold">{username}</span>
+      <nav className={`shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 flex items-center justify-between transition-all duration-600 ${isSidebarVisible ? 'pl-10' : 'pl-10'}`}>
+        <div className="flex items-center">
+          <FaBars className="text-white text-lg cursor-pointer mr-4" onClick={toggleSidebar} />
         </div>
         <Link to="/admin" className="text-white text-2xl font-black flex items-center justify-center h-full">
-          <h1 className=" flex justify-center absolute mr-40">BrightMind</h1>
+          <h1 className="absolute">BrightMind</h1>
         </Link>
-        <div className="relative">
-        <Link to="/ProfileEditor">
+        <div className="flex items-center relative">
+          <FaBell className="text-white text-lg mr-2 cursor-pointer" />
+          <span className="text-white text-xl font-bold mr-4">{username}</span>
+          <Link to="/ProfileEditor">
             <img 
               src={userImage}
               alt="UserImage"
-              className="h-14 w-14 cursor-pointer mr-10 border rounded-full"
+              className="h-14 w-14 cursor-pointer border rounded-full mr-5"
               onMouseEnter={() => setIsMenuVisible(true)}
               onMouseLeave={() => setIsMenuVisible(false)}
             />
