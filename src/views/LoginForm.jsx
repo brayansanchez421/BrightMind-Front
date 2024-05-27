@@ -1,62 +1,64 @@
-import { useState } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Link, useNavigate } from "react-router-dom";
-import Carousel from "../components/Login_components/Carousel.jsx";
-import { useAuth } from "../context/auth.context.jsx";
+// src/components/LoginForm.jsx
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Link, useNavigate } from 'react-router-dom';
+import Carousel from './../components/Login_components/Carousel';
+import { useAuth } from '../context/auth.context';
+import VideoPage from './VideoPage';
 
-function LoginForm() {
+const LoginForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false); // Estado para controlar la carga
+  const [loading, setLoading] = useState(false);
+  const [userRole, setUserRole] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { login } = useAuth();
 
   const validationSchema = yup.object().shape({
-    email: yup.string().email("Invalid email").required("Email is required"),
-    password: yup.string().required("Password is required"),
+    email: yup.string().email('Invalid email').required('Email is required'),
+    password: yup.string().required('Password is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Valores enviados al hacer inicio de sesión:", values);
+      console.log('Valores enviados al hacer inicio de sesión:', values);
       try {
-        setLoading(true); // Activar indicador de carga al iniciar sesión
-        const { success, user } = await login(values); // Obtener success y user de login
-        console.log("Inicio de sesión exitoso:", success);
-  
+        setLoading(true);
+        const { success, user } = await login(values);
+        console.log('Inicio de sesión exitoso:', success);
+
         if (success) {
           const userRole = user && user.data ? user.data.role : null;
           const userToken = user && user.data ? user.data.token : null;
           console.log(userRole);
-  
-          toast.success("Inicio de sesión exitoso");
+
+          toast.success('Inicio de sesión exitoso');
           document.cookie = 'token=' + userToken + '; path=/';
-          if (userRole === "Admin") {
-            navigate("/admin");
-          } else {
-            navigate("/home");
-          }
+          setUserRole(userRole);
+          setIsAuthenticated(true);
         } else {
-          setError("An error occurred");
-          toast.error("An error occurred");
+          setError('An error occurred');
+          toast.error('An error occurred');
         }
       } catch (error) {
         console.log(error);
-        setError("An error occurred");
-        toast.error("An error occurred");
-      } finally {
-        setLoading(false); // Desactivar indicador de carga al finalizar el inicio de sesión
+        setError('An error occurred');
+        toast.error('An error occurred');
       }
     },
   });
-  
+
+  if (isAuthenticated) {
+    return <VideoPage userRole={userRole} />;
+  }
 
   return (
     <div className="flex min-h-screen bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400">
@@ -72,10 +74,7 @@ function LoginForm() {
               </button>
             </Link>
           </div>
-          <form
-            onSubmit={formik.handleSubmit}
-            className="flex flex-col space-y-6"
-          >
+          <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-6">
             <div>
               <label className="text-lg font-bold text-gray-600 block mb-2">
                 Email
@@ -90,7 +89,7 @@ function LoginForm() {
                 placeholder="Enter email"
               />
               {formik.touched.email && formik.errors.email ? (
-                <div>{formik.errors.email}</div>
+                <div className="text-red-500">{formik.errors.email}</div>
               ) : null}
             </div>
             <div>
@@ -107,22 +106,22 @@ function LoginForm() {
                 placeholder="Enter password"
               />
               {formik.touched.password && formik.errors.password ? (
-                <div>{formik.errors.password}</div>
+                <div className="text-red-500">{formik.errors.password}</div>
               ) : null}
             </div>
             <button
               type="submit"
               className="w-full py-4 px-8 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
-              disabled={!formik.isValid}
+              disabled={!formik.isValid || loading}
             >
-              {loading ? "Loading..." : "LOGIN"} {/* Cambiar el texto del botón durante la carga */}
+              LOGIN
             </button>
           </form>
           <div className="mt-4 text-center">
             <Link
               to="/reset"
-              className=" text-gray-600 hover:text-blue-600 font-bold text-lg"
-              style={{ textDecoration: "none" }}
+              className="text-gray-600 hover:text-blue-600 font-bold text-lg"
+              style={{ textDecoration: 'none' }}
             >
               ¿Have you forgotten your password?
             </Link>
@@ -131,6 +130,6 @@ function LoginForm() {
       </div>
     </div>
   );
-}
+};
 
 export default LoginForm;

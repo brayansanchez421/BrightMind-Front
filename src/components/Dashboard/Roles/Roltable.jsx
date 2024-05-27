@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LeftBar from "../../Dashboard/LeftBar";
 import { Button, Modal, Checkbox, Pagination, Input, Form } from "antd";
-import { CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
+import { CaretUpOutlined, CaretDownOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useRoleContext } from "../../../context/user/role.context";
 import { usePermissionContext } from "../../../context/user/permissions.context";
 import CreateRolForm from "../Roles/CreateRolForm";
@@ -12,7 +12,7 @@ const { useForm } = Form;
 const DataTable = () => {
   const [permissionsUpdated, setPermissionsUpdated] = useState(false);
 
-  const { rolesData, updateRole } = useRoleContext();
+  const { rolesData, updateRole, deleteRole } = useRoleContext();
   const { permissionsData } = usePermissionContext();
 
   const [updatedDataFlag, setUpdatedDataFlag] = useState(false);
@@ -27,6 +27,8 @@ const DataTable = () => {
 
   const [selectedRole, setSelectedRole] = useState(null);
   const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     if (selectedRoleId) {
@@ -69,7 +71,6 @@ const DataTable = () => {
         setItemsPerPage(5);
       }
     };
-    
 
     window.addEventListener("resize", handleResize);
     handleResize(); // Initial call to set the correct itemsPerPage
@@ -130,6 +131,22 @@ const DataTable = () => {
   const handleViewPermissions = (role) => {
     setShowDetailsModal(true);
     setSelectedRoleId(role._id);
+  };
+
+  const handleDeleteRole = (roleId) => {
+    setSelectedRoleId(roleId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteRole = async () => {
+    try {
+      await deleteRole(selectedRoleId);
+      setShowDeleteModal(false);
+      setUpdatedDataFlag(true); // Trigger data refresh
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting role:", error);
+    }
   };
 
   const [selectedPermissionsMap, setSelectedPermissionsMap] = useState({});
@@ -287,7 +304,7 @@ const DataTable = () => {
                         </td>
                         <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg">
                           <Button
-                            className="bg-blue-900 h-10 "
+                            className="bg-blue-900 h-10"
                             type="primary"
                             onClick={() => handleViewPermissions(role)}
                           >
@@ -299,7 +316,13 @@ const DataTable = () => {
                             onClick={() => handleAssignPermissions(role)}
                           >
                             Assign
-                          </Button>
+                          </Button>{" "}
+                          <Button
+                            className="bg-red-600 h-10"
+                            type="primary"
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleDeleteRole(role._id)}
+                          />
                         </td>
                       </tr>
                     ))}
@@ -398,8 +421,37 @@ const DataTable = () => {
             ))}
         </Modal>
         <CreateRolForm visible={showForm} onClose={handleFormClose} onCreate={handleCreateRol} />
+        <Modal
+          className="shadow-2xl shadow-pink-400"
+          title="Confirm Delete"
+          visible={showDeleteModal}
+          onCancel={() => setShowDeleteModal(false)}
+          footer={[
+            <Button
+              className="bg-red-700 font-medium text-white hover:bg-red-900"
+              key="submit"
+              type="primary"
+              onClick={confirmDeleteRole}
+            >
+              Delete
+            </Button>,
+            <Button
+              className="bg-gray-300 font-medium text-black hover:bg-gray-400"
+              key="cancel"
+              onClick={() => setShowDeleteModal(false)}
+            >
+              Cancel
+            </Button>,
+          ]}
+          centered
+          maskStyle={{ backdropFilter: "blur(10px)" }}
+          maskClosable={false}
+          keyboard={false}
+        >
+          <p className="text-lg text-black">Are you sure you want to delete this role?</p>
+          <p className="text-md text-red-600"><b>This action cannot be undone.</b></p>
+        </Modal>
       </div>
-    
   );
 };
 
