@@ -1,35 +1,44 @@
 import React from "react";
 import { Modal, Button } from "antd";
+import { BackwardFilled } from "@ant-design/icons";
 
 const DetailsUserModal = ({ visible, onCancel, user }) => {
   return (
-    <Modal
-      title="User Details"
-      visible={visible}
-      onCancel={onCancel}
-      footer={[
-        <Button key="close" onClick={onCancel}>
-          Close
-        </Button>,
-      ]}
-    >
+    <Modal 
+  className="mt-56 transition-all duration-300"
+  visible={visible}
+  onCancel={onCancel}
+  maskStyle={{ backdropFilter: "blur(10px)" }}
+  footer={null}
+>
+
       {user && (
-        <div>
-          <p>
-            <strong>ID:</strong> {user._id}
+        <div className="bg-blue-100 py-6 shadow-orange shadow-sky-300">
+          <h1 className="text-center text-xl font-black">User Details</h1>
+          <p className="mt-6">
+            <strong className="ml-10">ID:</strong> {user._id}
           </p>
           <p>
-            <strong>Name:</strong> {user.username}
+            <strong className="ml-10" >Name:</strong> {user.username}
           </p>
           <p>
-            <strong>Email:</strong> {user.email}
+            <strong className="ml-10">Email:</strong> {user.email}
           </p>
           <p>
-            <strong>Role:</strong> {user.role}
+            <strong className="ml-10">Role:</strong> {user.role}
           </p>
           <p>
-            <strong>Status:</strong> {user.state ? "Active" : "Inactive"}
+            <strong className="ml-10">Status:</strong> {user.state ? "Active" : "Inactive"}
           </p>
+          <div className="flex justify-center">
+          <Button 
+            className="bg-sky-500 text-white font-medium mt-10" 
+            key="close" 
+            onClick={onCancel}
+          >
+            Close
+          </Button>
+        </div>
         </div>
       )}
     </Modal>

@@ -22,7 +22,7 @@ function Carousel() {
             setCurrentPhraseIndex((prevIndex) =>
                 prevIndex === phrases.length - 1 ? 0 : prevIndex + 1
             );
-        }, 10000); // Cambia la frase cada 3 segundos
+        }, 3000); // Cambia la frase cada 3 segundos
 
         return () => clearInterval(interval);
     }, []);

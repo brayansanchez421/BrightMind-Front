@@ -43,7 +43,7 @@ const CoursesComponent = () => {
     ];
 
     return (
-        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen md:py-1">
+        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen">
             <NavigationBar/>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:mt-36  max-w-screen-xl mx-auto ">
             {courses.map((course, index) => (

@@ -64,10 +64,10 @@ const Navbar = () => {
       <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
       <nav className={`shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 flex items-center justify-between transition-all duration-600 ${isSidebarVisible ? 'pl-10' : 'pl-10'}`}>
         <div className="flex items-center">
-          <FaBars className="text-white text-lg cursor-pointer mr-4" onClick={toggleSidebar} />
+          <FaBars className="text-white text-lg cursor-pointer absolute left-4 " onClick={toggleSidebar} />
         </div>
-        <Link to="/admin" className="text-white text-2xl font-black flex items-center justify-center h-full">
-          <h1 className="absolute">BrightMind</h1>
+        <Link to="/admin" className="text-white text-2xl font-black flex items-center justify-center h-full ml-44">
+          <h1 className="">BrightMind</h1>
         </Link>
         <div className="flex items-center relative">
           <FaBell className="text-white text-lg mr-2 cursor-pointer" />
@@ -87,7 +87,7 @@ const Navbar = () => {
             onMouseLeave={() => setIsMenuVisible(false)}
             className={`${
               isMenuVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
-            } absolute right-0 mt-5 w-56 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-300 ease-in-out`}
+            } absolute right-2 mt-56 w-56 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-300 ease-in-out`}
           >
             <ul className="py-2">
               <li className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded">

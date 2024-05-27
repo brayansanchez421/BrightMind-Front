@@ -3,10 +3,9 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-
 function QuoteCarousel({ phrases }) {
     const settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
@@ -16,18 +15,18 @@ function QuoteCarousel({ phrases }) {
     };
 
     return (
-        <div className=" lg:mt-10"> {/* Ajuste del margen superior para dispositivos de diferentes tamaños */}
-            <Slider {...settings} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="lg:mt-10"> {/* Ajuste del margen superior para dispositivos de diferentes tamaños */}
+            <Slider {...settings} className="mx-auto w-11/12 mt-10 ">
                 {phrases.map((phrase, index) => (
-                    <div key={index} className="flex items-center justify-center h-full">
-                        <div className="w-4/5 flex items-center justify-center h-full mx-auto">
-                            <div className="w-3/5 pr-8">
-                                <h2 className="text-3xl font-semibold text-center mb-4">{phrase.text}</h2>
-                                <p className="text-center">— {phrase.author}</p>
-                            </div>
-                            <div className="w-1/5 flex justify-end items-center">
-                                <img className="h-40 rounded-full object-cover" src={phrase.imageUrl} alt={`Image ${index + 1}`} />
-                            </div>
+                    <div className="flex flex-col items-center justify-center h-full mx-auto">
+                        <div className="text-center">
+                            <h2 className="text-4xl italic font-bold text-white mb-4">{phrase.text}</h2>
+                        </div>
+                        <div className="flex justify-center mt-6">
+                            <img className="h-40 rounded-full object-cover" src={phrase.imageUrl} alt={`Image ${index + 1}`} />
+                        </div>
+                        <div>
+                        <p className="text-right mt-4 mr-10 font-black">— {phrase.author}</p>
                         </div>
                     </div>
                 ))}
