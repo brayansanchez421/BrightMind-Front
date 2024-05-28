@@ -1,7 +1,7 @@
 // src/components/VideoPage.jsx
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Prueba from "../assets/Video/Prueba.mp4";
+import Prueba from "../assets/Video/Animation.mp4";
 
 const VideoPage = ({ userRole }) => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const VideoPage = ({ userRole }) => {
       } else {
         navigate('/home');
       }
-    }, 2000); // Redirigir después de 5 segundos
+    }, 3000); // Redirigir después de 5 segundos
 
     return () => clearTimeout(timer);
   }, [userRole, navigate]);

@@ -81,7 +81,6 @@ function App() {
           <Route path="/notFound" element={<NotFoundPage />} />
           <Route path="/activate" element={<ActivationComponent />} />
           <Route path="/ChangePassword" element={<ChangePassword />} />
-          <Route path="/roles" element={<Roles/>} />
           <Route path="ChangePasswordUser" element={<ChangePasswordUser/>} />
           <Route path="/MyCourses" element={<MyCourses/>} />
           <Route path="/Courses" element={<Courses />} />
@@ -92,7 +91,7 @@ function App() {
           <Route path="/Home" element={<HomePage />} />
           <Route path="/ProfileEditor" element={<ProfileEditor />} />
           <Route path="/Account" element={<ProfileUser/>} />
-          
+          <Route path="/roles" element={<Roles/>} />
 
           </Route>
           </Routes>
