@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FaBell, FaBars } from 'react-icons/fa'; // Importa el icono de menú
+import { useState, useEffect, useRef } from 'react';
+import {  FaBars, FaBell } from 'react-icons/fa';
 import { useUserContext } from '../../context/user/user.context.jsx';
-import { useAuth } from '../../context/auth.context.jsx'; 
+import { useAuth } from '../../context/auth.context.jsx';
 import { Link } from 'react-router-dom';
-import LeftBar from './LeftBar'; // Importa el componente LeftBar
+import LeftBar from './LeftBar';
 
 const Navbar = () => {
-  const { logout } = useAuth(); 
+  const { logout } = useAuth();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const menuRef = useRef(null);
-  const { getUserById } = useUserContext(); 
-  const { user } = useAuth(); 
+  const { getUserById } = useUserContext();
+  const { user } = useAuth();
   const [username, setUsername] = useState("Cargando...");
   const [userImage, setUserImage] = useState(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  
+
   const handleLogout = async () => {
     try {
-      await logout(); 
+      await logout();
       localStorage.removeItem('token');
-      window.location.href = '/'; 
+      window.location.href = '/';
     } catch (error) {
       console.error('Error al hacer logout:', error);
     }
@@ -30,7 +30,7 @@ const Navbar = () => {
       if (user && user.data && user.data.id) {
         try {
           const userData = await getUserById(user.data.id);
-          setUsername(userData.username); 
+          setUsername(userData.username);
           if (userData.userImage) {
             setUserImage(userData.userImage);
           }
@@ -61,26 +61,31 @@ const Navbar = () => {
 
   return (
     <>
-      <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
-      <nav className={`shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 flex items-center justify-between transition-all duration-600 ${isSidebarVisible ? 'pl-10' : 'pl-10'}`}>
-        <div className="flex items-center">
-          <FaBars className="text-white text-lg cursor-pointer mr-4" onClick={toggleSidebar} />
-        </div>
-        <Link to="/admin" className="text-white text-2xl font-black flex items-center justify-center h-full">
-          <h1 className="absolute">BrightMind</h1>
-        </Link>
-        <div className="flex items-center relative">
-          <FaBell className="text-white text-lg mr-2 cursor-pointer" />
-          <span className="text-white text-xl font-bold mr-4">{username}</span>
-          <Link to="/ProfileEditor">
-            <img 
-              src={userImage}
-              alt="UserImage"
-              className="h-14 w-14 cursor-pointer border rounded-full mr-5"
-              onMouseEnter={() => setIsMenuVisible(true)}
-              onMouseLeave={() => setIsMenuVisible(false)}
-            />
+    <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
+    <nav className={`shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 flex items-center justify-between transition-all duration-600 ${isSidebarVisible ? 'pl-10' : 'pl-10'}`}>
+      <div className="flex items-center">
+        <FaBars className="text-white text-lg cursor-pointer" onClick={toggleSidebar} />
+      </div>
+      <div className="flex items-center flex-1 justify-center"> {/* Modificación aquí */}
+        <div className="flex items-center"> {/* Nuevo contenedor */}
+          <Link to="/admin" className="text-white text-2xl font-black">
+            BrightMind
           </Link>
+        </div>
+      </div>
+  
+      <div className="relative flex items-center">
+        <div className="flex items-center mr-4">
+          <span className="text-white text-xl font-bold">{username}</span>
+        </div>
+        <div className="relative">
+          <img
+            src={userImage}
+            alt="UserImage"
+            className="h-12 w-12 cursor-pointer mr-10 rounded-full"
+            onMouseEnter={() => setIsMenuVisible(true)}
+            onMouseLeave={() => setIsMenuVisible(false)}
+          />
           <div
             ref={menuRef}
             onMouseEnter={() => setIsMenuVisible(true)}
@@ -102,8 +107,9 @@ const Navbar = () => {
             </ul>
           </div>
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
+  </>
   );
 };
 

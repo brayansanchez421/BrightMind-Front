@@ -176,8 +176,8 @@ const DataTable = () => {
                 />
               </div>
             </div>
-            <div className="overflow-x-auto mt-10 flex justify-center">
-              <table className="w-10/12">
+            <div className="overflow-x-auto mt-10 flex justify-center ">
+              <table className="w-10/12 ">
                 <thead>
                   <tr>
                     <th
@@ -248,7 +248,7 @@ const DataTable = () => {
                 <tbody>
                   {currentItems.map((item, index) => (
                     <tr key={item._id}>
-                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
+                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1 ">
                         {generateIds()[index]}
                       </td>
                       <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
@@ -262,21 +262,21 @@ const DataTable = () => {
                       </td>
                       <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
                         {item.state ? "Active" : "Inactive"}
-                      </td>
-                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
-                        <button
+                      </td> 
+                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1 ">
+                        <button 
                           onClick={() => handleActivateAccount(item._id)}
                           className={`${
                             item.state
                               ? "bg-red-500 hover:bg-red-700"
                               : "bg-green-500 hover:bg-green-700"
-                          } text-white font-bold py-2 px-4 rounded`}
+                          } text-white font-bold py-2 px-4 rounded flex-1  `}
                         >
                           {item.state ? "Deactivate" : "Activate"}
                         </button>
                         <button
                           onClick={() => handleUpdateButtonClick(item)}
-                          className="bg-blue-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded ml-2"
+                          className="bg-blue-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded ml-2 flex-1"
                         >
                           Update
                         </button>
@@ -285,7 +285,7 @@ const DataTable = () => {
                             setSelectedUserId(item._id);
                             setShowDetailsModal(true);
                           }}
-                          className="bg-purple-500 hover:bg-zinc-300 text-white font-bold py-2 px-4 rounded ml-2"
+                          className="bg-purple-500 hover:bg-zinc-300 text-white font-bold py-2 px-4 rounded ml-2 flex-1"
                         >
                           <InfoCircleOutlined />
                         </button>
@@ -323,7 +323,7 @@ const DataTable = () => {
         rolesData={rolesData}
       />
 
-      <UpdateUserModal
+      <UpdateUserModal 
         visible={showUpdateModal}
         onCancel={handleCloseUpdateModal}
         onUpdate={handleUpdateUser}

@@ -20,40 +20,37 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
   };
 
   return (
-    <Modal
-      title="Update User"
+    <Modal className="mt-28 "
       visible={visible}
+      maskStyle={{ backdropFilter: "blur(10px)" }}
+      footer={null}
       onCancel={onCancel}
-      footer={[
-        <Button key="cancel" onClick={onCancel}>
-          Cancel
-        </Button>,
-        <Button key="submit" type="primary" onClick={handleFormSubmit}>
-          Update
-        </Button>,
-      ]}
     >
-      <Form form={form} layout="vertical" initialValues={user}>
-        <Form.Item
-          name="username"
+      <Form className="py-6 bg-blue-100 shadow-orange shadow-sky-300  "
+      form={form} 
+      layout="vertical" 
+      initialValues={user}>
+        <h1 className="text-xl font-black text-center ">Update User</h1>
+        <Form.Item className="text-base font-semibold mx-10 mt-4"
+          name="username"  
           label="Username"
           rules={[{ required: true, message: "Please enter a username" }]}
         >
           <Input />
         </Form.Item>
-        <Form.Item
+        <Form.Item className="text-base font-semibold mx-10"
           name="email"
           label="Email"
           rules={[{ required: true, message: "Please enter an email" }]}
         >
           <Input />
         </Form.Item>
-        <Form.Item
+        <Form.Item className="text-base font-semibold mx-10"
           name="role"
           label="Role"
           rules={[{ required: true, message: "Please select a role" }]}
         >
-          <Select>
+          <Select className="text-center ">
             {rolesData.map((role) => (
               <Option key={role.id} value={role.name}>
                 {role.name}
@@ -61,16 +58,29 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item
+        <Form.Item className="text-base font-semibold mx-10 "
           name="state"
           label="State"
           rules={[{ required: true, message: "Please select a state" }]}
         >
-          <Select>
+          <Select className="text-center">
             <Option value={true}>Active</Option>
             <Option value={false}>Inactive</Option>
           </Select>
         </Form.Item>
+        <div className="flex justify-center mt-10">
+        <Button className="bg-rose-800 text-white font-medium"
+        key="cancel" 
+        onClick={onCancel}>
+        Cancel
+        </Button>,
+        <Button className="bg-sky-700 font-medium"
+        key="submit" 
+        type="primary" 
+        onClick={handleFormSubmit}>
+        Update
+        </Button>,
+        </div>
       </Form>
     </Modal>
   );

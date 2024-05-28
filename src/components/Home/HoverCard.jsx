@@ -4,7 +4,8 @@ import React from 'react';
 
 const HoverCard = ({ title, description,ruta }) => {
   return (
-<div className="relative group cursor-pointer overflow-hidden duration-500 w-80 h-100 p-5 mt-5 sm:mt-12 mx-auto lg:px-8 py-8 border border-gray-300 rounded-md bg-gradient-to-br from-blue-500 to-purple-500 text-gray-50">
+    <div className='flex justify-center'>
+<div className="relative group cursor-pointer overflow-hidden duration-500 w-80 h-100 p-5 mt-5 sm:mt-12 mx-auto lg:px-8 py-6 border border-gray-300 rounded-md bg-gradient-to-br from-blue-500 to-purple-500 text-gray-50">
       <div>
         <div className="group-hover:scale-110 w-full h-64 bg-blue-400 duration-500">
           <img src={ruta} alt="Aqui va una" className="object-cover w-full h-full" />
@@ -17,6 +18,7 @@ const HoverCard = ({ title, description,ruta }) => {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 };
