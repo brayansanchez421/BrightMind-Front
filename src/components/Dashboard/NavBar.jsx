@@ -61,25 +61,15 @@ const Navbar = () => {
 
   return (
     <>
-      <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
-      <nav className={`shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 flex items-center justify-between transition-all duration-600 ${isSidebarVisible ? 'pl-10' : 'pl-10'}`}>
-        <div className="flex items-center">
-          <FaBars className="text-white text-lg cursor-pointer absolute left-4 " onClick={toggleSidebar} />
-        </div>
-        <Link to="/admin" className="text-white text-2xl font-black flex items-center justify-center h-full ml-44">
-          <h1 className="">BrightMind</h1>
-        </Link>
-        <div className="flex items-center relative">
-          <FaBell className="text-white text-lg mr-2 cursor-pointer" />
-          <span className="text-white text-xl font-bold mr-4">{username}</span>
-          <Link to="/ProfileEditor">
-            <img 
-              src={userImage}
-              alt="UserImage"
-              className="h-14 w-14 cursor-pointer border rounded-full mr-5"
-              onMouseEnter={() => setIsMenuVisible(true)}
-              onMouseLeave={() => setIsMenuVisible(false)}
-            />
+    <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
+    <nav className={`shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 flex items-center justify-between transition-all duration-600 ${isSidebarVisible ? 'pl-10' : 'pl-10'}`}>
+      <div className="flex items-center">
+        <FaBars className="text-white text-lg cursor-pointer" onClick={toggleSidebar} />
+      </div>
+      <div className="flex items-center flex-1 justify-center"> {/* Modificación aquí */}
+        <div className="flex items-center"> {/* Nuevo contenedor */}
+          <Link to="/admin" className="text-white text-2xl font-black">
+            BrightMind
           </Link>
         </div>
       </div>
@@ -102,7 +92,7 @@ const Navbar = () => {
             onMouseLeave={() => setIsMenuVisible(false)}
             className={`${
               isMenuVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
-            } absolute right-2 mt-56 w-56 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-300 ease-in-out`}
+            } absolute right-0 mt-5 w-56 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-300 ease-in-out`}
           >
             <ul className="py-2">
               <li className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded">
