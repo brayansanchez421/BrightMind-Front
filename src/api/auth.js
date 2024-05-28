@@ -8,3 +8,4 @@ export const passwordReset = user => axios.post(`${api}/passwordReset`, user)
 export const logoutRequest = user => axios.post(`${api}/logout`, user)
 
 
+
