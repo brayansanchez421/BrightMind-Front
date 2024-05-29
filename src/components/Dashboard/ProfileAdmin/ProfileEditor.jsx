@@ -46,7 +46,7 @@ const ProfileEditor = () => {
         
         <div className="flex flex-1 overflow-hidden">
          
-          <div>
+          <div className='flex-1 ml-20'>
             <SettingsBar />
           </div>
           <div className="flex-1 mr-10 ml-10">

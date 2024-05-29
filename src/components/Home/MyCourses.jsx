@@ -40,12 +40,13 @@ const CoursesComponent = () => {
             description: 'Encuentra la paz interior y mejora tu salud física y mental con prácticas de yoga y meditación.',
             image: 'https://storage.googleapis.com/dycr-web/image/topic/python/logo.png'
         }
+        
     ];
 
     return (
-        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen">
+        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
             <NavigationBar/>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:mt-36  max-w-screen-xl mx-auto ">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:mt-24  max-w-screen-xl mx-auto ">
             {courses.map((course, index) => (
                 <div key={index} className="bg-white p- rounded-lg shadow-md border-black border">
                     <img src={course.image} alt={course.name} className="w-full h-40 object-cover rounded shadow-lg border border-black" />

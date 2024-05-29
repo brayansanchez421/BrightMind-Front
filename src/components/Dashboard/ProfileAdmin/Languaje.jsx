@@ -13,7 +13,7 @@ const LanguagePreferences = () => {
 
   return (
     <>
-      <div className='text-left font-bold py-1 hover:bg-red-100 '><a href="#" onClick={handleOpenModal}>Language preferences</a></div>
+      <div className='text-left font-bold py-1 hover:bg-red-100 rounded-lg'><a href="#" onClick={handleOpenModal}>Language preferences</a></div>
     
       {showModal && (
         <div className="text-lg font-medium shadow-md text-center py-1 mt-1 rounded-md">

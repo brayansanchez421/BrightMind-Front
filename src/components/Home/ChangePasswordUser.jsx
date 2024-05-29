@@ -99,15 +99,15 @@ function NewPassword() {
                             Change password 
                         </button>
                     </form>
-                    <div className="mt-4 text-center">
-                        <Link
-                            to="/Account"
-                            className="text-white hover:bg-gradient-to-r from-green-600 to-green-500 shadow-lg shadow-red-300 font-semibold inline-flex space-x-1 items-center"
-                            style={{ textDecoration: 'none' }}
-                        >
-                            Return to Settings
-                        </Link>
-                    </div>
+                        <div className="mt-4 text-center">
+                            <Link
+                                to="/Account"
+                                className="text-white hover:bg-gradient-to-r from-green-600 to-green-500 shadow-lg shadow-red-300 font-semibold inline-flex space-x-1 items-center"
+                                style={{ textDecoration: 'none' }}
+                            >
+                                Return to Settings
+                            </Link>
+                        </div>
                 </div>
             </div>
         </div>

@@ -68,7 +68,7 @@ const Navbar = () => {
       </div>
       <div className="flex items-center flex-1 justify-center"> {/* Modificación aquí */}
         <div className="flex items-center"> {/* Nuevo contenedor */}
-          <Link to="/admin" className="text-white text-2xl font-black">
+          <Link to="/admin" className="text-white text-2xl font-black ml-36">
             BrightMind
           </Link>
         </div>
