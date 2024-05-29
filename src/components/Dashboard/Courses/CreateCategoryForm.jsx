@@ -15,19 +15,18 @@ const CreateCategoryForm = ({ visible, onClose }) => {
     setCategory({ ...category, [name]: value });
   };
 
-  const handleImageChange = ({ file }) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setImagePreview(e.target.result);
-    };
-    reader.readAsDataURL(file.originFileObj);
-    setCategory({ ...category, image: file.originFileObj });
+  const handleImageChange = (e) => {
+    const imageFile = e.target.files[0];
+    if (imageFile) {
+      setCategory({ ...category, image: imageFile });
+      setImagePreview(URL.createObjectURL(imageFile));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Datos del formulario:", category); // Verificación
     try {
-      console.log("esto: ", category);
       await createCategory(category);
       onClose();
     } catch (error) {
@@ -44,9 +43,9 @@ const CreateCategoryForm = ({ visible, onClose }) => {
   }, [visible]);
 
   return (
-    <Modal visible={visible} footer={null} closable={false}>
+    <Modal visible={visible} footer={null} closable={false} onCancel={onClose}>
       <form
-        className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded "
+        className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded"
         onSubmit={handleSubmit}
       >
         <div>
@@ -79,20 +78,18 @@ const CreateCategoryForm = ({ visible, onClose }) => {
           <div className="mb-4">
             <label className="block text-zinc-100 text-lg font-medium mb-4">
               Imagen: <br />
-              <Upload
-                listType="picture"
-                maxCount={1}
-                beforeUpload={() => false}
+              <input
+                type="file"
+                accept="image/*"
                 onChange={handleImageChange}
-              >
-                <Button icon={<UploadOutlined />}>Seleccionar archivo</Button>
-              </Upload>
-              {imagePreview && (
-                <div className="mt-4">
-                  <img src={imagePreview} alt="preview" style={{ width: '100%', maxHeight: '200px' }} />
-                </div>
-              )}
+                className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
+              />
             </label>
+            {imagePreview && (
+              <div className="mt-4">
+                <img src={imagePreview} alt="preview" style={{ width: '100%', maxHeight: '200px' }} />
+              </div>
+            )}
           </div>
           {errorMessage && (
             <p className="text-red-500 text-sm">{errorMessage}</p>
@@ -107,7 +104,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
           </Button>
           <Button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold  px-4 rounded focus:outline-none focus:shadow-outline ml-4 flex flex-col items-center"
-            onClick={handleSubmit}
+            htmlType="submit"
           >
             Create Category
           </Button>

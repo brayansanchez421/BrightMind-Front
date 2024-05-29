@@ -14,9 +14,15 @@ export const useCategoryContext = () => {
 export const CategoryProvider = ({ children }) => {
     const [categories, setCategories] = useState([]);
 
-    const createCategory = async (data) => {
+    const createCategory = async ({ name, description, image }) => {
         try {
-            const res = await createCategoryApi(data);
+            const newCategoryData = {
+                name,
+                description,
+                image // Asegúrate de incluir la imagen en los datos de la categoría
+            };
+                console.log(newCategoryData)
+            const res = await createCategoryApi(newCategoryData);
             setCategories([...categories, res.data]);
             return res.data;
         } catch (error) {
@@ -44,5 +50,5 @@ export const CategoryProvider = ({ children }) => {
         <CategoryContext.Provider value={{ categories, createCategory, getCategories }}>
             {children}
         </CategoryContext.Provider>
-    );
+    );
 };

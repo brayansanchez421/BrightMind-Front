@@ -4,19 +4,17 @@ import { useEffect } from 'react';
 
 
 function ProtectedRoute() {
-    const { isAuthenticated } = useAuth();
+    const { loading, isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isAuthenticated()) {
+        if (!loading && !isAuthenticated()) {
             navigate('/notFound');
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated && loading, navigate]);
 
-    if (!isAuthenticated()) {
-        // Redireccionar a la página de login si no está autenticado
-        navigate('/');
-        return null; // No renderizar nada
+    if (!loading && !isAuthenticated()) {
+        return null;
     }
 
     return <Outlet />;

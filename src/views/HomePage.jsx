@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useCategoryContext } from '../context/courses/category.context';
 import NavigationBar from '../components/Home/NavigationBar';
 import QuoteCarousel from '../components/Home/QuoteCarousel';
 import HoverCard from '../components/Home/HoverCard';
 import ImageCarousel from '../components/Home/QuoteCarousel';  // Asegúrate de importar el componente correcto
-import imgNode from '../assets/img/Logo_cards/Nodejs.png';
-import imgJs from '../assets/img/Logo_cards/js.png';
-import imgGit from '../assets/img/Logo_cards/github.png';
-import imgReact from '../assets/img/Logo_cards/react.png';
-import imgPython from '../assets/img/Logo_cards/python.png';
-import imgMongo from '../assets/img/Logo_cards/mongo.png';
-import imgExpress from '../assets/img/Logo_cards/express.png';
 
 function HomePage() {
+    const { categories, getCategories } = useCategoryContext();
+
+    useEffect(() => {
+        getCategories();
+    }, [getCategories]);
+
     const phrases = [
         {
             text: 'Learning never exhausts the mind.',
@@ -50,14 +50,15 @@ function HomePage() {
             <NavigationBar />
             
             <QuoteCarousel phrases={phrases} />
-            <div className="grid grid-cols-3 gap-2  w-11/12 mx-auto ">
-                <HoverCard title="NodeJs" description="Node.js es un entorno de ejecución de JavaScript en el lado del servidor que utiliza un modelo asíncrono y dirigido por eventos. Es ideal para construir aplicaciones escalables en tiempo real." ruta={imgNode} />
-                <HoverCard title="JavaScript" description="JavaScript es un lenguaje de programación utilizado principalmente en el desarrollo web. Es conocido por su versatilidad y se utiliza tanto en el lado del cliente como en el servidor." ruta={imgJs} />
-                <HoverCard title="GitHub" description="GitHub es una plataforma de desarrollo colaborativo de software que utiliza el sistema de control de versiones Git. Es ampliamente utilizado para alojar proyectos de código abierto y colaborar en código." ruta={imgGit} />
-                <HoverCard title="React" description="React es una biblioteca de JavaScript utilizada para construir interfaces de usuario interactivas y de una sola página. Es mantenido por Facebook y una comunidad de desarrolladores." ruta={imgReact} />
-                <HoverCard title="Python" description="Python es un lenguaje de programación de alto nivel conocido por su sintaxis clara y legible. Es ampliamente utilizado en desarrollo web, análisis de datos, inteligencia artificial y más." ruta={imgPython} />
-                <HoverCard title="MongoDB" description="MongoDB es una base de datos NoSQL orientada a documentos que utiliza un modelo de datos flexible y escalable. Es popular en el desarrollo de aplicaciones web modernas." ruta={imgMongo} />
-                <HoverCard title="Express" description="Express es un marco de aplicación web de back-end para Node.js, diseñado para crear aplicaciones web y APIs de manera sencilla y rápida. Es minimalista y flexible." ruta={imgExpress} />
+            <div className="grid grid-cols-3 gap-2 w-11/12 mx-auto">
+                {categories.map((category, index) => (
+                    <HoverCard 
+                        key={index} 
+                        title={category.name} 
+                        description={category.description} 
+                        ruta={category.image} 
+                    />
+                ))}
             </div>
         </div>
     );
