@@ -79,7 +79,10 @@ export const AuthProvider = ({ children }) => {
       
       const logout = () => {
         localStorage.removeItem("authToken");
-      
+        
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "anotherCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        
         setUser(null);
         setRole(null);
       
