@@ -50,7 +50,7 @@ function HomePage() {
             <NavigationBar />
             
             <QuoteCarousel phrases={phrases} />
-            <div className="grid grid-cols-3 gap-2 w-11/12 mx-auto">
+            <div className="grid grid-cols-4 gap-10 w-11/12 mx-auto mt-10 mb-6">
                 {categories.map((category, index) => (
                     <HoverCard 
                         key={index} 
