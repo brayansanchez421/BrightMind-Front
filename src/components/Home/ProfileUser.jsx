@@ -91,6 +91,10 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
             console.error("Couldn't get user ID");
         }
     };
+    
+    const transformCloudinaryURL = (imageUrl) => {
+        return imageUrl; 
+    };
 
     return (
         <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
@@ -100,11 +104,18 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                     <SettingsBar />
                 </div>
 
-                <div className="mx-36 p-6 md:mt-36 w-5/12">
+                <div className="mx-36 p-6 md:mt-24 w-5/12">
                     <ToastContainer />
                     <form onSubmit={handleSubmit} className="bg-gradient-to-r from-violet-500 to-fuchsia-400 shadow-lg shadow-pink-400 rounded px-10 pt-6 pb-8 mb-4 md:w-full ">
                         <div className="mb-4">
-                            <h1 className="text-center font-black text-white md:text-4xl mb-6">Edit Profile</h1>
+                            <h1 
+                            className="text-center font-black text-white md:text-3xl">Edit Profile
+                            {previewProfileImage && (
+                            <div className="mb-4">
+                                <img src={previewProfileImage} alt="Preview" className="mt-4 w-20 h-20 rounded-full mx-auto mb-4" />
+                            </div>
+                        )}
+                            </h1>
                             <label className="block text-black text-base font-bold mb-2" htmlFor="name">
                                 Name
                             </label>
@@ -145,12 +156,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                                 onChange={handleImageChange}
                             />
                         </div>
-                        {previewProfileImage && (
-                            <div className="mb-4">
-                                <img src={previewProfileImage} alt="Preview" className="w-20 h-20 rounded-full mx-auto mb-4" />
-                            </div>
-                        )}
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-center">
                             <button
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 type="submit"
