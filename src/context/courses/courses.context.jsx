@@ -35,9 +35,18 @@ export const CoursesProvider = ({ children }) => {
         }
     };
 
-    const createCourse = async (courseData) => {
+    const createCourse = async ({ title, description, category, content, image }) => {
         try {
-            const res = await createCourseApi(courseData);
+            const newCourseData = {
+                title,
+                description,
+                category,
+                content,
+                image
+            };
+            console.log(newCourseData)
+    
+            const res = await createCourseApi(newCourseData);
             setCourses([...courses, res.data]);
             return res.data;
         } catch (error) {
@@ -45,10 +54,26 @@ export const CoursesProvider = ({ children }) => {
             return null;
         }
     };
+    
 
-    const updateCourse = async (id, courseData) => {
+
+    
+    
+    
+
+    const updateCourse = async (id, { title, description, category, content, image }) => {
         try {
-            const res = await updateCourseApi(id, courseData);
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('category', category);
+            formData.append('content', content);
+
+            if (image) {
+                formData.append('image', image);
+            }
+
+            const res = await updateCourseApi(id, formData);
             setCourses(courses.map(course => (course.id === id ? res.data : course)));
             return res.data;
         } catch (error) {

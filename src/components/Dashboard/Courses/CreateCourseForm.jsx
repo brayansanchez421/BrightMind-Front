@@ -1,24 +1,22 @@
 import React, { useState, useRef } from "react";
-import { Modal, Button, Input } from "antd";
-import { useCategoryContext } from "../../../context/courses/category.context";
-
-import { Select } from "antd";
-
+import { Modal, Button, Input, Select } from "antd";
+import { useCoursesContext } from "../../../context/courses/courses.context"; // Importa el contexto de cursos
+import { useCategoryContext } from "../../../context/courses/category.context"; // Importa el contexto de categorías
 
 const { Option } = Select;
 
-
 const CreateCourseForm = ({ visible, onClose, onCreate }) => {
   const { categories } = useCategoryContext(); // Obtiene la lista de categorías desde el contexto
+  const { createCourse } = useCoursesContext(); // Obtiene la función para crear cursos desde el contexto
 
   const [curso, setCurso] = useState({
     nombre: "",
     categoria: "",
     descripcion: "",
-    imagen: "",
+    imagen: null,
     recurso: null,
   });
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
 
   const imagenRef = useRef(null);
   const recursoRef = useRef(null);
@@ -30,19 +28,10 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
 
   const handleImagenChange = (e) => {
     const file = e.target.files[0];
-
     if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setCurso({ ...curso, imagen: reader.result });
-      };
-
-      reader.readAsDataURL(file);
-      e.target.style.borderColor = "initial";
+      setCurso({ ...curso, imagen: file });
       setErrorMessage("");
     } else {
-      e.target.style.borderColor = "red";
       e.target.value = null;
       setErrorMessage("Please select a valid image file.");
     }
@@ -53,9 +42,19 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     setCurso({ ...curso, recurso: file });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onCreate(curso);
+    const courseData = {
+      title: curso.nombre,
+      category: curso.categoria,
+      description: curso.descripcion,
+      content: curso.recurso,
+      image: curso.imagen,
+    };
+    console.log("hi:", courseData)
+    await createCourse(courseData);
+    onCreate(courseData);
+    onClose();
   };
 
   return (
@@ -64,7 +63,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       footer={null}
       closable={false}
     >
-      <form onSubmit={handleSubmit} className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded ">
+      <form onSubmit={handleSubmit} className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded">
         <button
           className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400"
           onClick={onClose}
@@ -85,7 +84,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
               />
             </label>
           </div>
-          <div className="mb-4 ">
+          <div className="mb-4">
             <label className="block text-zinc-100 text-lg font-bold mb-4">
               Categoría:
               <Select
@@ -123,24 +122,8 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                 ref={imagenRef}
                 onChange={handleImagenChange}
               />
-              {errorMessage && ( 
+              {errorMessage && (
                 <p className="text-red-500 text-sm">{errorMessage}</p>
-              )}
-              {curso.imagen && (
-                <div className="flex justify-center items-center">
-                  <img
-                    src={curso.imagen}
-                    alt="Preview"
-                    className="mt-6 rounded-2xl h-36"
-                    style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
-                  />
-                  <button
-                    className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
-                    onClick={() => setCurso({ ...curso, imagen: "" })}
-                  >
-                    Discard
-                  </button>
-                </div>
               )}
             </label>
           </div>

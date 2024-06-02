@@ -1,5 +1,4 @@
-// src/components/LoginForm.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
@@ -52,9 +51,21 @@ const LoginForm = () => {
         console.log(error);
         setError('An error occurred');
         toast.error('An error occurred');
+      } finally {
+        setLoading(false);
       }
     },
   });
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 3000); 
+
+      return () => clearTimeout(timer); 
+    }
+  }, [error]);
 
   if (isAuthenticated) {
     return <VideoPage userRole={userRole} />;
