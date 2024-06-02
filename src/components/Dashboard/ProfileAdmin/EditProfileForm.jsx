@@ -26,7 +26,7 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
                 // Verificar si el usuario tiene una imagen de perfil almacenada
                 if (userData.userImage) {
                     // Establecer la URL de la imagen almacenada como la vista previa de la imagen
-                    setPreviewProfileImage(userData.userImage);
+                    setPreviewProfileImage(transformCloudinaryURL(userData.userImage));
                 }
             }
         };
@@ -82,11 +82,22 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
         }
     };
 
+    const transformCloudinaryURL = (imageUrl) => {
+        return imageUrl; 
+    };
+
     return (
         <div className="w-5/6 md:mt-32 overflow-hidden">
             <ToastContainer />
-            <div className="max-w-lg mx-auto bg-gradient-to-r from-violet-500 to-fuchsia-400 rounded-lg shadow-lg py-10 px-6 md:px-10">
-                <h1 className="text-center font-black text-white text-4xl md:text-5xl mb-6">Edit Profile</h1>
+            <div className="max-w-lg mx-auto bg-gradient-to-r from-violet-500 to-fuchsia-400 rounded-lg shadow-lg py-4 px-6 md:px-10">
+                <h1 
+                className="text-center font-black text-white md:text-3xl mb-6">Edit Profile
+                {previewProfileImage && (
+                <div className="">
+                    <img src={previewProfileImage} alt="Preview" className="mt-4 w-20 h-20 rounded-full mx-auto mb-4" />
+                </div>
+                )}
+                </h1>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label htmlFor="name" className="block text-lg font-semibold text-black">
@@ -125,12 +136,8 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
                             onChange={handleImageChange}
                         />
                     </div>
-                    {previewProfileImage && (
-                        <div className="mb-4">
-                            <img src={previewProfileImage} alt="Preview" className="w-20 h-20 rounded-full mx-auto mb-4" />
-                        </div>
-                    )}
-                    <div className="flex items-center justify-between">
+                    
+                    <div className="flex items-center justify-center">
                         <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             type="submit"
