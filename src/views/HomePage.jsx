@@ -1,12 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCategoryContext } from '../context/courses/category.context';
 import NavigationBar from '../components/Home/NavigationBar';
 import QuoteCarousel from '../components/Home/QuoteCarousel';
 import HoverCard from '../components/Home/HoverCard';
-import ImageCarousel from '../components/Home/QuoteCarousel';  // Asegúrate de importar el componente correcto
+import { useNavigate } from 'react-router-dom';
+import { useCoursesContext } from '../context/courses/courses.context';
 
 function HomePage() {
+
+    const {getCoursesByCategory } = useCoursesContext();
+
     const { categories, getCategories } = useCategoryContext();
+    const navigate = useNavigate();
+    const [selectedCategory, setSelectedCategory] = useState('');
 
     useEffect(() => {
         getCategories();
@@ -45,6 +51,14 @@ function HomePage() {
         }
     ];
 
+    const handleCardClick = (category) => {
+        setSelectedCategory(category.name);
+        getCoursesByCategory(category.name)
+        console.log(category.name)
+        navigate(`/CoursesHome`, { state: { title: category.name } });
+    };
+
+
     return (
         <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
             <NavigationBar />
@@ -57,6 +71,7 @@ function HomePage() {
                         title={category.name} 
                         description={category.description} 
                         ruta={category.image} 
+                        onClick={() => handleCardClick(category)}
                     />
                 ))}
             </div>

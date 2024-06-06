@@ -36,7 +36,7 @@ import Roles from "./components/Dashboard/Roles/Roltable";
 import HomePage from "./views/HomePage";
 import ProfileUser from "./components/Home/ProfileUser"; 
 import MyCourses from './components/Home/MyCourses';
-
+import CoursesHome from './components/Home/Courses/Courses';
 
 //Vista error
 import NotFoundPage from './views/Error/404Page'
@@ -86,6 +86,8 @@ function App() {
           <Route path="ChangePasswordUser" element={<ChangePasswordUser/>} />
           <Route path="/MyCourses" element={<MyCourses/>} />
           <Route path="/Courses" element={<Courses />} />
+
+          <Route path="/CoursesHome" element={<CoursesHome />} />
           
           <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<Dashboard />} />

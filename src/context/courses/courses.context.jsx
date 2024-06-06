@@ -96,6 +96,8 @@ export const CoursesProvider = ({ children }) => {
     const getCoursesByCategory = async (categoryName) => {
         try {
             const res = await getCoursesByCategoryApi(categoryName);
+
+            console.log("cursos",res.data)
             return res.data;
         } catch (error) {
             console.error(error);
