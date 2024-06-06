@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getAllRoles as getAllRolesApi, getRole as getRoleApi, updateRole as updateRoleApi,  createRole as createRoleApi } from '../../api/user/role.request'; 
-
+import {
+    getAllRoles as getAllRolesApi,
+    getRole as getRoleApi,
+    updateRole as updateRoleApi,
+    createRole as createRoleApi,
+    deleteRole as deleteRoleApi
+} from '../../api/user/role.request'; 
 
 export const RoleContext = createContext();
 
@@ -14,9 +19,10 @@ export const useRoleContext = () => {
 
 export const RoleProvider = ({ children }) => {
     const [rolesData, setRolesData] = useState([]);
+    
     const getAllRoles = async () => {
         try {
-            const res = await getAllRolesApi(); 
+            const res = await getAllRolesApi();
             setRolesData(res.data);
         } catch (error) {
             console.log(error);
@@ -36,38 +42,37 @@ export const RoleProvider = ({ children }) => {
             return null;
         }
     };
+
     const updateRole = async (id, data) => {
         try {
-            console.log("este es el id: ", id )
-            console.log("este es la data: ", data )
             const res = await updateRoleApi(id, data);
-            
-
-            console.log("paso por aqui");
-            console.log("Datos obtenidos:", res.data); // Mostrar los datos obtenidos
+            setRolesData(rolesData.map(role => (role._id === id ? res.data : role)));
             return res.data;
         } catch (error) {
             console.log(error);
             return null;
         }
     };
+
     const createRole = async (data) => {
         try {
-            console.log("hajkskj: ", data)
-
             const res = await createRoleApi(data);
             setRolesData([...rolesData, res.data]);
-            console.log("hajkskj2: ", res.data)
-
             return res.data;
         } catch (error) {
             console.log(error);
             return null;
         }
     };
-    
 
-    
+    const deleteRole = async (id) => {
+        try {
+            await deleteRoleApi(id);
+            setRolesData(rolesData.filter(role => role._id !== id));
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <RoleContext.Provider
@@ -76,6 +81,8 @@ export const RoleProvider = ({ children }) => {
                 rolesData,
                 getRole,
                 updateRole,
+                deleteRole,
+                getAllRoles
             }}
         >
             {children}

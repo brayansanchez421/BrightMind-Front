@@ -140,6 +140,7 @@ const DataTable = () => {
 
   const confirmDeleteRole = async () => {
     try {
+      console.log(selectedRoleId)
       await deleteRole(selectedRoleId);
       setShowDeleteModal(false);
       setUpdatedDataFlag(true); // Trigger data refresh
