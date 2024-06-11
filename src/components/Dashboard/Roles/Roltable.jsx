@@ -428,7 +428,7 @@ const DataTable = () => {
           visible={showDeleteModal}
           onCancel={() => setShowDeleteModal(false)}
           footer={[
-            <Button
+            <Button 
               className="bg-red-700 font-medium text-white hover:bg-red-900"
               key="submit"
               type="primary"

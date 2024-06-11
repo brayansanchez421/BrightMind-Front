@@ -5,7 +5,7 @@ import { BackwardFilled } from "@ant-design/icons";
 const DetailsUserModal = ({ visible, onCancel, user }) => {
   return (
     <Modal 
-  className="mt-56 transition-all duration-300"
+  className="mt-28 transition-all duration-300"
   visible={visible}
   onCancel={onCancel}
   maskStyle={{ backdropFilter: "blur(10px)" }}

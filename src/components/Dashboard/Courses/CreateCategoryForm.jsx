@@ -43,11 +43,23 @@ const CreateCategoryForm = ({ visible, onClose }) => {
   }, [visible]);
 
   return (
-    <Modal visible={visible} footer={null} closable={false} onCancel={onClose}>
+    <Modal 
+    visible={visible} 
+    footer={null} 
+    closable={false} 
+    onCancel={onClose}
+    maskStyle={{ backdropFilter: "blur(10px)" }}
+    > 
       <form
         className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded"
         onSubmit={handleSubmit}
       >
+        <button
+          className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400"
+          onClick={onClose}
+        >
+          X
+        </button>
         <div>
           <h1 className="text-4xl font-black text-center mb-4 text-white">
             Create Category
