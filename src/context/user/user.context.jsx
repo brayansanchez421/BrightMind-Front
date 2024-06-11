@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { getAllUsers, ActivateAcc, getUser, updateUser as updateUserApi, deleteUser as deleteUserApi, deleteUserConfirmation as deleteUserConfirmationApi, createUser as createUserApi } from '../../api/user/user.request';
+import { getAllUsers, ActivateAcc, getUser, updateUser as updateUserApi, deleteUser as deleteUserApi, deleteUserConfirmation as deleteUserConfirmationApi, createUser as createUserApi, registerToCourse as registerToCourseApi, getUserCourses as getUserCoursesApi } from '../../api/user/user.request';
 import { useAuth } from '../auth.context'; // Importa el contexto de autenticación
 
 export const UserContext = createContext();
@@ -65,31 +65,31 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-  const updateUserPartial = async (_id, { username, email, userImage }) => {
-    try {
-        const { data: currentUserData } = await getUser(_id);
-        console.log("pruebassss:", currentUserData);
+    const updateUserPartial = async (_id, { username, email, userImage }) => {
+        try {
+            const { data: currentUserData } = await getUser(_id);
+            console.log("pruebassss:", currentUserData);
 
-        const updatedUserData = {
-            username: username || currentUserData.username,
-            email: email || currentUserData.email,
-            state: currentUserData.state,
-            role: currentUserData.role,
-            userImage: userImage || currentUserData.userImage, // Asegurarse de manejar la imagen
-        };
+            const updatedUserData = {
+                username: username || currentUserData.username,
+                email: email || currentUserData.email,
+                state: currentUserData.state,
+                role: currentUserData.role,
+                userImage: userImage || currentUserData.userImage, // Asegurarse de manejar la imagen
+            };
 
-        console.log("pruebas 2:", updatedUserData);
+            console.log("pruebas 2:", updatedUserData);
 
-        const formData = new FormData();
-        Object.keys(updatedUserData).forEach(key => {
-            formData.append(key, updatedUserData[key]);
-        });
+            const formData = new FormData();
+            Object.keys(updatedUserData).forEach(key => {
+                formData.append(key, updatedUserData[key]);
+            });
 
-        await updateUserApi(_id, formData);
-    } catch (error) {
-        console.error(error);
-    }
-};
+            await updateUserApi(_id, formData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const deleteUser = async (id) => {
         try {
@@ -104,6 +104,24 @@ export const UserProvider = ({ children }) => {
         try {
             const res = await deleteUserConfirmationApi(id, confirmationCode);
             console.log(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const registerToCourse = async (userId, courseId) => {
+        try {
+            const res = await registerToCourseApi(userId, courseId);
+            console.log("Usuario registrado al curso:", res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getUserCourses = async (userId) => {
+        try {
+            const res = await getUserCoursesApi(userId);
+            return res.data;
         } catch (error) {
             console.error(error);
         }
@@ -127,6 +145,8 @@ export const UserProvider = ({ children }) => {
                 updateUserPartial, 
                 deleteUser,
                 deleteUserConfirmation,
+                registerToCourse,
+                getUserCourses, // Agregar la función al contexto
             }}
         >
             {children}

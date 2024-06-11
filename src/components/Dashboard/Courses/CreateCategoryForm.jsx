@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Input, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Modal, Button, Input } from "antd";
+import { ToastContainer, toast } from "react-toastify"; // Importar aquí
+import "react-toastify/dist/ReactToastify.css";
 import { useCategoryContext } from "../../../context/courses/category.context";
 
 const CreateCategoryForm = ({ visible, onClose }) => {
@@ -8,7 +9,6 @@ const CreateCategoryForm = ({ visible, onClose }) => {
 
   const [category, setCategory] = useState({ name: "", description: "", image: null });
   const [imagePreview, setImagePreview] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,11 +29,13 @@ const CreateCategoryForm = ({ visible, onClose }) => {
     try {
       await createCategory(category);
       onClose();
+      toast.success("Category created successfully!"); // Utiliza toast.success en lugar de message.success
     } catch (error) {
       console.error(error);
-      setErrorMessage("Failed to create category.");
+      toast.error("Failed to create category."); // Utiliza toast.error en lugar de message.error
     }
   };
+  
 
   useEffect(() => {
     if (visible) {

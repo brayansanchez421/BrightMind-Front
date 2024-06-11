@@ -13,10 +13,14 @@ function HomePage() {
     const { categories, getCategories } = useCategoryContext();
     const navigate = useNavigate();
     const [selectedCategory, setSelectedCategory] = useState('');
+   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
 
     useEffect(() => {
-        getCategories();
-    }, [getCategories]);
+        if (!categoriesLoaded) {
+            getCategories();
+            setCategoriesLoaded(true);
+        }
+    }, [categoriesLoaded, getCategories]);
 
     const phrases = [
         {

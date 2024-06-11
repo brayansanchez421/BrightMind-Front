@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
 import { Modal, Button, Input, Select } from "antd";
-import { useCoursesContext } from "../../../context/courses/courses.context"; // Importa el contexto de cursos
-import { useCategoryContext } from "../../../context/courses/category.context"; // Importa el contexto de categorías
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useCoursesContext } from "../../../context/courses/courses.context";
+import { useCategoryContext } from "../../../context/courses/category.context";
 
 const { Option } = Select;
 
@@ -52,10 +54,15 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       content: curso.recurso,
       image: curso.imagen,
     };
-    console.log("hi:", courseData)
-    await createCourse(courseData);
-    onCreate(courseData);
-    onClose();
+    try {
+      console.log(courseData)
+
+      await createCourse(courseData);
+      onCreate(courseData);
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
