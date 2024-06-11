@@ -1,5 +1,12 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { getAllCourses as getAllCoursesApi, getCourse as getCourseApi, createCourse as createCourseApi, updateCourse as updateCourseApi, deleteCourse as deleteCourseApi } from '../../api/courses/course.request'; // Importa las funciones de tu archivo api
+import { 
+    getAllCourses as getAllCoursesApi, 
+    getCourse as getCourseApi, 
+    createCourse as createCourseApi, 
+    updateCourse as updateCourseApi, 
+    deleteCourse as deleteCourseApi,
+    getCoursesByCategory as getCoursesByCategoryApi
+} from '../../api/courses/course.request'; // Importa las funciones de tu archivo api
 
 export const CoursesContext = createContext();
 
@@ -44,7 +51,7 @@ export const CoursesProvider = ({ children }) => {
                 content,
                 image
             };
-            console.log(newCourseData)
+            console.log(newCourseData);
     
             const res = await createCourseApi(newCourseData);
             setCourses([...courses, res.data]);
@@ -54,12 +61,16 @@ export const CoursesProvider = ({ children }) => {
             return null;
         }
     };
-    
 
-
-    
-    
-    
+    const getCoursesByCategory = async (categoryName) => {
+        try {
+            const res = await getCoursesByCategoryApi(categoryName);
+            return res.data;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
 
     const updateCourse = async (id, { title, description, category, content, image }) => {
         try {
@@ -97,7 +108,7 @@ export const CoursesProvider = ({ children }) => {
     }, []);
 
     return (
-        <CoursesContext.Provider value={{ courses, getAllCourses, getCourse, createCourse, updateCourse, deleteCourse }}>
+        <CoursesContext.Provider value={{ courses, getAllCourses, getCourse, createCourse, getCoursesByCategory, updateCourse, deleteCourse }}>
             {children}
         </CoursesContext.Provider>
     );
