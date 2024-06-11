@@ -1,12 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { 
-    getAllCourses as getAllCoursesApi, 
-    getCourse as getCourseApi, 
-    createCourse as createCourseApi, 
-    updateCourse as updateCourseApi, 
-    deleteCourse as deleteCourseApi,
-    getCoursesByCategory as getCoursesByCategoryApi // Importa la nueva función
-} from '../../api/courses/course.request'; // Importa las funciones de tu archivo api
+import { getAllCourses as getAllCoursesApi, getCourse as getCourseApi, createCourse as createCourseApi, updateCourse as updateCourseApi, deleteCourse as deleteCourseApi } from '../../api/courses/course.request'; // Importa las funciones de tu archivo api
 
 export const CoursesContext = createContext();
 
@@ -61,6 +54,12 @@ export const CoursesProvider = ({ children }) => {
             return null;
         }
     };
+    
+
+
+    
+    
+    
 
     const updateCourse = async (id, { title, description, category, content, image }) => {
         try {
@@ -93,24 +92,12 @@ export const CoursesProvider = ({ children }) => {
         }
     };
 
-    const getCoursesByCategory = async (categoryName) => {
-        try {
-            const res = await getCoursesByCategoryApi(categoryName);
-
-            console.log("cursos",res.data)
-            return res.data;
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-    };
-
     useEffect(() => {
         getAllCourses();
     }, []);
 
     return (
-        <CoursesContext.Provider value={{ courses, getAllCourses, getCourse, createCourse, updateCourse, deleteCourse, getCoursesByCategory }}>
+        <CoursesContext.Provider value={{ courses, getAllCourses, getCourse, createCourse, updateCourse, deleteCourse }}>
             {children}
         </CoursesContext.Provider>
     );

@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import HoverCard from '../HoverCard';
 import NavigationBar from '../NavigationBar';
-import { useLocation } from 'react-router-dom';
 import { useCoursesContext } from '../../../context/courses/courses.context';
-import CardHome from '../Cards/CardHome';
+import { useUserContext } from '../../../context/user/user.context';
+import { useAuth } from '../../../context/auth.context';
 
 const Course = () => {
     const location = useLocation();
     const { title } = location.state || { title: '' };
     const { courses } = useCoursesContext();
+    const { user } = useAuth();
+    const { registerToCourse } = useUserContext();
+
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
@@ -24,9 +28,19 @@ const Course = () => {
         setIsConfirmModalOpen(false);
     };
 
-    const handleRegister = () => {
-        setIsConfirmModalOpen(false);
-        setIsSuccessModalOpen(true);
+    const handleRegister = async () => {
+
+        if (user && user.data && user.data.id) {
+            try {
+                await registerToCourse(user.data.id, selectedCourse._id);
+                setIsConfirmModalOpen(false);
+                setIsSuccessModalOpen(true);
+            } catch (error) {
+                console.error('Error al registrar el curso:', error);
+            }
+        } else {
+            console.error('Usuario no autenticado');
+        }
     };
 
     const closeSuccessModal = () => {
@@ -41,11 +55,11 @@ const Course = () => {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:mt-24 max-w-screen-xl mx-auto">
                 {filteredCourses.map((course, index) => (
-                    <CardHome 
-                        key={index} 
-                        title={course.title} 
-                        description={course.description} 
-                        ruta={course.image} 
+                    <HoverCard
+                        key={index}
+                        title={course.title}
+                        description={course.description}
+                        image={course.image}
                         onClick={() => handleCardClick(course)}
                     />
                 ))}

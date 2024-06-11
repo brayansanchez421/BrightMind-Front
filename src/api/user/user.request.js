@@ -4,6 +4,8 @@ const api = 'http://localhost:3068/PE';
 export const getAllUsers = () => axios.get(`${api}/users/getAll`, { withCredentials: true });
 
 export const getUser = (_id) => axios.get(`${api}/users/get/${_id}`, { withCredentials: true });
+export const getUserCourses = (userId) => axios.get(`${api}/users/${userId}/courses`, { withCredentials: true });
+
 
 export const updateUser = async (_id, userData) => {
     return axios.put(`${api}/users/modify/${_id}`, userData, {
@@ -13,6 +15,7 @@ export const updateUser = async (_id, userData) => {
         },
     });
 };
+export const registerToCourse = (userId, courseId) => axios.post(`${api}/users/registerToCourse`, { userId, courseId }, { withCredentials: true });
 
 
 

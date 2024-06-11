@@ -61,6 +61,5 @@ export const updateCourse = (id, courseData) => {
 
 // Función para eliminar un curso
 export const deleteCourse = (id) => courseRequest.delete(`/deleteCourse/${id}`);
-export const getCoursesByCategory = (categoryName) => courseRequest.get(`/category/${categoryName}`);
 
 export default courseRequest;
