@@ -4,29 +4,50 @@ import * as yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
 import { Link, useParams, useNavigate } from 'react-router-dom'; // Importa useParams
 import { passwordReset } from '../../api/auth'; // Debes implementar esta función en tu API
+import { useUserContext } from '../../context/user/user.context';
+import { useAuth } from '../../context/auth.context';
 
 function NewPassword() {
     const { token } = useParams(); // Obtiene el token de los parámetros de la URL
     const [error, setError] = useState('');
     const [passwordsMatch, setPasswordsMatch] = useState(false);
     const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const { getUserById } = useUserContext();
+    const { user } = useAuth();
+
+    useEffect(() => {
+        const fetchUserEmail = async () => {
+            try {
+                if (user && user.data && user.data.id) {
+                    const userData = await getUserById(user.data.id);
+                    console.log("User data fetched:", userData);
+                    setEmail(userData.email);
+                }
+            } catch (error) {
+                console.error('Error fetching user email:', error);
+            }
+        };
+
+        fetchUserEmail();
+    }, [getUserById, user]);
 
     const validationSchema = yup.object().shape({
-        email: yup.string().email('Invalid email').required('The email is required'),
         password: yup.string().required('The  password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, 'The password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
         confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'The passwords must match'),
     });
 
     const formik = useFormik({
         initialValues: {
-            email: '',
+            email: email,
             password: '',
             confirmPassword: '',
         },
+        enableReinitialize: true,
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             try {
-                await passwordReset(values);
+                await passwordReset({ email, password: values.password, confirmPassword: values.confirmPassword });
                 toast.success('Password changed successfully');
                 setTimeout(() => {
                     navigate('/');
@@ -56,9 +77,9 @@ function NewPassword() {
                             <input
                                 type="email"
                                 name="email"
-                                value={formik.values.email}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
+                                value={email}
+                                readOnly
+                                disabled
                                 className="w-full p-4 border border-cyan-300 rounded-full bg-pink-100 placeholder-gray-450 focus:outline-sky-600 focus:border-sky-950 focus:bg-slate-200"
                                 placeholder="Email"
                             />
