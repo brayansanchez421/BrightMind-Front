@@ -10,7 +10,7 @@ const { Option } = Select;
 const CreateCourseForm = ({ visible, onClose, onCreate }) => {
   const { categories } = useCategoryContext(); // Obtiene la lista de categorías desde el contexto
   const { createCourse } = useCoursesContext(); // Obtiene la función para crear cursos desde el contexto
-  const MAX_DESCRIPCION_LENGTH = 200;
+  const MAX_DESCRIPCION_LENGTH = 150;
 
   const [curso, setCurso] = useState({
     nombre: "",
@@ -76,7 +76,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       <form onSubmit={handleSubmit} className="shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-4 relative shadow-orange rounded overflow-x-hidden ">
         <button
           className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400"
-          onClick={onClose}
+          onClick={false}
         >
           X
         </button>

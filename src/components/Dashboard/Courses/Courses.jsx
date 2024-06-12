@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Input } from "antd";
-import { ReloadOutlined, InfoCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { ReloadOutlined, InfoCircleOutlined, DeleteOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import LeftBar from "../../Dashboard/LeftBar";
 import { useUserContext } from "../../../context/user/user.context";
 import { useCoursesContext } from "../../../context/courses/courses.context";
@@ -73,10 +73,11 @@ const DataTablete = () => {
         <LeftBar onVisibilityChange={setIsLeftBarVisible} />
         <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? "ml-80 max-w-full" : ""}`}>
           <Navbar />
-          <div className="flex flex-col mt-6 p-10">
+          <div className="flex flex-col p-10">
             <div>
               <h2 className="text-2xl font-black  text-white text-center">Courses</h2>
-              <div className="flex flex-wrap items-center justify-center mt-4">
+              <div className="flex flex-wrap items-center justify-center mt-10">
+
                 <Button 
                   type="primary"
                   style={{ backgroundColor: "green" }}
@@ -89,7 +90,7 @@ const DataTablete = () => {
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={handleCreateCategoryClick}
-                  className="mr-4 "
+                  className="mr-4 text-center  font-medium text-base "
                 >
                   <b>Create Category</b>
                 </Button>
@@ -97,7 +98,7 @@ const DataTablete = () => {
                   placeholder="Search by Name"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  className="w-40 "
+                  className="w-40 text-center  font-medium text-base"
                 />
               </div>
 
@@ -106,19 +107,19 @@ const DataTablete = () => {
                   <table className="min-w-full overflow-x-auto">
                     <thead>
                       <tr>
-                        <th className="text-xl px-6 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800">
+                        <th className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800 ">
                           ID
                         </th>
-                        <th className="text-xl px-6 py-3 bg-yellow-500 text-white border-2 cursor-pointer border-blue-800">
+                        <th className="text-xl px-8 py-3 bg-yellow-500 text-white border-2 cursor-pointer border-blue-800">
                           Category
                         </th>
                         <th className="text-xl px-6 py-3 bg-green-500 text-white border-2 cursor-pointer border-blue-800">
                           Name
                         </th>
-                        <th className="text-xl px-6 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">
+                        <th className="text-xl px-10 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">
                           Description
                         </th>
-                        <th className="text-xl px-6 py-3 bg-red-500 text-white border-2 border-blue-800">
+                        <th className="text-xl px-20 py-3 bg-red-500 text-white border-2 border-blue-800">
                           Actions
                         </th>
                       </tr>
@@ -128,53 +129,46 @@ const DataTablete = () => {
                         .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
                         .map((course, index) => (
                           <tr key={course._id}>
-                            <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300 text-lg text-black mt-1">
+                            <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center font-bold">
                               {generateIds()[index]}
                             </td>
-                            <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300 text-lg text-black mt-1">
+                            <td className="border-2 border-blue-800  bg-gray-300 text-lg text-black mt-1 text-center ">
                               {course.category}
                             </td>
-                            <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300 text-lg text-black mt-1">
+                            <td className="border-2 border-blue-800  bg-gray-300 text-lg text-black mt-1 text-center">
                               {course.title}
                             </td>
-                            <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300 text-lg text-black mt-1">
+                            <td className="border-2 border-blue-800  bg-gray-300 text-lg text-black mt-1 text-balance  px-1">
                               {course.description}
                             </td>
-                            <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300 text-balance">
-                              <div className="flex   items-center text-center">
-                                
-                                  <Button
-                                    className="mb-2 bg-blue-500 h-10 text-lg"
-                                    type="primary"
-                                    icon={<ReloadOutlined />}
-                                    onClick={() => handleUpdateButtonClick(course)}
+                            <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300">
+                              <div className="flex justify-center">
+
+                              <Button
+                                  className="mb-2 bg-green-500 h-10 text-lg text-white mr-2 ml-2"
+                                  onClick={() => handleAssignButtonClick(course)}
+                                  icon={<CheckCircleOutlined/>}
                                   >
-                                    Update 
-                                  </Button>
-                                  <Button
-                                    className="bg-purple-600 text-white text-lg h-10"
-                                    icon={<InfoCircleOutlined />}
-                                    onClick={() => handleDetailsButtonClick(course)}
-                                  >
-                                    
-                                  </Button>
-                              
-                                
-                                  <Button
-                                    className="mb-2 bg-yellow-500 h-10 text-lg text-white"
-                                    onClick={() => handleAssignButtonClick(course)}
-                                    
-                                  >
-                                    Asignar
-                                  </Button>
-                                  <Button
-                                    className="bg-red-500 h-10 text-lg text-white"
-                                    icon={<DeleteOutlined />}
-                                    onClick={() => handleDeleteButtonClick(course, index)}
-                                  >
-                                    
-                                  </Button>
-                                
+                              </Button>
+                              <Button
+                                  className="mb-2 bg-blue-500 h-10 text-lg mr-2 ml-2"
+                                  type="primary"
+                                  icon={<ReloadOutlined />}
+                                  onClick={() => handleUpdateButtonClick(course)}
+                                >
+                                </Button>
+                                <Button
+                                  className="bg-purple-600 text-white text-lg h-10 mr-2 ml-2"
+                                  icon={<InfoCircleOutlined />}
+                                  onClick={() => handleDetailsButtonClick(course)}
+                                >
+                                </Button>
+                                <Button
+                                  className="bg-red-500 h-10 text-lg text-white ml-2"
+                                  icon={<DeleteOutlined />}
+                                  onClick={() => handleDeleteButtonClick(course, index)}
+                                >
+                                </Button>
                               </div>
                             </td>
                           </tr>
@@ -187,7 +181,7 @@ const DataTablete = () => {
           </div>
 
           <CreateCourseForm
-            visible={showForm}
+            visible ={showForm}
             onClose={handleFormClose}
             onCreate={handleCreateCourse}
           />
@@ -199,7 +193,7 @@ const DataTablete = () => {
           />
 
           {totalPages > 1 && (
-            <div className="flex justify-end mr-32 mt-6 mb-10">
+            <div className="flex justify-center   mb-10">
               <button
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Input } from "antd";
-import { ToastContainer, toast } from "react-toastify"; // Importar aquí
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCategoryContext } from "../../../context/courses/category.context";
 
@@ -9,6 +9,9 @@ const CreateCategoryForm = ({ visible, onClose }) => {
 
   const [category, setCategory] = useState({ name: "", description: "", image: null });
   const [imagePreview, setImagePreview] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const MAX_DESCRIPCION_LENGTH = 100;
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,38 +28,40 @@ const CreateCategoryForm = ({ visible, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Datos del formulario:", category); // Verificación
+    console.log("Datos del formulario:", category);
     try {
       await createCategory(category);
       onClose();
-      toast.success("Category created successfully!"); // Utiliza toast.success en lugar de message.success
+      toast.success("Category created successfully!");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create category."); // Utiliza toast.error en lugar de message.error
+      setErrorMessage("Failed to create category.");
+      toast.error("Failed to create category.");
     }
   };
-  
 
   useEffect(() => {
     if (visible) {
       setCategory({ name: "", description: "", image: null });
-      setImagePreview(null); // Restablece la previsualización de la imagen cuando se abre el formulario
+      setImagePreview(null);
+      setErrorMessage("");
     }
   }, [visible]);
 
   return (
-    <Modal 
-    visible={visible} 
-    footer={null} 
-    closable={false} 
-    onCancel={onClose}
-    maskStyle={{ backdropFilter: "blur(10px)" }}
-    > 
+    <Modal
+      visible={visible}
+      footer={null}
+      closable={false}
+      onCancel={onClose}
+      maskStyle={{ backdropFilter: "blur(10px)" }}
+    >
       <form
         className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded"
         onSubmit={handleSubmit}
       >
         <button
+          type="button"
           className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400"
           onClick={onClose}
         >
@@ -86,7 +91,10 @@ const CreateCategoryForm = ({ visible, onClose }) => {
                 name="description"
                 value={category.description}
                 onChange={handleChange}
+                maxLength={MAX_DESCRIPCION_LENGTH}
+                style={{ minHeight: "100px" }}
               />
+              <div className="text-white mt-1 text-right">{category.description.length}/{MAX_DESCRIPCION_LENGTH}</div>
             </label>
           </div>
           <div className="mb-4">
@@ -111,13 +119,13 @@ const CreateCategoryForm = ({ visible, onClose }) => {
         </div>
         <div className="flex items-center justify-center mt-10">
           <Button
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold  px-4 rounded focus:outline-none focus:shadow-outline mr-2 flex flex-col items-center"
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold px-4 rounded focus:outline-none focus:shadow-outline mr-2 flex flex-col items-center"
             onClick={onClose}
           >
             Close
           </Button>
           <Button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold  px-4 rounded focus:outline-none focus:shadow-outline ml-4 flex flex-col items-center"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded focus:outline-none focus:shadow-outline ml-4 flex flex-col items-center"
             htmlType="submit"
           >
             Create Category
