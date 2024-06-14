@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input } from "antd";
+import { Button, Input, Modal } from "antd";
 import { ReloadOutlined, InfoCircleOutlined, DeleteOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import LeftBar from "../../Dashboard/LeftBar";
 import { useUserContext } from "../../../context/user/user.context";
@@ -19,6 +19,8 @@ const DataTablete = () => {
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
+  const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
     getUsers();
@@ -60,6 +62,15 @@ const DataTablete = () => {
     setShowForm(false);
   };
 
+  const handleAssignButtonClick = (course) => {
+    setSelectedCourse(course);
+    setIsAssignModalVisible(true);
+  };
+
+  const handleAssignModalClose = () => {
+    setIsAssignModalVisible(false);
+  };
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateIds = () => {
@@ -75,14 +86,14 @@ const DataTablete = () => {
           <Navbar />
           <div className="flex flex-col p-10">
             <div>
-              <h2 className="text-2xl font-black  text-white text-center">Courses</h2>
+              <h2 className="text-2xl font-black text-white text-center">Courses</h2>
               <div className="flex flex-wrap items-center justify-center mt-10">
 
                 <Button 
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={handleCreateCourseClick}
-                  className="mr-4  text-center  font-medium text-base "
+                  className="mr-4 text-center font-medium text-base"
                 >
                   <b>Create Course</b>
                 </Button>
@@ -90,7 +101,7 @@ const DataTablete = () => {
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={handleCreateCategoryClick}
-                  className="mr-4 text-center  font-medium text-base "
+                  className="mr-4 text-center font-medium text-base"
                 >
                   <b>Create Category</b>
                 </Button>
@@ -98,7 +109,7 @@ const DataTablete = () => {
                   placeholder="Search by Name"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  className="w-40 text-center  font-medium text-base"
+                  className="w-40 text-center font-medium text-base"
                 />
               </div>
 
@@ -107,7 +118,7 @@ const DataTablete = () => {
                   <table className="min-w-full overflow-x-auto">
                     <thead>
                       <tr>
-                        <th className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800 ">
+                        <th className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800">
                           ID
                         </th>
                         <th className="text-xl px-8 py-3 bg-yellow-500 text-white border-2 cursor-pointer border-blue-800">
@@ -132,25 +143,24 @@ const DataTablete = () => {
                             <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center font-bold">
                               {generateIds()[index]}
                             </td>
-                            <td className="border-2 border-blue-800  bg-gray-300 text-lg text-black mt-1 text-center ">
+                            <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center">
                               {course.category}
                             </td>
-                            <td className="border-2 border-blue-800  bg-gray-300 text-lg text-black mt-1 text-center">
+                            <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center">
                               {course.title}
                             </td>
-                            <td className="border-2 border-blue-800  bg-gray-300 text-lg text-black mt-1 text-balance  px-1">
+                            <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-balance px-1">
                               {course.description}
                             </td>
                             <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300">
                               <div className="flex justify-center">
-
-                              <Button
+                                <Button
                                   className="mb-2 bg-green-500 h-10 text-lg text-white mr-2 ml-2"
                                   onClick={() => handleAssignButtonClick(course)}
-                                  icon={<CheckCircleOutlined/>}
-                                  >
-                              </Button>
-                              <Button
+                                  icon={<CheckCircleOutlined />}
+                                >
+                                </Button>
+                                <Button
                                   className="mb-2 bg-blue-500 h-10 text-lg mr-2 ml-2"
                                   type="primary"
                                   icon={<ReloadOutlined />}
@@ -181,7 +191,7 @@ const DataTablete = () => {
           </div>
 
           <CreateCourseForm
-            visible ={showForm}
+            visible={showForm}
             onClose={handleFormClose}
             onCreate={handleCreateCourse}
           />
@@ -193,7 +203,7 @@ const DataTablete = () => {
           />
 
           {totalPages > 1 && (
-            <div className="flex justify-center   mb-10">
+            <div className="flex justify-center mb-10">
               <button
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}
@@ -223,6 +233,38 @@ const DataTablete = () => {
               </button>
             </div>
           )}
+
+<Modal
+  title={`Curso ${selectedCourse ? selectedCourse.title : ''}`}
+  visible={isAssignModalVisible}
+  onCancel={handleAssignModalClose}
+  footer={[
+    <Button key="back" onClick={handleAssignModalClose}>
+      Cancel
+    </Button>,
+    
+    <button key="submit" className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={handleAssignModalClose}>
+      Assign
+    </button>,
+  ]}
+>
+  {selectedCourse && (
+    <>
+      <p>{selectedCourse.content}</p>
+    </>
+  )}
+  <div className="mb-4">
+    <label className="block text-zinc-950 text-lg font-bold mb-4">
+      Recurso:
+      <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline italic mt-2"
+        type="file"
+       
+      />
+    </label>
+  </div>
+</Modal>
+
         </div>
       </div>
     </div>
