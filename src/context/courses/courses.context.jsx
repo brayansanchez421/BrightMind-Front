@@ -47,8 +47,7 @@ export const CoursesProvider = ({ children }) => {
             const newCourseData = {
                 title,
                 description,
-                category,
-               
+                category,              
                 image
             };
             console.log(newCourseData);
@@ -72,7 +71,7 @@ export const CoursesProvider = ({ children }) => {
         }
     };
 
-    const updateCourse = async (id, { title, description, category, content, image }) => {
+    const updateCourse = async (id, title, description, category, content, image ) => {
         try {
             const formData = new FormData();
             formData.append('title', title);
@@ -83,8 +82,9 @@ export const CoursesProvider = ({ children }) => {
             if (image) {
                 formData.append('image', image);
             }
-
+            console.log(formData)
             const res = await updateCourseApi(id, formData);
+            console.log(res)
             setCourses(courses.map(course => (course.id === id ? res.data : course)));
             return res.data;
         } catch (error) {
