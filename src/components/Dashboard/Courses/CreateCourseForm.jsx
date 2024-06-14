@@ -17,7 +17,6 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     categoria: "",
     descripcion: "",
     imagen: null,
-    recurso: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -40,10 +39,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     }
   };
 
-  const handleRecursoChange = (e) => {
-    const file = e.target.files[0];
-    setCurso({ ...curso, recurso: file });
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +47,6 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       title: curso.nombre,
       category: curso.categoria,
       description: curso.descripcion,
-      content: curso.recurso,
       image: curso.imagen,
     };
     try {
@@ -140,15 +135,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
             </label>
           </div>
           <div className="mb-4">
-            <label className="block text-zinc-100 text-lg font-bold mb-4">
-              Recurso:
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline italic mt-2"
-                type="file"
-                ref={recursoRef}
-                onChange={handleRecursoChange}
-              />
-            </label>
+            
           </div>
         </div>
         <div className="flex items-center justify-center mt-4">

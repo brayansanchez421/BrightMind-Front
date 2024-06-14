@@ -42,13 +42,13 @@ export const CoursesProvider = ({ children }) => {
         }
     };
 
-    const createCourse = async ({ title, description, category, content, image }) => {
+    const createCourse = async ({ title, description, category,  image }) => {
         try {
             const newCourseData = {
                 title,
                 description,
                 category,
-                content,
+               
                 image
             };
             console.log(newCourseData);

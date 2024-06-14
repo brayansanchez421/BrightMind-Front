@@ -21,7 +21,6 @@ export const createCourse = (courseData) => {
   formData.append('title', courseData.title);
   formData.append('description', courseData.description);
   formData.append('category', courseData.category);
-  formData.append('content', courseData.content);
 
   // Agregar la imagen si existe
   if (courseData.image) {
