@@ -26,6 +26,8 @@ export const CoursesProvider = ({ children }) => {
         try {
             const res = await getAllCoursesApi();
             setCourses(res.data);
+            console.log(res.data)
+
             return res.data;
         } catch (error) {
             console.error(error);
@@ -76,6 +78,7 @@ export const CoursesProvider = ({ children }) => {
         try {
           const res = await updateCourseApi(id, courseData);
           setCourses(courses.map((course) => (course._id === id ? res.data : course)));
+          console.log(res.data)
           return res.data;
         } catch (error) {
           console.error(error);

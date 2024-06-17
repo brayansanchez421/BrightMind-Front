@@ -11,7 +11,7 @@ import Navbar from "../NavBar";
 
 const DataTablete = () => {
   const { getUsers, usersData } = useUserContext();
-  const { getAllCourses, courses, asignarContenido } = useCoursesContext();
+  const { getAllCourses, courses, asignarContenido, deleteCourse } = useCoursesContext();
   const [searchValue, setSearchValue] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false); // Estado para mostrar el formulario de actualización
@@ -70,7 +70,7 @@ const DataTablete = () => {
   const handleUpdateCourse = async (updatedCourse) => {
     message.success("Curso actualizado exitosamente");
     // Actualiza la información de la tabla aquí si es necesario
-    Window.location.reload();
+    window.location.reload();
     setShowUpdateForm(false);
     setSelectedCourseId(null);
   };
@@ -100,6 +100,23 @@ const DataTablete = () => {
       console.log("Contenido asignado:", res);
       // Aquí podrías realizar alguna acción adicional después de asignar el contenido, como actualizar la lista de cursos, etc.
       setIsAssignModalVisible(false); // Cierra la modal después de asignar el contenido
+    }
+  };
+  const handleDeleteModalClose = () => {
+    setIsDeleteModalVisible(false);
+    setCourseToDelete(null);
+  };
+  const handleDeleteConfirm = async () => {
+    try {
+      await deleteCourse(courseToDelete._id);
+      console.log(courseToDelete._id);
+      message.success("Curso eliminado exitosamente");
+      // Actualiza la información de la tabla después de eliminar un curso
+    } catch (error) {
+      message.error("Error al eliminar el curso");
+    } finally {
+      setIsDeleteModalVisible(false);
+      setCourseToDelete(null);
     }
   };
 
