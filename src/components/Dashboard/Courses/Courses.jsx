@@ -65,9 +65,12 @@ const DataTablete = () => {
     setSelectedCourse(null);
   };
 
-  const handleUpdateCourse = (updatedCourse) => {
-    console.log("Curso actualizado:", updatedCourse);
+  const handleUpdateCourse = async (updatedCourse) => {
+    message.success("Curso actualizado exitosamente");
+    // Actualiza la información de la tabla aquí si es necesario
+    Window.location.reload();
     setShowUpdateForm(false);
+    setSelectedCourseId(null);
   };
 
   const handleCreateCourse = (curso) => {

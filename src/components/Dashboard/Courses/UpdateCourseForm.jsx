@@ -60,7 +60,7 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
       category: curso.categoria,
       description: curso.descripcion,
       image: curso.imagen,
-    };
+    }
     try {
       await updateCourse(courseId, courseData);
       onUpdate(courseData);
