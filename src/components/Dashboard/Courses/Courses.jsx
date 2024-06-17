@@ -10,11 +10,13 @@ import Navbar from "../NavBar";
 
 const DataTablete = () => {
   const { getUsers, usersData } = useUserContext();
-  const { getAllCourses, courses } = useCoursesContext();
+  const { getAllCourses, courses, asignarContenido } = useCoursesContext();
   const [searchValue, setSearchValue] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [contentFile, setContentFile] = useState(null);
+
   const [itemsPerPage] = useState(5);
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
@@ -66,11 +68,26 @@ const DataTablete = () => {
     setSelectedCourse(course);
     setIsAssignModalVisible(true);
   };
-
+  
   const handleAssignModalClose = () => {
     setIsAssignModalVisible(false);
   };
+  
+  const handleAssignContent = async () => {
+    if (selectedCourse && contentFile) { // Verifica que haya un curso seleccionado y un archivo adjunto
+      const courseId = selectedCourse._id;
+      console.log("Curso seleccionado:", selectedCourse._id);
+      console.log("Archivo adjunto:", contentFile);
+  
+      const res = await asignarContenido(courseId, contentFile);
+  
+      console.log("Contenido asignado:", res);
+      // Aquí podrías realizar alguna acción adicional después de asignar el contenido, como actualizar la lista de cursos, etc.
+      setIsAssignModalVisible(false); // Cierra la modal después de asignar el contenido
+    }
+  };
 
+  
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateIds = () => {
@@ -240,30 +257,60 @@ const DataTablete = () => {
   onCancel={handleAssignModalClose}
   footer={[
     <Button key="back" onClick={handleAssignModalClose}>
-      Cancel
+      Cancelar
     </Button>,
-    
-    <button key="submit" className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={handleAssignModalClose}>
-      Assign
-    </button>,
+    <Button key="submit" type="primary" onClick={handleAssignContent}>
+      Asignar
+    </Button>,
   ]}
 >
   {selectedCourse && (
     <>
-      <p>{selectedCourse.content}</p>
+      {console.log("selectedCourse.content:", selectedCourse.content)}
+      {selectedCourse.content.map((url, index) => {
+        if (url.endsWith('.mp4')) {
+          return (
+            <video key={index} controls className="w-full mb-4">
+              <source src={url} type="video/mp4" />
+              Tu navegador no soporta el elemento de video.
+            </video>
+          );
+        } else if (url.endsWith('.pdf')) {
+          return (
+            <iframe
+              key={index}
+              src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`}
+              className="w-full mb-4"
+              style={{ minHeight: '600px' }}
+              frameBorder="0"
+            >
+              Tu navegador no soporta PDFs. Por favor descarga el PDF para verlo: <a href={url}>Descargar PDF</a>
+            </iframe>
+          );
+        } else {
+          return (
+            <img key={index} src={url} alt={`Vista previa del curso ${index}`} className="w-full mb-4" />
+          );
+        }
+      })}
     </>
   )}
   <div className="mb-4">
-    <label className="block text-zinc-950 text-lg font-bold mb-4">
+    <label className="block text-lg font-bold mb-4">
       Recurso:
       <input
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline italic mt-2"
         type="file"
-       
+        onChange={(e) => setContentFile(e.target.files[0])}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline mt-2"
       />
     </label>
   </div>
 </Modal>
+
+
+
+
+
 
         </div>
       </div>

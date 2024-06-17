@@ -10,6 +10,22 @@ const courseRequest = axios.create({
 // Función para obtener todos los cursos
 export const getAllCourses = () => courseRequest.get('/getAllCourses');
 
+// Función para asignar contenido a un curso
+export const asignarContenido = (id, contentFile) => {
+  const formData = new FormData(); // Crear una instancia de FormData
+
+  // Agregar el archivo de contenido al FormData
+  formData.append('content', contentFile);
+
+  // Realizar la solicitud POST utilizando Axios
+  return courseRequest.post(`/asignarContenido/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+
 // Función para obtener un curso por ID
 export const getCourse = (id) => courseRequest.get(`/getCourse/${id}`);
 

@@ -5,7 +5,8 @@ import {
     createCourse as createCourseApi, 
     updateCourse as updateCourseApi, 
     deleteCourse as deleteCourseApi,
-    getCoursesByCategory as getCoursesByCategoryApi
+    getCoursesByCategory as getCoursesByCategoryApi,
+    asignarContenido as asignarContenidoApi // Importa la función asignarContenido desde tu archivo api
 } from '../../api/courses/course.request'; // Importa las funciones de tu archivo api
 
 export const CoursesContext = createContext();
@@ -42,17 +43,16 @@ export const CoursesProvider = ({ children }) => {
         }
     };
 
-    const createCourse = async ({ title, description, category,  image }) => {
+    const createCourse = async ({ title, description, category, image }) => {
         try {
             const newCourseData = {
                 title,
                 description,
                 category,
-               
                 image
             };
             console.log(newCourseData);
-    
+
             const res = await createCourseApi(newCourseData);
             setCourses([...courses, res.data]);
             return res.data;
@@ -103,12 +103,26 @@ export const CoursesProvider = ({ children }) => {
         }
     };
 
+    const asignarContenido = async (id, contentFile) => {
+        try {
+            console.log("llego",id);
+            console.log("llegooo", contentFile)
+
+            const res = await asignarContenidoApi(id, contentFile);
+            console.log("estoooo: ", res)
+            return res.data;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
+
     useEffect(() => {
         getAllCourses();
     }, []);
 
     return (
-        <CoursesContext.Provider value={{ courses, getAllCourses, getCourse, createCourse, getCoursesByCategory, updateCourse, deleteCourse }}>
+        <CoursesContext.Provider value={{ courses, getAllCourses, getCourse, createCourse, getCoursesByCategory, updateCourse, deleteCourse, asignarContenido }}>
             {children}
         </CoursesContext.Provider>
     );
