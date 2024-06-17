@@ -66,6 +66,8 @@ export const updateCourse = (id, courseData) => {
     formData.append('image', courseData.image);
   }
 
+
+
   // Realizar la solicitud PUT utilizando Axios
   return courseRequest.put(`/updateCourse/${id}`, formData, {
     headers: {

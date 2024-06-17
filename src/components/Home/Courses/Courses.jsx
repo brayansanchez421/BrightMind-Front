@@ -59,7 +59,7 @@ const Course = () => {
                         key={index}
                         title={course.title}
                         description={course.description}
-                        image={course.image}
+                        ruta={course.image}
                         onClick={() => handleCardClick(course)}
                     />
                 ))}

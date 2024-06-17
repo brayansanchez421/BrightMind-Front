@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, Modal } from "antd";
+import { Button, Input, Modal, message } from "antd";
 import { ReloadOutlined, InfoCircleOutlined, DeleteOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import LeftBar from "../../Dashboard/LeftBar";
 import { useUserContext } from "../../../context/user/user.context";
 import { useCoursesContext } from "../../../context/courses/courses.context";
 import CreateCourseForm from "../Courses/CreateCourseForm";
 import CreateCategoryForm from "../Courses/CreateCategoryForm";
+import UpdateCourseForm from "../Courses/UpdateCourseForm"; // Importa el nuevo formulario de actualización
 import Navbar from "../NavBar";
 
 const DataTablete = () => {
   const { getUsers, usersData } = useUserContext();
   const { getAllCourses, courses, asignarContenido } = useCoursesContext();
   const [searchValue, setSearchValue] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showUpdateForm, setShowUpdateForm] = useState(false); // Estado para mostrar el formulario de actualización
+  const [selectedCourse, setSelectedCourse] = useState(null); // Estado para el curso seleccionado
   const [currentPage, setCurrentPage] = useState(1);
   const [contentFile, setContentFile] = useState(null);
 
@@ -22,7 +24,8 @@ const DataTablete = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
   const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState(null);
 
   useEffect(() => {
     getUsers();
@@ -46,22 +49,35 @@ const DataTablete = () => {
     setShowCategoryForm(false);
   };
 
-  const handleUpdateButtonClick = (item) => {
-    setSelectedUser(item);
-    setShowForm(true);
-  };
-
   const handleCreateCourseClick = () => {
-    setShowForm(true);
+    setShowCreateForm(true);
   };
 
-  const handleFormClose = () => {
-    setShowForm(false);
+  const handleCreateFormClose = () => {
+    setShowCreateForm(false);
+  };
+
+  const handleUpdateButtonClick = (course) => {
+    setSelectedCourse(course);
+    setShowUpdateForm(true); // Muestra el formulario de actualización
+  };
+
+  const handleUpdateFormClose = () => {
+    setShowUpdateForm(false);
+    setSelectedCourse(null);
+  };
+
+  const handleUpdateCourse = async (updatedCourse) => {
+    message.success("Curso actualizado exitosamente");
+    // Actualiza la información de la tabla aquí si es necesario
+    Window.location.reload();
+    setShowUpdateForm(false);
+    setSelectedCourseId(null);
   };
 
   const handleCreateCourse = (curso) => {
     console.log("Nuevo curso:", curso);
-    setShowForm(false);
+    setShowCreateForm(false);
   };
 
   const handleAssignButtonClick = (course) => {
@@ -105,7 +121,6 @@ const DataTablete = () => {
             <div>
               <h2 className="text-2xl font-black text-white text-center">Courses</h2>
               <div className="flex flex-wrap items-center justify-center mt-10">
-
                 <Button 
                   type="primary"
                   style={{ backgroundColor: "green" }}
@@ -129,7 +144,6 @@ const DataTablete = () => {
                   className="w-40 text-center font-medium text-base"
                 />
               </div>
-
               <div className="mt-10 flex justify-center">
                 <div className="overflow-auto w-full">
                   <table className="min-w-full overflow-x-auto">
@@ -175,27 +189,23 @@ const DataTablete = () => {
                                   className="mb-2 bg-green-500 h-10 text-lg text-white mr-2 ml-2"
                                   onClick={() => handleAssignButtonClick(course)}
                                   icon={<CheckCircleOutlined />}
-                                >
-                                </Button>
+                                />
                                 <Button
                                   className="mb-2 bg-blue-500 h-10 text-lg mr-2 ml-2"
                                   type="primary"
                                   icon={<ReloadOutlined />}
                                   onClick={() => handleUpdateButtonClick(course)}
-                                >
-                                </Button>
+                                />
                                 <Button
                                   className="bg-purple-600 text-white text-lg h-10 mr-2 ml-2"
                                   icon={<InfoCircleOutlined />}
                                   onClick={() => handleDetailsButtonClick(course)}
-                                >
-                                </Button>
+                                />
                                 <Button
                                   className="bg-red-500 h-10 text-lg text-white ml-2"
                                   icon={<DeleteOutlined />}
-                                  onClick={() => handleDeleteButtonClick(course, index)}
-                                >
-                                </Button>
+                                  onClick={() => handleDeleteButtonClick(course)}
+                                />
                               </div>
                             </td>
                           </tr>
@@ -208,8 +218,8 @@ const DataTablete = () => {
           </div>
 
           <CreateCourseForm
-            visible={showForm}
-            onClose={handleFormClose}
+            visible={showCreateForm}
+            onClose={handleCreateFormClose}
             onCreate={handleCreateCourse}
           />
 
@@ -217,6 +227,13 @@ const DataTablete = () => {
             visible={showCategoryForm}
             onClose={handleCategoryFormClose}
             onCreate={handleCreateCategory}
+          />
+
+          <UpdateCourseForm
+            visible={showUpdateForm}
+            onClose={handleUpdateFormClose}
+            onUpdate={handleUpdateCourse}
+            courseId={selectedCourse ? selectedCourse._id : null}
           />
 
           {totalPages > 1 && (
@@ -312,6 +329,21 @@ const DataTablete = () => {
 
 
 
+          <Modal
+            title="Confirmar eliminación"
+            visible={isDeleteModalVisible}
+            onCancel={handleDeleteModalClose}
+            footer={[
+              <Button key="cancel" onClick={handleDeleteModalClose}>
+                Cancelar
+              </Button>,
+              <Button key="delete" type="primary" danger onClick={handleDeleteConfirm}>
+                Eliminar
+              </Button>,
+            ]}
+          >
+            <p>¿Estás seguro de que deseas eliminar este curso?</p>
+          </Modal>
         </div>
       </div>
     </div>

@@ -21,11 +21,12 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         setLoading(true);
         try {
-          const user = await loginRequest(credentials);
-          console.log("Respuesta de loginRequest:", user);
-          console.log(user.data.token);
+          const response = await loginRequest(credentials);
+          const user = response.data;
+          console.log("Respuesta de loginRequest:", response);
+          console.log(user.token);
           // Guardar la cookie de autenticación en el localStorage
-          localStorage.setItem("authToken", user.data.token);
+          localStorage.setItem("authToken", user.token);
       
           setUser(user);
           setLoading(false);
@@ -36,8 +37,14 @@ export const AuthProvider = ({ children }) => {
           return { success: true, user }; // Devuelve true si el inicio de sesión fue exitoso y el usuario
         } catch (error) {
           console.error(error);
+
+          let errorMessage = 'An error occurred';
+            if (error.response && error.response.data && error.response.data.message) {
+                errorMessage = error.response.data.message;
+            }
+
           setLoading(false);
-          return { success: false, user: null }; // Devuelve false si hubo un error en el inicio de sesión
+          return { success: false, message: errorMessage}; // Devuelve false si hubo un error en el inicio de sesión
         }
       };
 

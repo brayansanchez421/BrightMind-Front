@@ -31,26 +31,31 @@ const LoginForm = () => {
       console.log('Valores enviados al hacer inicio de sesión:', values);
       try {
         setLoading(true);
-        const { success, user } = await login(values);
+        const response = await login(values);
+        const success = response?.success;
+        const user = response?.user;
+        const message = response?.message;
+
         console.log('Inicio de sesión exitoso:', success);
 
         if (success) {
-          const userRole = user && user.data ? user.data.role : null;
-          const userToken = user && user.data ? user.data.token : null;
+          const userRole = user?.data?.role || null;
+          const userToken = user?.data?.token || null;
           console.log(userRole);
 
-          toast.success('Inicio de sesión exitoso');
-          document.cookie = 'token=' + userToken + '; path=/';
+          toast.success(message || 'Login successful');
+          document.cookie = `token=${userToken}; path=/`;
           setUserRole(userRole);
           setIsAuthenticated(true);
         } else {
-          setError('An error occurred');
-          toast.error('An error occurred');
+          setError(message);
+          toast.error(message);
         }
       } catch (error) {
-        console.log(error);
-        setError('An error occurred');
-        toast.error('An error occurred');
+        console.log('Error capturado en el catch:', error);
+        const errorMessage = error?.response?.data?.message || 'An error occurred';
+        setError(errorMessage);
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -61,9 +66,8 @@ const LoginForm = () => {
     if (error) {
       const timer = setTimeout(() => {
         setError(null);
-      }, 3000); 
-
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 

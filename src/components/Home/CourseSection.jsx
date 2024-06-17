@@ -20,7 +20,7 @@ function CourseSection({ courseItems }) {
               <p className="text-gray-600 mb-2">{course.author}</p>
               <p className="text-gray-600">{course.tag}</p>
               <div className="text-gray-600">
-                <span className="line-through mr-2">599,900 COL$</span>
+                <span className="line-through mr-2">599,900 COL$</span> 
                 <span>{course.price}</span>
               </div>
             </div>
