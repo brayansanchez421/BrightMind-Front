@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
     const { updateUserPartial, getUserById } = useUserContext();
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
 
     const [name, setName] = useState(initialName);
     const [email, setEmail] = useState(initialEmail);
@@ -25,9 +25,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                     setName(userData.username);
                     setEmail(userData.email);
 
-                    // Verificar si el usuario tiene una imagen de perfil almacenada
                     if (userData.userImage) {
-                        // Establecer la URL de la imagen almacenada como la vista previa de la imagen
                         setPreviewProfileImage(userData.userImage);
                     }
                 } catch (error) {
@@ -57,7 +55,6 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                 };
 
                 if (profileImage) {
-                    // Aquí podrías añadir la lógica para subir la imagen a tu servidor o servicio de almacenamiento
                     userData.userImage = profileImage;
                 }
 
@@ -70,12 +67,9 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
+                    onClose: () => window.location.reload(), // Añadido para recargar la página
                 });
                 
-                // Cerrar sesión después de actualizar exitosamente
-                await logout(); // Esperar a que la sesión se cierre antes de recargar la página
-                localStorage.removeItem('token');
-                window.location.reload();
             } catch (error) {
                 toast.error('Failed to save changes. Please try again.', {
                     position: 'top-right',
