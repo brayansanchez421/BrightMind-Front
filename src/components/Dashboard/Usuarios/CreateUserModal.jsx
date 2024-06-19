@@ -18,6 +18,7 @@ const CreateUserModal = ({ visible, onCancel, onCreate }) => {
       console.error("Failed to create user:", error);
     }
   };
+  console.log("esto aqui",rolesData)
 
   return (
     <Modal className="mt-14"
@@ -51,8 +52,8 @@ const CreateUserModal = ({ visible, onCancel, onCreate }) => {
         >
           <Select>
             {rolesData.map((role) => (
-              <Option key={role.id} value={role.name}>
-                {role.name}
+              <Option key={role._id} value={role.nombre}>
+                {role.nombre}
               </Option>
             ))}
           </Select>

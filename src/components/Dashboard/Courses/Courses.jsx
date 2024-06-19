@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, Modal, message } from "antd";
+import { Button, Input, Modal, message, Collapse } from "antd";
 import { ReloadOutlined, InfoCircleOutlined, DeleteOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import LeftBar from "../../Dashboard/LeftBar";
 import { useUserContext } from "../../../context/user/user.context";
 import { useCoursesContext } from "../../../context/courses/courses.context";
 import CreateCourseForm from "../Courses/CreateCourseForm";
 import CreateCategoryForm from "../Courses/CreateCategoryForm";
-import UpdateCourseForm from "../Courses/UpdateCourseForm"; // Importa el nuevo formulario de actualización
+import UpdateCourseForm from "../Courses/UpdateCourseForm";
 import Navbar from "../NavBar";
+
+const { Panel } = Collapse;
 
 const DataTablete = () => {
   const { getUsers, usersData } = useUserContext();
   const { getAllCourses, courses, asignarContenido, deleteCourse } = useCoursesContext();
   const [searchValue, setSearchValue] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showUpdateForm, setShowUpdateForm] = useState(false); // Estado para mostrar el formulario de actualización
-  const [selectedCourse, setSelectedCourse] = useState(null); // Estado para el curso seleccionado
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [contentFile, setContentFile] = useState(null);
 
@@ -59,7 +61,7 @@ const DataTablete = () => {
 
   const handleUpdateButtonClick = (course) => {
     setSelectedCourse(course);
-    setShowUpdateForm(true); // Muestra el formulario de actualización
+    setShowUpdateForm(true);
   };
 
   const handleUpdateFormClose = () => {
@@ -69,10 +71,9 @@ const DataTablete = () => {
 
   const handleUpdateCourse = async (updatedCourse) => {
     message.success("Curso actualizado exitosamente");
-    // Actualiza la información de la tabla aquí si es necesario
     window.location.reload();
     setShowUpdateForm(false);
-    setSelectedCourseId(null);
+    setSelectedCourse(null);
   };
 
   const handleCreateCourse = (curso) => {
@@ -84,34 +85,34 @@ const DataTablete = () => {
     setSelectedCourse(course);
     setIsAssignModalVisible(true);
   };
-  
+
   const handleAssignModalClose = () => {
     setIsAssignModalVisible(false);
   };
-  
+
   const handleAssignContent = async () => {
-    if (selectedCourse && contentFile) { // Verifica que haya un curso seleccionado y un archivo adjunto
+    if (selectedCourse && contentFile) {
       const courseId = selectedCourse._id;
       console.log("Curso seleccionado:", selectedCourse._id);
       console.log("Archivo adjunto:", contentFile);
-  
+
       const res = await asignarContenido(courseId, contentFile);
-  
+
       console.log("Contenido asignado:", res);
-      // Aquí podrías realizar alguna acción adicional después de asignar el contenido, como actualizar la lista de cursos, etc.
-      setIsAssignModalVisible(false); // Cierra la modal después de asignar el contenido
+      setIsAssignModalVisible(false);
     }
   };
+
   const handleDeleteModalClose = () => {
     setIsDeleteModalVisible(false);
     setCourseToDelete(null);
   };
+
   const handleDeleteConfirm = async () => {
     try {
       await deleteCourse(courseToDelete._id);
       console.log(courseToDelete._id);
       message.success("Curso eliminado exitosamente");
-      // Actualiza la información de la tabla después de eliminar un curso
     } catch (error) {
       message.error("Error al eliminar el curso");
     } finally {
@@ -120,7 +121,6 @@ const DataTablete = () => {
     }
   };
 
-  
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateIds = () => {
@@ -285,66 +285,57 @@ const DataTablete = () => {
             </div>
           )}
 
-<Modal
-  title={`Curso ${selectedCourse ? selectedCourse.title : ''}`}
-  visible={isAssignModalVisible}
-  onCancel={handleAssignModalClose}
-  footer={[
-    <Button key="back" onClick={handleAssignModalClose}>
-      Cancelar
-    </Button>,
-    <Button key="submit" type="primary" onClick={handleAssignContent}>
-      Asignar
-    </Button>,
-  ]}
->
-  {selectedCourse && (
-    <>
-      {console.log("selectedCourse.content:", selectedCourse.content)}
-      {selectedCourse.content.map((url, index) => {
-        if (url.endsWith('.mp4')) {
-          return (
-            <video key={index} controls className="w-full mb-4">
-              <source src={url} type="video/mp4" />
-              Tu navegador no soporta el elemento de video.
-            </video>
-          );
-        } else if (url.endsWith('.pdf')) {
-          return (
-            <iframe
-              key={index}
-              src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`}
-              className="w-full mb-4"
-              style={{ minHeight: '600px' }}
-              frameBorder="0"
-            >
-              Tu navegador no soporta PDFs. Por favor descarga el PDF para verlo: <a href={url}>Descargar PDF</a>
-            </iframe>
-          );
-        } else {
-          return (
-            <img key={index} src={url} alt={`Vista previa del curso ${index}`} className="w-full mb-4" />
-          );
-        }
-      })}
-    </>
-  )}
-  <div className="mb-4">
-    <label className="block text-lg font-bold mb-4">
-      Recurso:
-      <input
-        type="file"
-        onChange={(e) => setContentFile(e.target.files[0])}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline mt-2"
-      />
-    </label>
-  </div>
-</Modal>
-
-
-
-
-
+          <Modal
+            title={`Curso ${selectedCourse ? selectedCourse.title : ''}`}
+            visible={isAssignModalVisible}
+            onCancel={handleAssignModalClose}
+            footer={[
+              <Button key="back" onClick={handleAssignModalClose}>
+                Cancelar
+              </Button>,
+              <Button key="submit" type="primary" onClick={handleAssignContent}>
+                Asignar
+              </Button>,
+            ]}
+          >
+            {selectedCourse && (
+              <Collapse>
+                {selectedCourse.content.map((url, index) => (
+                  <Panel header={`Recurso ${index + 1}`} key={index}>
+                    {url.endsWith('.mp4') && (
+                      <video controls className="w-full mb-4">
+                        <source src={url} type="video/mp4" />
+                        Tu navegador no soporta el elemento de video.
+                      </video>
+                    )}
+                    {url.endsWith('.pdf') && (
+                      <iframe
+                        src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`}
+                        className="w-full mb-4"
+                        style={{ minHeight: '600px' }}
+                        frameBorder="0"
+                      >
+                        Tu navegador no soporta PDFs. Por favor descarga el PDF para verlo: <a href={url}>Descargar PDF</a>
+                      </iframe>
+                    )}
+                    {!url.endsWith('.mp4') && !url.endsWith('.pdf') && (
+                      <img src={url} alt={`Vista previa del curso ${index}`} className="w-full mb-4" />
+                    )}
+                  </Panel>
+                ))}
+              </Collapse>
+            )}
+            <div className="mb-4">
+              <label className="block text-lg font-bold mb-4">
+                Recurso:
+                <input
+                  type="file"
+                  onChange={(e) => setContentFile(e.target.files[0])}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                />
+              </label>
+            </div>
+          </Modal>
 
           <Modal
             title="Confirmar eliminación"
