@@ -20,66 +20,80 @@ const CreateUserModal = ({ visible, onCancel, onCreate }) => {
   };
 
   return (
-    <Modal className="mt-14"
+    <Modal 
+      className="mt-14"
       visible={visible}
       onCancel={onCancel}
       footer={null}
       maskStyle={{ backdropFilter: "blur(10px)" }}
     >
-      <Form className="bg-blue-100 py-6 shadow-orange shadow-sky-300" 
-      form={form} 
-      layout="vertical">
+      <Form 
+        className="bg-blue-100 py-6 shadow-orange shadow-sky-300" 
+        form={form} 
+        layout="vertical"
+      >
         <h1 className="text-2xl text-center font-black">Create User</h1>
-        <Form.Item className="text-base font-semibold mx-10 mt-4"
+        <Form.Item 
+          className="text-base font-semibold mx-10 mt-4"
           name="username"
           label="Username"
           rules={[{ required: true, message: "Please enter a username" }]}
         >
           <Input />
         </Form.Item>
-        <Form.Item className="text-base font-semibold mx-10"
+        <Form.Item 
+          className="text-base font-semibold mx-10"
           name="email"
           label="Email"
-          rules={[{ required: true, message: "Please enter an email" }]}
+          rules={[
+            { required: true, message: "Please enter an email" },
+            { type: 'email', message: 'Please enter a valid email' }
+          ]}
         >
           <Input />
         </Form.Item>
-        <Form.Item className="text-base font-semibold mx-10"
+        <Form.Item 
+          className="text-base font-semibold mx-10"
           name="role"
           label="Role"
           rules={[{ required: true, message: "Please select a role" }]}
         >
           <Select>
             {rolesData.map((role) => (
-              <Option key={role.id} value={role.name}>
-                {role.name}
+              <Option key={role._id} value={role.nombre}>
+                {role.nombre}
               </Option>
             ))}
           </Select>
         </Form.Item>
-        <Form.Item className="text-base font-semibold mx-10"
+        <Form.Item 
+          className="text-base font-semibold mx-10"
           name="state"
           label="State"
           rules={[{ required: true, message: "Please select a state" }]}
         >
-          <Select className="text-center" >
+          <Select className="text-center">
             <Option value={true}>Active</Option>
             <Option value={false}>Inactive</Option>
           </Select>
-          <div className="flex justify-center mt-10">
-          <Button className="bg-rose-800 text-white font-medium"
-          key="cancel" 
-          onClick={onCancel}>
-          Cancel
-        </Button>,
-        <Button className="bg-sky-700 font-medium"
-        key="submit" 
-        type="primary" 
-        onClick={handleFormSubmit}>
-          Create
-        </Button>,
-          </div>
         </Form.Item>
+        <div className="flex justify-center mt-10">
+          <Button 
+            className="bg-rose-800 text-white font-medium"
+            key="cancel" 
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+          <Button 
+            className="bg-sky-700 font-medium ml-2"
+            key="submit" 
+            type="primary" 
+            onClick={handleFormSubmit}
+          >
+            Create
+          </Button>
+        </div>
       </Form>
     </Modal>
   );
