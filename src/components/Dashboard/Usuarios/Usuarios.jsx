@@ -15,11 +15,8 @@ import UpdateUserModal from "./UpdateUserModal";
 import { useUserContext } from "../../../context/user/user.context";
 import { useRoleContext } from "../../../context/user/role.context";
 
-
 const DataTable = () => {
-  const { rolesData } = useRoleContext();
-  const { getUsers, usersData, activateAccount, updateUser, createUser } =
-    useUserContext();
+  const { getUsers, usersData, activateAccount, updateUser, createUser } = useUserContext();
   const [updatedDataFlag, setUpdatedDataFlag] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [form] = Form.useForm();
@@ -153,7 +150,7 @@ const DataTable = () => {
             isLeftBarVisible ? "ml-80 max-w-full" : ""
           }`}
         >
-          <Navbar className="" />
+          <Navbar />
           <div className="flex flex-col mt-20 p-4">
             <div>
               <h2 className="text-4xl font-bold mb-4 text-white text-center">
@@ -320,7 +317,6 @@ const DataTable = () => {
         visible={showCreateModal}
         onCancel={() => setShowCreateModal(false)}
         onCreate={handleCreateFormSubmit}
-        rolesData={rolesData}
       />
 
       <UpdateUserModal 
@@ -328,7 +324,6 @@ const DataTable = () => {
         onCancel={handleCloseUpdateModal}
         onUpdate={handleUpdateUser}
         user={selectedUser}
-        rolesData={rolesData}
         form={form}
       />
 

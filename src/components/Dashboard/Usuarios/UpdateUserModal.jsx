@@ -62,8 +62,8 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
         >
           <Select className="text-center">
             {rolesData.map((role) => (
-              <Option key={role.id} value={role.name}>
-                {role.name}
+              <Option key={role._id} value={role.nombre}>
+                {role.nombre}
               </Option>
             ))}
           </Select>
@@ -88,7 +88,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
             Cancelar
           </Button>
           <Button
-            className="bg-sky-700 font-medium"
+            className="bg-sky-700 font-medium ml-2"
             key="submit"
             type="primary"
             onClick={handleFormSubmit}
