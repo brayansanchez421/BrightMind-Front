@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import HoverCard from '../HoverCard';
+import HoverCard from '../Cards/HoverCard';
 import NavigationBar from '../NavigationBar';
 import { useCoursesContext } from '../../../context/courses/courses.context';
 import { useUserContext } from '../../../context/user/user.context';

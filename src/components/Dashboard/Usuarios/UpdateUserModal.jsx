@@ -25,7 +25,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
 
   return (
     <Modal
-      className="mt-14"
+      className="mt-6"
       visible={visible}
       maskStyle={{ backdropFilter: "blur(10px)" }}
       footer={null}

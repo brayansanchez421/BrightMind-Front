@@ -21,7 +21,7 @@ import ResetPasswordForm from "./views/Password_change/ResetPassword";
 import ResetPasswordVerifyForm from './views/Password_change/codePassword'
 import NewPassword from "./views/Password_change/newPassword";
 import ChangePasswordUser from './components/Home/ChangePasswordUser';
-import CourseView from "./components/Home/courseView";
+import CourseView from "./components/Home/Courses/courseView";
 
 
 //Vista admin
@@ -36,7 +36,7 @@ import Roles from "./components/Dashboard/Roles/Roltable";
 //Vista usuarios                
 import HomePage from "./views/HomePage";
 import ProfileUser from "./components/Home/ProfileUser"; 
-import MyCourses from './components/Home/MyCourses';
+import MyCourses from './components/Home/Courses/MyCourses';
 import CoursesHome from './components/Home/Courses/Courses';
 
 //Vista error

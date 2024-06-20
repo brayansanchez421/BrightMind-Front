@@ -10,12 +10,12 @@ const HoverCard = ({ title, description, ruta, onClick }) => {
         <div className="group-hover:scale-110 duration-500  mx-auto">
           <img 
             src={ruta} 
-            alt="Aqui va una" 
+            alt='Image Course Preview'
             className="w-full h-56" 
             style={{ objectFit: 'cover' }} 
           />
         </div>
-        <div className="absolute w-full h-56 left-0 -bottom-20 right-0 duration-200 group-hover:-translate-y-1/4">
+        <div className="absolute w-full h-56 left-0 -bottom-40 right-0 duration-200 group-hover:-translate-y-1/4">
           <div className="absolute -z-10 left-0 w-full h-full duration-500 group-hover:opacity-200 group-hover:bg-neutral-300">
             <span className="mt-2 text-lg font-black text-zinc-700 justify-center flex ">
               {title}

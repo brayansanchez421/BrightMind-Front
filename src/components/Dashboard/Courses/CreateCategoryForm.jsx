@@ -55,9 +55,10 @@ const CreateCategoryForm = ({ visible, onClose }) => {
       closable={false}
       onCancel={onClose}
       maskStyle={{ backdropFilter: "blur(10px)" }}
+  
     >
       <form
-        className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded"
+        className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded "
         onSubmit={handleSubmit}
       >
         <button

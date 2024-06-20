@@ -152,7 +152,7 @@ const DataTablete = () => {
         <LeftBar onVisibilityChange={setIsLeftBarVisible} />
         <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? "ml-80 max-w-full" : ""}`}>
           <Navbar />
-          <div className="flex flex-col p-10">
+          <div className="flex flex-col mt-10 px-20">
             <div>
               <h2 className="text-2xl font-black text-white text-center">Courses</h2>
               <div className="flex flex-wrap items-center justify-center mt-10">
@@ -206,7 +206,7 @@ const DataTablete = () => {
                         .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
                         .map((course, index) => (
                           <tr key={course._id}>
-                            <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center font-bold">
+                            <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center font-black">
                               {generateIds()[index]}
                             </td>
                             <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center">
@@ -304,9 +304,11 @@ const DataTablete = () => {
           )}
 
           <Modal
+            className="mt-16"
             title={`Curso ${selectedCourse ? selectedCourse.title : ''}`}
             visible={isAssignModalVisible}
             onCancel={handleAssignModalClose}
+            maskStyle={{ backdropFilter: "blur(10px)" }}
             footer={[
               <Button key="back" onClick={handleAssignModalClose}>
                 Cancelar
@@ -371,6 +373,7 @@ const DataTablete = () => {
             title="Confirmar eliminación"
             visible={isDeleteModalVisible}
             onCancel={handleDeleteModalClose}
+            maskStyle={{ backdropFilter: "blur(10px)" }}
             footer={[
               <Button key="cancel" onClick={handleDeleteModalClose}>
                 Cancelar

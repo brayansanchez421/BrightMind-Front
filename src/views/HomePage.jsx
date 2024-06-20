@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useCategoryContext } from '../context/courses/category.context';
 import NavigationBar from '../components/Home/NavigationBar';
 import QuoteCarousel from '../components/Home/QuoteCarousel';
-import HoverCard from '../components/Home/HoverCard';
+import HoverCard from '../components/Home/Cards/HoverCard';
 import { useNavigate } from 'react-router-dom';
 import { useCoursesContext } from '../context/courses/courses.context';
 
@@ -64,7 +64,7 @@ function HomePage() {
 
 
     return (
-        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
+        <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 min-h-screen overflow-hidden">
             <NavigationBar />
             
             <QuoteCarousel phrases={phrases} />

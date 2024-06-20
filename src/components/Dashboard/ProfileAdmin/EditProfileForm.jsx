@@ -87,7 +87,7 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
     };
 
     return (
-        <div className="w-5/6 md:mt-32 overflow-hidden">
+        <div className="w-5/6 md:mt-32 overflow-hidden flex mr-20">
             <ToastContainer />
             <div className="max-w-lg mx-auto bg-gradient-to-r from-violet-500 to-fuchsia-400 rounded-lg shadow-lg py-4 px-6 md:px-10">
                 <h1 

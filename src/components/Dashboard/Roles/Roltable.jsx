@@ -231,8 +231,8 @@ const DataTable = () => {
   };
 
   return (
-    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
-      <div className="flex h-screen overflow-hidden">
+    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 overflow-hidden min-h-screen">
+      <div className="flex h-full">
       <LeftBar onVisibilityChange={setIsLeftBarVisible} />
       <div
           className={`w-full transition-all duration-300 ${
@@ -241,10 +241,10 @@ const DataTable = () => {
         >
 
         <Navbar />
-        <div className="flex flex-col mt-10">
+        <div className="flex flex-col mt-10 ">
           <div>
-            <h2 className="text-3xl font-bold mb-4 text-white text-center">Roles</h2>
-            <div className="flex items-center mb-4 mt-10 justify-center">
+            <h2 className="text-2xl font-black text-white text-center">Roles</h2>
+            <div className="flex flex-wrap items-center justify-center mt-10">
               <Button
                 type="primary"
                 style={{ backgroundColor: "green" }}
@@ -277,7 +277,7 @@ const DataTable = () => {
                         ))}
                     </th>
                     <th
-                      className="px-6 py-4 bg-yellow-500 text-white border-2 border-blue-800 cursor-pointer"
+                      className="px-6 py-4 bg-green-500 text-white border-2 border-blue-800 cursor-pointer"
                       onClick={() => orderBy("nombre")}
                     >
                       Name{" "}
@@ -288,7 +288,7 @@ const DataTable = () => {
                           <CaretDownOutlined />
                         ))}
                     </th>
-                    <th className="w-72 py-4 bg-green-500 text-white border-2 border-blue-800">
+                    <th className="w-72 py-4 bg-red-500 text-white border-2 border-blue-800">
                       Actions
                     </th>
                   </tr>
@@ -297,7 +297,7 @@ const DataTable = () => {
                   {rolesData &&
                     currentItems.map((role, index) => (
                       <tr key={role._id}>
-                        <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg">
+                        <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg font-black">
                           {generateIds()[index]}
                         </td>
                         <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg">
@@ -331,22 +331,36 @@ const DataTable = () => {
               </table>
             </div>
             {totalPages > 1 && (
-              <div className="flex justify-end mr-40 mt-6">
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => paginate(index + 1)}
-                    className={`px-3 py-1 mx-1 ${
-                      currentPage === index + 1
-                        ? "bg-black border text-white"
-                        : "bg-gray-200 text-gray-800 border"
-                    }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="flex justify-center mb-10 mt-10">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => paginate(index + 1)}
+                  className={`px-3 py-1 mx-1 ${
+                    currentPage === index + 1
+                      ? "bg-black border text-white"
+                      : "bg-gray-200 text-gray-800 border"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+              >
+                Next
+              </button>
+            </div>
+          )}
           </div>
         </div>
       </div>

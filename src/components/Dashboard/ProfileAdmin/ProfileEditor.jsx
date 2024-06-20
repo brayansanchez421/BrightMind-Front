@@ -49,7 +49,7 @@ const ProfileEditor = () => {
           <div className='flex-1 ml-20'>
             <SettingsBar />
           </div>
-          <div className="flex-1 mr-10 ml-10">
+          <div className="flex-1 mr-20">
             <ProfileForm
               name={name}
               email={email}

@@ -65,7 +65,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       visible={visible}
       footer={null}
       closable={false}
-      className="lg:absolute top-8 left-1/3"
+      className="lg:absolute top-14 left-1/3"
       maskStyle={{ backdropFilter: "blur(10px)" }}
     >
       <form onSubmit={handleSubmit} className="shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-4 relative shadow-orange rounded overflow-x-hidden ">

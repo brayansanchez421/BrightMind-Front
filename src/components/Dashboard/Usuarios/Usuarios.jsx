@@ -15,8 +15,11 @@ import UpdateUserModal from "./UpdateUserModal";
 import { useUserContext } from "../../../context/user/user.context";
 import { useRoleContext } from "../../../context/user/role.context";
 
+
 const DataTable = () => {
-  const { getUsers, usersData, activateAccount, updateUser, createUser } = useUserContext();
+  const { rolesData } = useRoleContext();
+  const { getUsers, usersData, activateAccount, updateUser, createUser } =
+    useUserContext();
   const [updatedDataFlag, setUpdatedDataFlag] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [form] = Form.useForm();
@@ -110,9 +113,6 @@ const DataTable = () => {
   };
 
   const handleCloseUpdateModal = () => {
-    if (selectedUser) {
-      updateUser(selectedUser._id, { ...selectedUser });
-    }
     setShowUpdateModal(false);
     setSelectedUser(null);
   };
@@ -122,6 +122,7 @@ const DataTable = () => {
       await createUser(values);
       form.resetFields();
       setShowCreateModal(false);
+      setUpdatedDataFlag(true); // Agregar esta línea para actualizar la tabla después de crear un usuario
     } catch (error) {
       console.error(error);
     }
@@ -141,27 +142,29 @@ const DataTable = () => {
     setSelectedUser(null);
   };
 
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
   return (
-    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
-      <div className="flex h-screen overflow-hidden">
+    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 overflow-hidden min-h-screen">
+      <div className="flex h-full">
         <LeftBar onVisibilityChange={setIsLeftBarVisible} />
         <div
           className={`w-full transition-all duration-300 ${
             isLeftBarVisible ? "ml-80 max-w-full" : ""
           }`}
         >
-          <Navbar />
-          <div className="flex flex-col mt-20 p-4">
+          <Navbar className="" />
+          <div className="flex flex-col mt-8">
             <div>
-              <h2 className="text-4xl font-bold mb-4 text-white text-center">
+              <h2 className="text-2xl font-black  text-white text-center">
                 Users
               </h2>
-              <div className="flex items-center mb-4 mt-10 justify-center">
+              <div className="flex flex-wrap items-center justify-center mt-10">
                 <Button
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={() => setShowCreateModal(true)}
-                  className="mr-4"
+                  className="mr-4 text-center font-medium text-base"
                 >
                   <b>Create User</b>
                 </Button>
@@ -169,28 +172,23 @@ const DataTable = () => {
                   placeholder="Search by Name"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  className="w-40"
+                  className="w-40 text-center font-medium text-base"
                 />
               </div>
             </div>
-            <div className="overflow-x-auto mt-10 flex justify-center ">
-              <table className="w-10/12 ">
+            <div className="mt-10 flex justify-center">
+            <div className="overflow-auto w-full px-20">
+              <table className="min-w-full overflow-x-auto">
                 <thead>
                   <tr>
                     <th
-                      className="text-xl px-6 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800"
+                      className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800"
                       onClick={() => orderBy("id")}
                     >
                       ID{" "}
-                      {sortConfig.key === "id" &&
-                        (sortConfig.direction === "ascending" ? (
-                          <CaretUpOutlined />
-                        ) : (
-                          <CaretDownOutlined />
-                        ))}
                     </th>
                     <th
-                      className="text-xl px-6 py-3 bg-yellow-500 text-white border-2 cursor-pointer border-blue-800"
+                      className="text-xl px-8 py-3  bg-yellow-500 text-white border-2 cursor-pointer border-blue-800"
                       onClick={() => orderBy("role")}
                     >
                       Role{" "}
@@ -214,30 +212,18 @@ const DataTable = () => {
                         ))}
                     </th>
                     <th
-                      className="text-xl px-6 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800"
+                      className="text-xl px-10 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800"
                       onClick={() => orderBy("email")}
                     >
                       Email{" "}
-                      {sortConfig.key === "email" &&
-                        (sortConfig.direction === "ascending" ? (
-                          <CaretUpOutlined />
-                        ) : (
-                          <CaretDownOutlined />
-                        ))}
                     </th>
                     <th
-                      className="text-xl px-6 py-3 bg-red-500 text-white border-2 cursor-pointer border-blue-800"
+                      className="text-xl px-10 py-3 bg-gray-500 text-white border-2 cursor-pointer border-blue-800"
                       onClick={() => orderBy("state")}
                     >
-                      Status{" "}
-                      {sortConfig.key === "state" &&
-                        (sortConfig.direction === "ascending" ? (
-                          <CaretUpOutlined />
-                        ) : (
-                          <CaretDownOutlined />
-                        ))}
+                      Status{" "}  
                     </th>
-                    <th className="px-6 py-3 bg-gray-500 text-white text-xl border-2 border-blue-800">
+                    <th className="px-20 py-3 bg-red-500 text-white text-xl border-2 border-blue-800">
                       Actions
                     </th>
                   </tr>
@@ -245,22 +231,22 @@ const DataTable = () => {
                 <tbody>
                   {currentItems.map((item, index) => (
                     <tr key={item._id}>
-                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1 ">
+                      <td className="border-2 border-blue-800 px-6 py-2 bg-gray-300 text-lg text-black mt-1 font-black text-center">
                         {generateIds()[index]}
                       </td>
-                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
+                      <td className=" text-center border-2 border-blue-800 px-6 py-2 bg-gray-300 text-lg text-black mt-1">
                         {item.role}
                       </td>
-                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
+                      <td className="border-2 border-blue-800 px-6 py-2 bg-gray-300 text-lg text-black mt-1 text-center">
                         {item.username}
                       </td>
-                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
+                      <td className=" text-center border-2 border-blue-800 px-6 py-2 bg-gray-300 text-lg text-black mt-1">
                         {item.email}
                       </td>
-                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1">
+                      <td className="text-center border-2 border-blue-800 px-6 py-2 bg-gray-300 text-lg text-black mt-1">
                         {item.state ? "Active" : "Inactive"}
                       </td> 
-                      <td className="border-2 border-blue-800 px-6 py-4 bg-gray-300 text-lg text-black mt-1 ">
+                      <td className="border-2 border-blue-800 px-6 py-2 bg-gray-300 text-lg text-black mt-1 text-center ">
                         <button 
                           onClick={() => handleActivateAccount(item._id)}
                           className={`${
@@ -292,23 +278,38 @@ const DataTable = () => {
                 </tbody>
               </table>
             </div>
-            {filteredUsers.length > itemsPerPage && (
-              <div className="flex justify-center mt-4">
-                <Button
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="mr-2"
+            </div>
+            {totalPages > 1 && (
+            <div className="flex justify-center mt-10 mb-10">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => paginate(index + 1)}
+                  className={`px-3 py-1 mx-1 ${
+                    currentPage === index + 1
+                      ? "bg-black border text-white"
+                      : "bg-gray-200 text-gray-800 border"
+                  }`}
                 >
-                  Previous
-                </Button>
-                <Button
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentItems.length < itemsPerPage}
-                >
-                  Next
-                </Button>
-              </div>
-            )}
+                  {index + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+              >
+                Next
+              </button>
+            </div>
+          )}
           </div>
         </div>
       </div>
@@ -317,6 +318,7 @@ const DataTable = () => {
         visible={showCreateModal}
         onCancel={() => setShowCreateModal(false)}
         onCreate={handleCreateFormSubmit}
+        rolesData={rolesData}
       />
 
       <UpdateUserModal 
@@ -324,6 +326,7 @@ const DataTable = () => {
         onCancel={handleCloseUpdateModal}
         onUpdate={handleUpdateUser}
         user={selectedUser}
+        rolesData={rolesData}
         form={form}
       />
 

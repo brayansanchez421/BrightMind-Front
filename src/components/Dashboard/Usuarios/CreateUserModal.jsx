@@ -22,7 +22,7 @@ const CreateUserModal = ({ visible, onCancel, onCreate }) => {
 
   return (
     <Modal 
-      className="mt-14"
+      className="mt-6"
       visible={visible}
       onCancel={onCancel}
       footer={null}

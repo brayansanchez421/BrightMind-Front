@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Modal, Button, Input, Select } from "antd";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useCoursesContext } from "../../../context/courses/courses.context";
 import { useCategoryContext } from "../../../context/courses/category.context";
 
@@ -34,8 +32,10 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
         });
       }
     };
-    fetchCourseData();
-  }, [courseId, getCourse]);
+    if (visible) {
+      fetchCourseData();
+    }
+  }, [courseId, getCourse, visible]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,11 +60,11 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
       category: curso.categoria,
       description: curso.descripcion,
       image: curso.imagen,
-    }
+    };
     try {
       await updateCourse(courseId, courseData);
       onUpdate(courseData);
-      onClose();
+      onClose();  // Close the modal without resetting the form
     } catch (error) {
       console.error(error);
     }
@@ -75,13 +75,13 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
       visible={visible}
       footer={null}
       closable={false}
-      className="lg:absolute top-8 left-1/3"
+      className="lg:absolute top-14 left-1/3"
       maskStyle={{ backdropFilter: "blur(10px)" }}
     >
       <form onSubmit={handleSubmit} className="shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-4 relative shadow-orange rounded overflow-x-hidden ">
         <button
           className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400"
-          onClick={onClose}
+          onClick={onClose}  // Use onClose directly
         >
           X
         </button>
@@ -149,7 +149,7 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
           <button
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-4 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
-            onClick={onClose}
+            onClick={onClose}  // Use onClose directly
           >
             Close
           </button>
