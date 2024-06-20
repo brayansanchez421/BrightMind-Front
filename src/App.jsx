@@ -21,6 +21,7 @@ import ResetPasswordForm from "./views/Password_change/ResetPassword";
 import ResetPasswordVerifyForm from './views/Password_change/codePassword'
 import NewPassword from "./views/Password_change/newPassword";
 import ChangePasswordUser from './components/Home/ChangePasswordUser';
+import CourseView from "./components/Home/courseView";
 
 
 //Vista admin
@@ -96,6 +97,7 @@ function App() {
           <Route path="/ProfileEditor" element={<ProfileEditor />} />
           <Route path="/Account" element={<ProfileUser/>} />
           <Route path="/roles" element={<Roles/>} />
+          <Route path="/course/:courseId" element={<CourseView />} />
 
           </Route>
           </Routes>
