@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Input, Modal, message, Collapse } from "antd";
-import { ReloadOutlined, InfoCircleOutlined, DeleteOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { ReloadOutlined, InfoCircleOutlined, DeleteOutlined, CheckCircleOutlined, DeleteFilled } from "@ant-design/icons";
 import LeftBar from "../../Dashboard/LeftBar";
 import { useUserContext } from "../../../context/user/user.context";
 import { useCoursesContext } from "../../../context/courses/courses.context";
@@ -13,7 +13,7 @@ const { Panel } = Collapse;
 
 const DataTablete = () => {
   const { getUsers, usersData } = useUserContext();
-  const { getAllCourses, courses, asignarContenido, deleteCourse } = useCoursesContext();
+  const { getAllCourses, courses, asignarContenido, deleteCourse, updateCourse } = useCoursesContext();
   const [searchValue, setSearchValue] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
@@ -118,6 +118,24 @@ const DataTablete = () => {
     } finally {
       setIsDeleteModalVisible(false);
       setCourseToDelete(null);
+    }
+  };
+
+  const handleRemoveResource = async (index) => {
+    if (selectedCourse) {
+      const updatedContent = [...selectedCourse.content];
+      updatedContent.splice(index, 1);
+
+      try {
+        await updateCourse(selectedCourse._id, { ...selectedCourse, content: updatedContent });
+        setSelectedCourse((prevCourse) => ({
+          ...prevCourse,
+          content: updatedContent,
+        }));
+        message.success("Recurso eliminado exitosamente");
+      } catch (error) {
+        message.error("Error al eliminar el recurso");
+      }
     }
   };
 
@@ -301,7 +319,19 @@ const DataTablete = () => {
             {selectedCourse && (
               <Collapse>
                 {selectedCourse.content.map((url, index) => (
-                  <Panel header={`Recurso ${index + 1}`} key={index}>
+                  <Panel
+                    header={(
+                      <div className="flex justify-between items-center">
+                        <span>Recurso {index + 1}</span>
+                        <Button
+                          type="danger"
+                          icon={<DeleteFilled />}
+                          onClick={() => handleRemoveResource(index)}
+                        />
+                      </div>
+                    )}
+                    key={index}
+                  >
                     {url.endsWith('.mp4') && (
                       <video controls className="w-full mb-4">
                         <source src={url} type="video/mp4" />
