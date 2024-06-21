@@ -100,6 +100,7 @@ const DataTablete = () => {
 
       console.log("Contenido asignado:", res);
       setIsAssignModalVisible(false);
+      window.location.reload();
     }
   };
 

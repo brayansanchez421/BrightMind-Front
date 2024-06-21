@@ -38,9 +38,9 @@ const ResetPasswordForm = () => {
             <ToastContainer />
             <div className="md:z-50 mx-auto my-3 max-w-full bg-gradient-to-r from-violet-600 to-rose-500 p-3 rounded-xl shadow-xl shadow-zinc-950">
                 <h1 className="md:text-nowrap font-black text-4xl p-3 text-slate-100 rounded-xl w-6/12 mx-28 py-8">¿Did you forget your password?</h1>
-                <p className="italic font-semibold text-center text-2xl text-slate-300 my-8 py-8 p-10 ">Enter your email and we will send you a code to recover it</p>
+                <p className="italic font-semibold text-center text-2xl text-slate-300 my-8 py-4 p-10 ">Enter your email and we will send you a code to recover it</p>
                 <div className="my-8 w- flex flex-col items-center">
-                    <img src={logo} alt="Logo" className="h-24" />
+                    <img src={logo} alt="Logo" className="h-48" />
                 </div>
 
                 <form onSubmit={formik.handleSubmit} className="my-3">

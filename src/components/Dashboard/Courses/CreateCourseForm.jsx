@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Modal, Button, Input, Select } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,6 +18,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     descripcion: "",
     imagen: null,
   });
+  const [imagePreview, setImagePreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const imagenRef = useRef(null);
@@ -60,6 +61,14 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     }
   };
 
+  useEffect(() => {
+    if (visible) {
+      setCurso({ nombre: "", categoria: "", descripcion: "",  image: null });
+      setImagePreview(null);
+      setErrorMessage("");
+    }
+  }, [visible]);
+
   return (
     <Modal
       visible={visible}
@@ -71,7 +80,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       <form onSubmit={handleSubmit} className="shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-4 relative shadow-orange rounded overflow-x-hidden ">
         <button
           className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400"
-          onClick={false}
+          onClick={onClose}
         >
           X
         </button>
