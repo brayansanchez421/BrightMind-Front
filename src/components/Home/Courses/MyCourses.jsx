@@ -34,7 +34,7 @@ const CoursesComponent = () => {
         <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
             <NavigationBar />
             <div className='text-center mt-10 text-3xl text-white font-black'>
-                <h1>Cursos que has adquirido</h1>
+                <h1>Mis Cursos</h1>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:mt-16 mx-20 mb-10 ">
                 {userCourses.map((course) => (
