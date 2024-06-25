@@ -1,32 +1,39 @@
-import React from "react";
-import { Modal, Form, Input, Select, Button } from "antd";
+import React, { useState } from "react";
+import { Modal, Form, Input, Select, Button, message } from "antd";
 import { useRoleContext } from '../../../context/user/role.context';
 
 const { Option } = Select;
 
 const CreateUserModal = ({ visible, onCancel, onCreate }) => {
   const { rolesData } = useRoleContext();
-
   const [form] = Form.useForm();
+  const [successMessageVisible, setSuccessMessageVisible] = useState(false);
 
   const handleFormSubmit = async () => {
     try {
       const values = await form.validateFields();
       onCreate(values);
+      setSuccessMessageVisible(true); // Mostrar el mensaje de éxito
       form.resetFields();
+      onCancel(); // Cerrar el modal después de crear el usuario
     } catch (error) {
       console.error("Failed to create user:", error);
     }
   };
-  console.log("esto aqui",rolesData)
+
+  const handleModalClose = () => {
+    setSuccessMessageVisible(false); // Ocultar el mensaje si se cierra el modal
+    onCancel(); // Cerrar el modal
+  };
 
   return (
     <Modal 
       className="mt-6"
       visible={visible}
-      onCancel={onCancel}
+      onCancel={handleModalClose}
       footer={null}
       maskStyle={{ backdropFilter: "blur(10px)" }}
+      afterClose={() => setSuccessMessageVisible(false)} // Asegurar que se oculte el mensaje después de cerrar el modal
     >
       <Form 
         className="bg-blue-100 py-6 shadow-orange shadow-sky-300" 
@@ -82,7 +89,7 @@ const CreateUserModal = ({ visible, onCancel, onCreate }) => {
           <Button 
             className="bg-rose-800 text-white font-medium"
             key="cancel" 
-            onClick={onCancel}
+            onClick={handleModalClose}
           >
             Cancel
           </Button>
@@ -96,6 +103,14 @@ const CreateUserModal = ({ visible, onCancel, onCreate }) => {
           </Button>
         </div>
       </Form>
+
+      {/* Mostrar mensaje de éxito */}
+      {successMessageVisible && (
+        message.success({
+          content: "Usuario creado exitosamente",
+          duration: 5, // Duración en segundos que se muestra el mensaje
+        })
+      )}
     </Modal>
   );
 };
