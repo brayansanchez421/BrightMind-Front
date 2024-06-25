@@ -10,8 +10,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
   const [category, setCategory] = useState({ name: "", description: "", image: null });
   const [imagePreview, setImagePreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const MAX_DESCRIPCION_LENGTH = 100;
-
+  const MAX_DESCRIPTION_LENGTH = 100;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,12 +30,14 @@ const CreateCategoryForm = ({ visible, onClose }) => {
     console.log("Datos del formulario:", category);
     try {
       await createCategory(category);
-      onClose();
-      toast.success("Category created successfully!");
+      toast.success("¡Categoría creada exitosamente!");
+      setTimeout(() => {
+        onClose();
+      }, 3000); // Cerrar el formulario después de 3 segundos
     } catch (error) {
       console.error(error);
-      setErrorMessage("Failed to create category.");
-      toast.error("Failed to create category.");
+      setErrorMessage("Error al crear la categoría.");
+      toast.error("Error al crear la categoría.");
     }
   };
 
@@ -55,10 +56,9 @@ const CreateCategoryForm = ({ visible, onClose }) => {
       closable={false}
       onCancel={onClose}
       maskStyle={{ backdropFilter: "blur(10px)" }}
-  
     >
       <form
-        className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded "
+        className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded"
         onSubmit={handleSubmit}
       >
         <button
@@ -70,7 +70,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
         </button>
         <div>
           <h1 className="text-4xl font-black text-center mb-4 text-white">
-            Create Category
+            Crear Categoría
           </h1>
           <div className="mb-4">
             <label className="block text-zinc-100 text-lg font-medium mb-4">
@@ -81,6 +81,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
                 name="name"
                 value={category.name}
                 onChange={handleChange}
+                required
               />
             </label>
           </div>
@@ -92,10 +93,11 @@ const CreateCategoryForm = ({ visible, onClose }) => {
                 name="description"
                 value={category.description}
                 onChange={handleChange}
-                maxLength={MAX_DESCRIPCION_LENGTH}
+                maxLength={MAX_DESCRIPTION_LENGTH}
                 style={{ minHeight: "100px" }}
+                required
               />
-              <div className="text-white mt-1 text-right">{category.description.length}/{MAX_DESCRIPCION_LENGTH}</div>
+              <div className="text-white mt-1 text-right">{category.description.length}/{MAX_DESCRIPTION_LENGTH}</div>
             </label>
           </div>
           <div className="mb-4">
@@ -106,6 +108,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
                 accept="image/*"
                 onChange={handleImageChange}
                 className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
+                required
               />
             </label>
             {imagePreview && (
@@ -123,13 +126,13 @@ const CreateCategoryForm = ({ visible, onClose }) => {
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold px-4 rounded focus:outline-none focus:shadow-outline mr-2 flex flex-col items-center"
             onClick={onClose}
           >
-            Close
+            Cerrar
           </Button>
           <Button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded focus:outline-none focus:shadow-outline ml-4 flex flex-col items-center"
             htmlType="submit"
           >
-            Create Category
+            Crear Categoría
           </Button>
         </div>
       </form>
