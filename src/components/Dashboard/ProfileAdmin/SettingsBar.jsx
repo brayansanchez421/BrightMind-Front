@@ -45,16 +45,16 @@ const SettingsBar = () => {
   };
 
   return (
-    <div className="w-96 mt-60 md:ml-32  bg-gradient-to-r from-violet-500 to-fuchsia-400 rounded-lg shadow-md shadow-rose-400 md:px-10 py-4">
+    <div className="w-96 mt-60 md:ml-32 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg shadow-md md:px-10 py-4">
       <h2 className="text-center font-black text-white p-3 text-lg md:text-xl">Account Setting</h2>
       <ul className="list-disc pl-2 md:pl-4">
-        <li className=''>
+        <li>
           <LanguagePreferences/>
         </li>
         <li className="text-base hover:bg-cyan-400 py-1 font-bold mt-1 rounded-lg">
           <Link to="/ChangePassword">Change Password</Link>
         </li>
-        <li className='text-base mt-1 hover:bg-red-600 py-1 font-bold rounded-lg'>
+        <li className="text-base mt-1 hover:bg-red-600 py-1 font-bold rounded-lg">
           <a href="#" onClick={handleDeleteAccount}>Delete account</a>
         </li>
       </ul>

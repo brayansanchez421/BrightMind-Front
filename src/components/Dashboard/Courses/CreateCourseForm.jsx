@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Modal, Button, Input, Select } from "antd";
+import { Modal, Select } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCoursesContext } from "../../../context/courses/courses.context";
@@ -74,20 +74,22 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
         className="lg:absolute top-14 left-1/3"
         maskStyle={{ backdropFilter: "blur(10px)" }}
       >
-        <form onSubmit={handleSubmit} className="shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-4 relative shadow-orange rounded overflow-x-hidden ">
+        <form onSubmit={handleSubmit} className="bg-gradient-to-r from-green-400 to-blue-500 shadow-lg rounded-lg p-6 relative">
           <button
-            className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400"
+            className="absolute top-2 right-2 text-white hover:text-red-600 focus:outline-none"
             onClick={onClose}
           >
-            X
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
           </button>
           <div>
-            <h1 className="text-4xl font-black text-center mb-4 text-white">Create Course</h1>
+            <h1 className="text-3xl font-bold text-white text-center mb-6">Create Course</h1>
             <div className="mb-4">
-              <label className="block text-zinc-100 text-base font-medium mb-4">
-                Nombre: <br />
+              <label className="block text-white text-base font-medium mb-2">
+                Name:
                 <input
-                  className="shadow appearance-none border rounded w-full py-1 px-3 text-black leading-tight focus:outline-none focus:shadow-outline mt-2 font-normal"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
                   type="text"
                   name="nombre"
                   value={curso.nombre}
@@ -96,17 +98,17 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                 />
               </label>
             </div>
-            <div className="">
-              <label className="block text-zinc-100 text-base font-medium mb-4">
-                Categoría:
+            <div className="mb-4">
+              <label className="block text-white text-base font-medium mb-2">
+                Category:
                 <Select
-                  className="font-normal text-black mt-2"
-                  style={{ width: "100%" }}
+                  className="w-full mt-1"
+                  style={{ borderRadius: "0.375rem" }}
                   value={curso.categoria}
                   onChange={(value) => setCurso({ ...curso, categoria: value })}
                   required
                 >
-                  {categories.map(category => (
+                  {categories.map((category) => (
                     <Option key={category._id} value={category.name}>
                       {category.name}
                     </Option>
@@ -114,11 +116,11 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                 </Select>
               </label>
             </div>
-            <div className="">
-              <label className="block text-zinc-100 text-base font-medium mb-2">
-                Descripción:
+            <div className="mb-4">
+              <label className="block text-white text-base font-medium mb-2">
+                Description:
                 <textarea
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight font-normal focus:outline-none focus:shadow-outline mt-2 resize-none"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1 resize-none"
                   name="descripcion"
                   value={curso.descripcion}
                   onChange={handleChange}
@@ -126,14 +128,14 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                   style={{ minHeight: "100px" }}
                   required
                 />
-                <div className="text-gray-500 text-right">{curso.descripcion.length}/{MAX_DESCRIPCION_LENGTH}</div>
+                <div className="text-gray-300 text-right mt-1">{curso.descripcion.length}/{MAX_DESCRIPCION_LENGTH}</div>
               </label>
             </div>
-            <div className="">
-              <label className="block text-zinc-100 text-lg font-bold mb-2">
-                Imagen:
+            <div className="mb-4">
+              <label className="block text-white text-lg font-bold mb-2">
+                Image:
                 <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline-red-100 italic mt-2"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
                   type="file"
                   accept="image/*"
                   ref={imagenRef}
@@ -141,21 +143,21 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                   required
                 />
                 {errorMessage && (
-                  <p className="text-red-500 text-sm">{errorMessage}</p>
+                  <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
                 )}
               </label>
             </div>
           </div>
-          <div className="flex items-center justify-center mt-4">
+          <div className="flex items-center justify-center mt-6">
             <button
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-4 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-gray-500 mr-4"
               type="button"
               onClick={onClose}
             >
               Close
             </button>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded focus:outline-none focus:shadow-outline ml-4"
+              className="bg-green-400 hover:bg-white text-white hover:text-green-400 font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-green-500"
               type="submit"
             >
               Create Course
