@@ -57,7 +57,8 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       setTimeout(() => {
         onCreate(courseData);
         onClose();
-      }, 3000);
+        window.location.reload();
+      }, 5000);
     } catch (error) {
       console.error(error);
       toast.error("Failed to create course. Please try again.");
