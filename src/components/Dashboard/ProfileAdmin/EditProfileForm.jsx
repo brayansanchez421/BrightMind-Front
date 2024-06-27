@@ -18,7 +18,6 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
         const fetchUserId = async () => {
             if (user && user.data && user.data.id) {
                 const userData = await getUserById(user.data.id);
-                console.log("tra: ", userData)
                 setUserId(userData._id);
                 setName(userData.username);
                 setEmail(userData.email);
@@ -89,50 +88,48 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
     return (
         <div className="w-5/6 md:mt-32 overflow-hidden flex mr-20">
             <ToastContainer />
-            <div className="max-w-lg mx-auto bg-gradient-to-r from-violet-500 to-fuchsia-400 rounded-lg shadow-lg py-4 px-6 md:px-10">
-                <h1 
-                className="text-center font-black text-white md:text-3xl mb-6">Edit Profile
+            <div className="max-w-lg mx-auto bg-gradient-to-r from-green-400 to-blue-500 rounded-lg shadow-lg py-4 px-6 md:px-10">
+                <h1 className="text-center font-black text-white md:text-3xl mb-6">Edit Profile</h1>
                 {previewProfileImage && (
-                <div className="">
-                    <img src={previewProfileImage} alt="Preview" className="mt-4 w-20 h-20 rounded-full mx-auto mb-4" />
-                </div>
+                    <div className="text-center">
+                        <img src={previewProfileImage} alt="Preview" className="mt-4 w-20 h-20 rounded-full mx-auto mb-4" />
+                    </div>
                 )}
-                </h1>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="name" className="block text-lg font-semibold text-black">
+                        <label htmlFor="name" className="block text-lg font-semibold text-white">
                             Name
                         </label>
                         <input
                             type="text"
                             id="name"
-                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
+                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-green-300 focus:border-green-300 hover:bg-gray-100"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="email" className="block text-lg font-semibold text-black">
+                        <label htmlFor="email" className="block text-lg font-semibold text-white">
                             Email
                         </label>
                         <input
                             type="email"
                             id="email"
-                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
+                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-green-300 focus:border-green-300 hover:bg-gray-100"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="profileImage" className="block text-lg font-semibold text-black">
+                        <label htmlFor="profileImage" className="block text-lg font-semibold text-white">
                             Profile Image
                         </label>
                         <input
                             type="file"
                             id="profileImage"
                             accept="image/*"
-                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
+                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-green-300 focus:border-green-300 hover:bg-gray-100"
                             onChange={handleImageChange}
                         />
                     </div>

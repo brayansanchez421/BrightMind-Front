@@ -80,7 +80,7 @@ function Changepassword() {
                     <Navbar />
                     <ToastContainer />
                     <div className="flex w-2/5 mx-auto justify-center items-center mt-20">
-                        <div className="p-6 bg-white rounded-3xl shadow-2xl w-4/5 bg-gradient-to-r from-violet-600 to-rose-500">
+                        <div className="p-6 bg-white rounded-3xl shadow-2xl w-4/5 bg-gradient-to-r from-green-400 to-blue-500"> {/* Cambio de color del formulario */}
                             <h2 className="text-5xl font-black text-center mb-2 text-white">Change Password</h2>
                             <form onSubmit={formik.handleSubmit} className="py-10 flex flex-col space-y-6">
                                 <div>
@@ -122,23 +122,23 @@ function Changepassword() {
                                     {formik.touched.confirmPassword && formik.errors.confirmPassword ? <div>{formik.errors.confirmPassword}</div> : null}
                                 </div>
                                 {error && <div className="text-red-500">{error}</div>}
-                                <button
-                                    className={`w-48 text-center block mt-10 mx-auto py-2 font-medium text-white rounded-full text-xl ${passwordsMatch ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'} disabled:opacity-50`}
-                                    type="submit"
-                                    disabled={!formik.isValid || !passwordsMatch}
-                                >
-                                    Change password
-                                </button>
+                                <div className="flex justify-between">
+                                    <button
+                                        className={`w-48 text-center block mt-10 mx-auto py-2 font-medium text-sm text-white rounded-full ${passwordsMatch ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'} disabled:opacity-50`}
+                                        type="submit"
+                                        disabled={!formik.isValid || !passwordsMatch}
+                                    >
+                                        Change password
+                                    </button>
+                                    <Link
+                                        to="/ProfileEditor"
+                                        className="text-white bg-gradient-to-r from-green-600 to-green-500 hover:bg-gradient-to-r from-green-700 to-green-600 shadow-lg shadow-red-300 font-semibold inline-flex space-x-1 items-center mt-10 mx-4 px-6 py-2 rounded-lg"
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                        Return Settings
+                                    </Link>
+                                </div>
                             </form>
-                            <div className="text-center">
-                                <Link
-                                    to="/ProfileEditor"
-                                    className="text-white hover:bg-gradient-to-r from-green-600 to-green-500 shadow-lg shadow-red-300 font-semibold inline-flex space-x-1 items-center"
-                                    style={{ textDecoration: 'none' }}
-                                >
-                                    Return to Settings
-                                </Link>
-                            </div>
                         </div>
                     </div>
                 </div>
