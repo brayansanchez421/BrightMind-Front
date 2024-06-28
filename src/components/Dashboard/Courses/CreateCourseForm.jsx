@@ -8,8 +8,8 @@ import { useCategoryContext } from "../../../context/courses/category.context";
 const { Option } = Select;
 
 const CreateCourseForm = ({ visible, onClose, onCreate }) => {
-  const { categories } = useCategoryContext(); // Obtiene la lista de categorías desde el contexto
-  const { createCourse } = useCoursesContext(); // Obtiene la función para crear cursos desde el contexto
+  const { categories } = useCategoryContext();
+  const { createCourse } = useCoursesContext();
   const MAX_DESCRIPCION_LENGTH = 150;
 
   const [curso, setCurso] = useState({
@@ -87,7 +87,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
           <div>
             <h1 className="text-3xl font-bold text-white text-center mb-6">Create Course</h1>
             <div className="mb-4">
-              <label className="block text-white text-base font-medium mb-2">
+              <label className="block text-black text-base font-bold mb-2">
                 Name:
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
@@ -100,7 +100,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
               </label>
             </div>
             <div className="mb-4">
-              <label className="block text-white text-base font-medium mb-2">
+              <label className="block text-black text-base font-bold mb-2">
                 Category:
                 <Select
                   className="w-full mt-1"
@@ -118,7 +118,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
               </label>
             </div>
             <div className="mb-4">
-              <label className="block text-white text-base font-medium mb-2">
+              <label className="block text-black text-base font-bold mb-2">
                 Description:
                 <textarea
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1 resize-none"
@@ -133,7 +133,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
               </label>
             </div>
             <div className="mb-4">
-              <label className="block text-white text-lg font-bold mb-2">
+              <label className="block text-black text-lg font-bold mb-2">
                 Image:
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"

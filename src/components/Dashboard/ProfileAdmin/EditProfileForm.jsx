@@ -22,9 +22,7 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
                 setName(userData.username);
                 setEmail(userData.email);
                 
-                // Verificar si el usuario tiene una imagen de perfil almacenada
                 if (userData.userImage) {
-                    // Establecer la URL de la imagen almacenada como la vista previa de la imagen
                     setPreviewProfileImage(transformCloudinaryURL(userData.userImage));
                 }
             }
@@ -88,7 +86,7 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
     return (
         <div className="w-5/6 md:mt-32 overflow-hidden flex mr-20">
             <ToastContainer />
-            <div className="max-w-lg mx-auto bg-gradient-to-r from-green-400 to-blue-500 rounded-lg shadow-lg py-4 px-6 md:px-10">
+            <div className="max-w-lg mx-auto bg-gradient-to-b from-purple-500 to-blue-500 rounded-lg shadow-lg py-4 px-6 md:px-10">
                 <h1 className="text-center font-black text-white md:text-3xl mb-6">Edit Profile</h1>
                 {previewProfileImage && (
                     <div className="text-center">
@@ -97,46 +95,46 @@ const ProfileForm = ({ name: initialName, email: initialEmail }) => {
                 )}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="name" className="block text-lg font-semibold text-white">
+                        <label htmlFor="name" className="block text-lg font-semibold text-black">
                             Name
                         </label>
                         <input
                             type="text"
                             id="name"
-                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-green-300 focus:border-green-300 hover:bg-gray-100"
+                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-purple-300 focus:border-purple-300 hover:bg-gray-100"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="email" className="block text-lg font-semibold text-white">
+                        <label htmlFor="email" className="block text-lg font-semibold text-black">
                             Email
                         </label>
                         <input
                             type="email"
                             id="email"
-                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-green-300 focus:border-green-300 hover:bg-gray-100"
+                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-purple-300 focus:border-purple-300 hover:bg-gray-100"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="profileImage" className="block text-lg font-semibold text-white">
+                        <label htmlFor="profileImage" className="block text-lg font-semibold text-black">
                             Profile Image
                         </label>
                         <input
                             type="file"
                             id="profileImage"
                             accept="image/*"
-                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-green-300 focus:border-green-300 hover:bg-gray-100"
+                            className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-purple-300 focus:border-purple-300 hover:bg-gray-100"
                             onChange={handleImageChange}
                         />
                     </div>
                     
                     <div className="flex items-center justify-center">
                         <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            className="bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-900 hover:to-blue-700 text-white font-bold py-2 px-6 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-300"
                             type="submit"
                         >
                             Save

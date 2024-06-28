@@ -77,7 +77,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
         <div>
           <h1 className="text-3xl font-bold text-center mb-4 text-white">Create Category</h1>
           <div className="mb-4">
-            <label className="block text-white text-lg font-medium mb-2">
+            <label className="block text-black text-lg font-medium mb-2">
               Name: <br />
               <Input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:border-teal-300"
@@ -90,7 +90,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
             </label>
           </div>
           <div className="mb-4">
-            <label className="block text-white text-lg font-medium mb-2">
+            <label className="block text-black text-lg font-medium mb-2">
               Description: <br />
               <Input.TextArea
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:border-teal-300"
@@ -105,7 +105,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
             </label>
           </div>
           <div className="mb-4">
-            <label className="block text-white text-lg font-medium mb-2">
+            <label className="block text-black text-lg font-medium mb-2">
               Image: <br />
               <input
                 type="file"

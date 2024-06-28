@@ -5,21 +5,21 @@ import { useRoleContext } from "../../../context/user/role.context";
 const CreateRolForm = ({ visible, onClose }) => {
   const { createRole } = useRoleContext();
   const [role, setRole] = useState({ nombre: "" });
-  const [error, setError] = useState(false); // Estado para manejar el error de campo vacío
+  const [error, setError] = useState(false);
   const [successMessageVisible, setSuccessMessageVisible] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setRole({ ...role, [name]: value });
     if (error && value.trim() !== "") {
-      setError(false); // Si se empieza a escribir y el campo está en error, quitar el error
+      setError(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!role.nombre.trim()) {
-      setError(true); // Activar el error si el campo está vacío al enviar
+      setError(true);
       return;
     }
     try {
@@ -50,7 +50,8 @@ const CreateRolForm = ({ visible, onClose }) => {
     >
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md p-6 bg-gradient-to-r from-blue-500 to-green-500 rounded-lg shadow-xl relative"
+        className="w-full max p-6 bg-gradient-to-r from-blue-500 to-green-500 rounded-lg shadow-xl relative"
+        style={{ color: "black" }}
       >
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-white">Create Role</h1>
@@ -58,7 +59,7 @@ const CreateRolForm = ({ visible, onClose }) => {
             type="button"
             onClick={handleModalClose}
             className="text-white hover:text-red-500 focus:outline-none"
-            style={{ fontSize: "1.5rem" }} // Tamaño de fuente más grande
+            style={{ fontSize: "1.5rem" }}
           >
             &times;
           </button>
@@ -69,6 +70,7 @@ const CreateRolForm = ({ visible, onClose }) => {
             className={`block text-sm font-medium ${
               error ? "text-red-500" : "text-white"
             } mb-2`}
+            style={{ color: "black" }}
           >
             Name:
           </label>
