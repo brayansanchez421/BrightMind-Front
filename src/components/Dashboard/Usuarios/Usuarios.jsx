@@ -150,7 +150,7 @@ const DataTable = () => {
         <LeftBar onVisibilityChange={setIsLeftBarVisible} />
         <div
           className={`w-full transition-all duration-300 ${
-            isLeftBarVisible ? "ml-80 max-w-full" : ""
+            isLeftBarVisible ? "ml-56 max-w-full" : ""
           }`}
         >
           <Navbar className="" />
@@ -159,12 +159,12 @@ const DataTable = () => {
               <h2 className="text-2xl font-black  text-white text-center">
                 Users
               </h2>
-              <div className="flex flex-wrap items-center justify-center mt-10">
+              <div className="flex flex-col items-center justify-center mt-10">
                 <Button
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={() => setShowCreateModal(true)}
-                  className="mr-4 text-center font-medium text-base"
+                  className="text-center font-medium text-base"
                 >
                   <b>Create User</b>
                 </Button>
@@ -172,12 +172,12 @@ const DataTable = () => {
                   placeholder="Search by Name"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  className="w-40 text-center font-medium text-base"
+                  className="w-40 text-center font-medium text-base mt-2"
                 />
               </div>
             </div>
             <div className="mt-10 flex justify-center">
-            <div className="overflow-auto w-full px-20">
+            <div className="overflow-auto w-full px-4">
               <table className="min-w-full overflow-x-auto">
                 <thead>
                   <tr>
@@ -223,7 +223,7 @@ const DataTable = () => {
                     >
                       Status{" "}  
                     </th>
-                    <th className="px-20 py-3 bg-red-500 text-white text-xl border-2 border-blue-800">
+                    <th className="px-40 py-3 bg-red-500 text-white text-xl border-2 border-blue-800">
                       Actions
                     </th>
                   </tr>

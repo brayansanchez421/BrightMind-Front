@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { FaBars, FaBell } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import { useUserContext } from '../../context/user/user.context.jsx';
 import { useAuth } from '../../context/auth.context.jsx';
 import { Link } from 'react-router-dom';
@@ -8,12 +8,13 @@ import LeftBar from './LeftBar';
 const Navbar = () => {
   const { logout } = useAuth();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const menuRef = useRef(null);
+  const sidebarRef = useRef(null);
   const { getUserById } = useUserContext();
   const { user } = useAuth();
   const [username, setUsername] = useState("Cargando...");
   const [userImage, setUserImage] = useState(null);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -46,6 +47,9 @@ const Navbar = () => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsMenuVisible(false);
       }
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarVisible(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -61,25 +65,31 @@ const Navbar = () => {
 
   return (
     <>
-      <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
-      <nav className="shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-3 flex items-center transition-all duration-400">
-        <div className='absolute left-4'>
-          <FaBars className="text-white text-lg cursor-pointer" onClick={toggleSidebar} />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <Link to="/admin" className="text-white text-2xl font-black">
-            <h1>BrightMind</h1>
-          </Link>
-        </div>
-        <div className="flex items-center absolute right-4">
-          <div className="flex items-center mr-4">
-            <span className="text-white text-xl font-bold">{username}</span>
+      <nav className="shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 transition-all duration-400 justify-center flex w-full">
+      <div ref={sidebarRef}>
+        <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
+        
+      </div>
+        <div className=" flex items-center  relative  w-screen  text-justify">
+          <div className="absolute left-0 top-0 h-full flex items-center ">
+            <FaBars
+              className="text-white text-lg cursor-pointer ml-4"
+              onClick={toggleSidebar}
+              onClickCapture={() => setIsSidebarVisible (true)}
+              onTouchStartCapture={() => setIsSidebarVisible(true)}
+            />
           </div>
-          <div className="relative">
+          <div className="flex-1 justify-center text-center md:ml-48 ml-12   sm:ml-48">
+            <Link to="/admin" className="text-white text-2xl font-black ">
+              <span>BrightMind</span>
+            </Link>
+          </div>
+          <div className="flex items-center ml-auto mr-4 ">
+            <span className="text-white text-xl font-bold hidden sm:block mr-4">{username}</span>
             <img
               src={userImage}
               alt="UserImage"
-              className="h-12 w-12 cursor-pointer mr-4 rounded-full"
+              className="h-12 w-12 cursor-pointer rounded-full"
               onClick={() => setIsMenuVisible(!isMenuVisible)}
             />
             {isMenuVisible && (
