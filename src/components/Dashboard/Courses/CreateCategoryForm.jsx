@@ -10,8 +10,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
   const [category, setCategory] = useState({ name: "", description: "", image: null });
   const [imagePreview, setImagePreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const MAX_DESCRIPCION_LENGTH = 100;
-
+  const MAX_DESCRIPTION_LENGTH = 100;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,15 +27,21 @@ const CreateCategoryForm = ({ visible, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Datos del formulario:", category);
+    if (!category.name || !category.description || !category.image) {
+      setErrorMessage("All fields are required.");
+      return;
+    }
+
     try {
       await createCategory(category);
-      onClose();
       toast.success("Category created successfully!");
+      setTimeout(() => {
+        onClose();
+      }, 3000);
     } catch (error) {
       console.error(error);
-      setErrorMessage("Failed to create category.");
-      toast.error("Failed to create category.");
+      setErrorMessage("Failed to create category. Please try again.");
+      toast.error("Failed to create category. Please try again.");
     }
   };
 
@@ -55,62 +60,64 @@ const CreateCategoryForm = ({ visible, onClose }) => {
       closable={false}
       onCancel={onClose}
       maskStyle={{ backdropFilter: "blur(10px)" }}
-  
     >
       <form
-        className="w-full h-full shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-8 relative shadow-orange rounded "
+        className="w-full p-6 bg-gradient-to-r from-teal-400 to-blue-500 rounded-lg shadow-lg relative"
         onSubmit={handleSubmit}
       >
         <button
           type="button"
-          className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400"
+          className="absolute top-2 right-2 text-white hover:text-red-500 focus:outline-none"
           onClick={onClose}
         >
-          X
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
         <div>
-          <h1 className="text-4xl font-black text-center mb-4 text-white">
-            Create Category
-          </h1>
+          <h1 className="text-3xl font-bold text-center mb-4 text-white">Create Category</h1>
           <div className="mb-4">
-            <label className="block text-zinc-100 text-lg font-medium mb-4">
-              Nombre: <br />
+            <label className="block text-white text-lg font-medium mb-2">
+              Name: <br />
               <Input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:border-teal-300"
                 type="text"
                 name="name"
                 value={category.name}
                 onChange={handleChange}
+                required
               />
             </label>
           </div>
           <div className="mb-4">
-            <label className="block text-zinc-100 text-lg font-medium mb-4">
-              Descripción: <br />
+            <label className="block text-white text-lg font-medium mb-2">
+              Description: <br />
               <Input.TextArea
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:border-teal-300"
                 name="description"
                 value={category.description}
                 onChange={handleChange}
-                maxLength={MAX_DESCRIPCION_LENGTH}
+                maxLength={MAX_DESCRIPTION_LENGTH}
                 style={{ minHeight: "100px" }}
+                required
               />
-              <div className="text-white mt-1 text-right">{category.description.length}/{MAX_DESCRIPCION_LENGTH}</div>
+              <div className="text-gray-300 mt-1 text-right">{category.description.length}/{MAX_DESCRIPTION_LENGTH}</div>
             </label>
           </div>
           <div className="mb-4">
-            <label className="block text-zinc-100 text-lg font-medium mb-4">
-              Imagen: <br />
+            <label className="block text-white text-lg font-medium mb-2">
+              Image: <br />
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
+                className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring focus:border-teal-300 hover:bg-red-100"
+                required
               />
             </label>
             {imagePreview && (
-              <div className="mt-4">
-                <img src={imagePreview} alt="preview" style={{ width: '100%', maxHeight: '200px' }} />
+              <div className="mt-2">
+                <img src={imagePreview} alt="preview" className="rounded-lg" style={{ maxWidth: "100%", maxHeight: "200px" }} />
               </div>
             )}
           </div>
@@ -118,15 +125,15 @@ const CreateCategoryForm = ({ visible, onClose }) => {
             <p className="text-red-500 text-sm">{errorMessage}</p>
           )}
         </div>
-        <div className="flex items-center justify-center mt-10">
+        <div className="flex justify-center mt-6 space-x-4">
           <Button
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold px-4 rounded focus:outline-none focus:shadow-outline mr-2 flex flex-col items-center"
+            className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             onClick={onClose}
           >
-            Close
+            Cancel
           </Button>
           <Button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded focus:outline-none focus:shadow-outline ml-4 flex flex-col items-center"
+            className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             htmlType="submit"
           >
             Create Category

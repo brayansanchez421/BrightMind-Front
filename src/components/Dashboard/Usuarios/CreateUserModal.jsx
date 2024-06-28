@@ -1,39 +1,46 @@
-import React from "react";
-import { Modal, Form, Input, Select, Button } from "antd";
+import React, { useState } from "react";
+import { Modal, Form, Input, Select, Button, message } from "antd";
 import { useRoleContext } from '../../../context/user/role.context';
 
 const { Option } = Select;
 
 const CreateUserModal = ({ visible, onCancel, onCreate }) => {
   const { rolesData } = useRoleContext();
-
   const [form] = Form.useForm();
+  const [successMessageVisible, setSuccessMessageVisible] = useState(false);
 
   const handleFormSubmit = async () => {
     try {
       const values = await form.validateFields();
       onCreate(values);
+      setSuccessMessageVisible(true); // Mostrar el mensaje de éxito
       form.resetFields();
+      onCancel(); // Cerrar el modal después de crear el usuario
     } catch (error) {
       console.error("Failed to create user:", error);
     }
   };
-  console.log("esto aqui",rolesData)
+
+  const handleModalClose = () => {
+    setSuccessMessageVisible(false); // Ocultar el mensaje si se cierra el modal
+    onCancel(); // Cerrar el modal
+  };
 
   return (
     <Modal 
       className="mt-6"
       visible={visible}
-      onCancel={onCancel}
+      onCancel={handleModalClose}
       footer={null}
       maskStyle={{ backdropFilter: "blur(10px)" }}
+      afterClose={() => setSuccessMessageVisible(false)} // Asegurar que se oculte el mensaje después de cerrar el modal
     >
       <Form 
-        className="bg-blue-100 py-6 shadow-orange shadow-sky-300" 
+        className="bg-gradient-to-r from-blue-400 to-green-400 py-6 shadow-lg rounded p-6"
         form={form} 
         layout="vertical"
       >
-        <h1 className="text-2xl text-center font-black">Create User</h1>
+        <h1 className="text-2xl text-center font-black mb-6">Create User</h1>
         <Form.Item 
           className="text-base font-semibold mx-10 mt-4"
           name="username"
@@ -80,14 +87,14 @@ const CreateUserModal = ({ visible, onCancel, onCreate }) => {
         </Form.Item>
         <div className="flex justify-center mt-10">
           <Button 
-            className="bg-rose-800 text-white font-medium"
+            className="bg-gray-600 text-white font-medium"
             key="cancel" 
-            onClick={onCancel}
+            onClick={handleModalClose}
           >
             Cancel
           </Button>
           <Button 
-            className="bg-sky-700 font-medium ml-2"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-medium ml-4"
             key="submit" 
             type="primary" 
             onClick={handleFormSubmit}
@@ -96,6 +103,14 @@ const CreateUserModal = ({ visible, onCancel, onCreate }) => {
           </Button>
         </div>
       </Form>
+
+      {/* Mostrar mensaje de éxito */}
+      {successMessageVisible && (
+        message.success({
+          content: "User created successfully",
+          duration: 5, // Duración en segundos que se muestra el mensaje
+        })
+      )}
     </Modal>
   );
 };

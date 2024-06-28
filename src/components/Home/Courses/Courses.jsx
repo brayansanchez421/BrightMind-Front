@@ -79,7 +79,7 @@ const Course = () => {
             <div className="flex justify-center mt-8">
                 <h1 className="text-4xl font-bold text-white">Cursos de {title}</h1>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:mt-24 max-w-screen-xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:mt-24 max-w-screen-2xl mx-auto ">
                 {filteredCourses.map((course, index) => (
                     <HoverCard
                         key={index}

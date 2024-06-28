@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Modal, Button, Input, Select } from "antd";
+import React, { useState, useRef } from "react";
+import { Modal, Select } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCoursesContext } from "../../../context/courses/courses.context";
@@ -18,11 +18,9 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     descripcion: "",
     imagen: null,
   });
-  const [imagePreview, setImagePreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const imagenRef = useRef(null);
-  const recursoRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,10 +38,13 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     }
   };
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!curso.nombre || !curso.categoria || !curso.descripcion || !curso.imagen) {
+      setErrorMessage("All fields are required.");
+      return;
+    }
+
     const courseData = {
       title: curso.nombre,
       category: curso.categoria,
@@ -51,119 +52,121 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       image: curso.imagen,
     };
     try {
-      console.log(courseData)
-
       await createCourse(courseData);
-      onCreate(courseData);
-      onClose();
+      toast.success("Course created successfully!");
+      setTimeout(() => {
+        onCreate(courseData);
+        onClose();
+        window.location.reload();
+      }, 5000);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to create course. Please try again.");
     }
   };
 
-  useEffect(() => {
-    if (visible) {
-      setCurso({ nombre: "", categoria: "", descripcion: "",  image: null });
-      setImagePreview(null);
-      setErrorMessage("");
-    }
-  }, [visible]);
-
   return (
-    <Modal
-      visible={visible}
-      footer={null}
-      closable={false}
-      className="lg:absolute top-14 left-1/3"
-      maskStyle={{ backdropFilter: "blur(10px)" }}
-    >
-      <form onSubmit={handleSubmit} className="shadow-black bg-gradient-to-r from-violet-500 to-fuchsia-400 p-4 relative shadow-orange rounded overflow-x-hidden ">
-        <button
-          className="absolute top-2 right-2 text-black hover:bg-red-500 w-6 h-6 text-base bg-red-400"
-          onClick={onClose}
-        >
-          X
-        </button>
-        <div>
-          <h1 className="text-4xl font-black text-center mb-4 text-white">Create Course</h1>
-          <div className="mb-4">
-            <label className="block text-zinc-100 text-base font-medium mb-4">
-              Nombre: <br />
-              <input
-                className="shadow appearance-none border rounded w-full py-1 px-3 text-black leading-tight focus:outline-none focus:shadow-outline mt-2 font-normal"
-                type="text"
-                name="nombre"
-                value={curso.nombre}
-                onChange={handleChange}
-              />
-            </label>
-          </div>
-          <div className="">
-            <label className="block text-zinc-100 text-base font-medium mb-4">
-              Categoría:
-              <Select className="font-normal text-black mt-2 "
-                style={{ width: "100%" }}
-                value={curso.categoria}
-                onChange={(value) => setCurso({ ...curso, categoria: value })}
-              >
-                {categories.map(category => (
-                  <Option key={category._id} value={category.name}>
-                    {category.name}
-                  </Option>
-                ))}
-              </Select>
-            </label>
-          </div>
-          <div className="">
-      <label className="block text-zinc-100 text-base font-medium mb-2">
-        Descripción:
-        <textarea
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight font-normal focus:outline-none focus:shadow-outline mt-2 resize-none"
-          name="descripcion"
-          value={curso.descripcion}
-          onChange={handleChange}
-          maxLength={MAX_DESCRIPCION_LENGTH}
-          style={{ minHeight: "100px" }}
-        />
-        <div className="text-gray-500 text-right">{curso.descripcion.length}/{MAX_DESCRIPCION_LENGTH}</div>
-      </label>
-    </div>
-          <div className="">
-            <label className="block text-zinc-100 text-lg font-bold mb-2">
-              Imagen:
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline-red-100 italic mt-2"
-                type="file"
-                accept="image/*"
-                ref={imagenRef}
-                onChange={handleImagenChange}
-              />
-              {errorMessage && (
-                <p className="text-red-500 text-sm">{errorMessage}</p>
-              )}
-            </label>
-          </div>
-          <div className="mb-4">
-            
-          </div>
-        </div>
-        <div className="flex items-center justify-center mt-4">
+    <>
+      <ToastContainer />
+      <Modal
+        visible={visible}
+        footer={null}
+        closable={false}
+        className="lg:absolute top-14 left-1/3"
+        maskStyle={{ backdropFilter: "blur(10px)" }}
+      >
+        <form onSubmit={handleSubmit} className="bg-gradient-to-r from-green-400 to-blue-500 shadow-lg rounded-lg p-6 relative">
           <button
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-4 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
+            className="absolute top-2 right-2 text-white hover:text-red-600 focus:outline-none"
             onClick={onClose}
           >
-            Close
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
           </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded focus:outline-none focus:shadow-outline ml-4"
-            type="submit"
-          >
-            Create Course
-          </button>
-        </div>
-      </form>
-    </Modal>
+          <div>
+            <h1 className="text-3xl font-bold text-white text-center mb-6">Create Course</h1>
+            <div className="mb-4">
+              <label className="block text-white text-base font-medium mb-2">
+                Name:
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
+                  type="text"
+                  name="nombre"
+                  value={curso.nombre}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+            </div>
+            <div className="mb-4">
+              <label className="block text-white text-base font-medium mb-2">
+                Category:
+                <Select
+                  className="w-full mt-1"
+                  style={{ borderRadius: "0.375rem" }}
+                  value={curso.categoria}
+                  onChange={(value) => setCurso({ ...curso, categoria: value })}
+                  required
+                >
+                  {categories.map((category) => (
+                    <Option key={category._id} value={category.name}>
+                      {category.name}
+                    </Option>
+                  ))}
+                </Select>
+              </label>
+            </div>
+            <div className="mb-4">
+              <label className="block text-white text-base font-medium mb-2">
+                Description:
+                <textarea
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1 resize-none"
+                  name="descripcion"
+                  value={curso.descripcion}
+                  onChange={handleChange}
+                  maxLength={MAX_DESCRIPCION_LENGTH}
+                  style={{ minHeight: "100px" }}
+                  required
+                />
+                <div className="text-gray-300 text-right mt-1">{curso.descripcion.length}/{MAX_DESCRIPCION_LENGTH}</div>
+              </label>
+            </div>
+            <div className="mb-4">
+              <label className="block text-white text-lg font-bold mb-2">
+                Image:
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
+                  type="file"
+                  accept="image/*"
+                  ref={imagenRef}
+                  onChange={handleImagenChange}
+                  required
+                />
+                {errorMessage && (
+                  <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+                )}
+              </label>
+            </div>
+          </div>
+          <div className="flex items-center justify-center mt-6">
+            <button
+              className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-gray-500 mr-4"
+              type="button"
+              onClick={onClose}
+            >
+              Close
+            </button>
+            <button
+              className="bg-green-400 hover:bg-white text-white hover:text-green-400 font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-green-500"
+              type="submit"
+            >
+              Create Course
+            </button>
+          </div>
+        </form>
+      </Modal>
+    </>
   );
 };
 

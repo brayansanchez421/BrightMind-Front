@@ -104,6 +104,11 @@ const DataTablete = () => {
     }
   };
 
+  const handleDeleteButtonClick = (course) => {
+    setCourseToDelete(course);
+    setIsDeleteModalVisible(true);
+  };
+
   const handleDeleteModalClose = () => {
     setIsDeleteModalVisible(false);
     setCourseToDelete(null);
@@ -114,6 +119,7 @@ const DataTablete = () => {
       await deleteCourse(courseToDelete._id);
       console.log(courseToDelete._id);
       message.success("Curso eliminado exitosamente");
+      getAllCourses();
     } catch (error) {
       message.error("Error al eliminar el curso");
     } finally {

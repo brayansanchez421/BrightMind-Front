@@ -12,20 +12,19 @@ function NewPassword() {
     const navigate = useNavigate();
 
     const validationSchema = yup.object().shape({
-        email: yup.string().email('Invalid email').required('The email is required'),
         password: yup.string().required('The  password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, 'The password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
         confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'The passwords must match'),
     });
 
     const formik = useFormik({
         initialValues: {
-            email: '',
             password: '',
             confirmPassword: '',
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             try {
+                console.log(values)
                 await passwordReset(values);
                 toast.success('Password changed successfully');
                 setTimeout(() => {
@@ -51,19 +50,7 @@ function NewPassword() {
                 <div className="p-16 bg-white rounded-3xl shadow-2xl w-4/5 bg-gradient-to-r from-violet-600  to-rose-500  ">
                     <h2 className="text-5xl font-black text-center mb-10 text-white ">Change Password</h2>
                     <form onSubmit={formik.handleSubmit} className="py-10 flex flex-col space-y-6">
-                        <div>
-                            <label className="text-lg font-bold text-white block mb-4 mx-4">Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={formik.values.email}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                className="w-full p-4 border border-cyan-300 rounded-full bg-pink-100 placeholder-gray-450 focus:outline-sky-600 focus:border-sky-950 focus:bg-slate-200"
-                                placeholder="Email"
-                            />
-                            {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
-                        </div>
+                       
                         <div>
                             <label className="text-lg font-bold text-white block mb-4 mx-4">New password </label>
                             <input
