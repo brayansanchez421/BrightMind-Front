@@ -151,17 +151,17 @@ const DataTablete = () => {
     <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 overflow-hidden min-h-screen">
       <div className="flex h-full">
         <LeftBar onVisibilityChange={setIsLeftBarVisible} />
-        <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? "ml-56 max-w-full" : ""}`}>
+        <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? "ml-80 max-w-full" : ""}`}>
           <Navbar />
-          <div className="flex flex-col mt-10 px-4">
+          <div className="flex flex-col mt-10 px-20">
             <div>
               <h2 className="text-2xl font-black text-white text-center">Courses</h2>
-              <div className="flex flex-col items-center justify-center mt-4">
+              <div className="flex flex-wrap items-center justify-center mt-10">
                 <Button 
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={handleCreateCourseClick}
-                  className="text-center font-medium text-base"
+                  className="mr-4 text-center font-medium text-base"
                 >
                   <b>Create Course</b>
                 </Button>
@@ -169,7 +169,7 @@ const DataTablete = () => {
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={handleCreateCategoryClick}
-                  className="text-center font-medium text-base mt-2 "
+                  className="mr-4 text-center font-medium text-base"
                 >
                   <b>Create Category</b>
                 </Button>
@@ -177,7 +177,7 @@ const DataTablete = () => {
                   placeholder="Search by Name"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  className="w-44 text-center font-medium text-base mt-2"
+                  className="w-40 text-center font-medium text-base"
                 />
               </div>
               <div className="mt-10 flex justify-center">
@@ -194,7 +194,7 @@ const DataTablete = () => {
                         <th className="text-xl px-6 py-3 bg-green-500 text-white border-2 cursor-pointer border-blue-800">
                           Name
                         </th>
-                        <th className="text-xl px-48 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">
+                        <th className="text-xl px-10 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">
                           Description
                         </th>
                         <th className="text-xl px-20 py-3 bg-red-500 text-white border-2 border-blue-800">
@@ -273,7 +273,7 @@ const DataTablete = () => {
           />
 
           {totalPages > 1 && (
-            <div className="flex justify-center mb-8 mt-10">
+            <div className="flex justify-center mb-10">
               <button
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}

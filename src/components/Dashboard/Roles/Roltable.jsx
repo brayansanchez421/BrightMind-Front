@@ -236,20 +236,20 @@ const DataTable = () => {
       <LeftBar onVisibilityChange={setIsLeftBarVisible} />
       <div
           className={`w-full transition-all duration-300 ${
-            isLeftBarVisible ? "ml-56 max-w-full" : ""
+            isLeftBarVisible ? "ml-80 max-w-full" : ""
           }`}
         >
 
         <Navbar />
-        <div className="flex flex-col mt-10 mx-4">
+        <div className="flex flex-col mt-10 ">
           <div>
             <h2 className="text-2xl font-black text-white text-center">Roles</h2>
-            <div className="flex flex-col items-center justify-center mt-6">
+            <div className="flex flex-wrap items-center justify-center mt-10">
               <Button
                 type="primary"
                 style={{ backgroundColor: "green" }}
                 onClick={() => setShowForm(true)}
-                className=""
+                className="mr-4"
               >
                 <b>Create Rol</b>
               </Button>
@@ -257,11 +257,11 @@ const DataTable = () => {
                 placeholder="Search by roles"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                className="w-40 mt-2"
+                className="w-40"
               />
             </div>
             <div className="overflow-x-auto mt-10 flex justify-center">
-              <table className="md:w-10/12 bg-gray-300 ">
+              <table className="md:w-10/12 bg-gray-300">
                 <thead>
                   <tr>
                     <th
@@ -288,7 +288,7 @@ const DataTable = () => {
                           <CaretDownOutlined />
                         ))}
                     </th>
-                    <th className="w-72 py-4 mx-20 bg-red-500 text-white border-2 border-blue-800">
+                    <th className="w-72 py-4 bg-red-500 text-white border-2 border-blue-800">
                       Actions
                     </th>
                   </tr>
@@ -331,7 +331,7 @@ const DataTable = () => {
               </table>
             </div>
             {totalPages > 1 && (
-            <div className="flex justify-center mb-6 mt-10">
+            <div className="flex justify-center mb-10 mt-10">
               <button
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}
