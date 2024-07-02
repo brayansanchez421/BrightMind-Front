@@ -46,7 +46,7 @@ function RegisterForm() {
         } else {
           setSuccess(true);
           toast.success("User created successfully");
-          setTimeout(() => { navigate('/'); }, 500);
+          setTimeout(() => { navigate('/'); }, 5000);
         }
       } catch (error) {
         console.error(error);

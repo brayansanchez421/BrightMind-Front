@@ -89,7 +89,7 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
           <h1 className="text-4xl font-black text-center mb-4 text-white">Update Course</h1>
           <div className="mb-4">
             <label className="block text-zinc-100 text-base font-medium mb-4">
-              Nombre: <br />
+              Name: <br />
               <input
                 className="shadow appearance-none border rounded w-full py-1 px-3 text-black leading-tight focus:outline-none focus:shadow-outline mt-2 font-normal"
                 type="text"
@@ -101,7 +101,7 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
           </div>
           <div className="">
             <label className="block text-zinc-100 text-base font-medium mb-4">
-              Categoría:
+              Category:
               <Select className="font-normal text-black mt-2 "
                 style={{ width: "100%" }}
                 value={curso.categoria}
@@ -117,7 +117,7 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
           </div>
           <div className="">
             <label className="block text-zinc-100 text-base font-medium mb-2">
-              Descripción:
+              Description:
               <textarea
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight font-normal focus:outline-none focus:shadow-outline mt-2 resize-none"
                 name="descripcion"
@@ -131,7 +131,7 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
           </div>
           <div className="">
             <label className="block text-zinc-100 text-lg font-bold mb-2">
-              Imagen:
+              Image:
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline-red-100 italic mt-2"
                 type="file"

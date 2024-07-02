@@ -28,7 +28,7 @@ const ResetPasswordVerifyForm = () => {
         const resetCode = codes.join('');
         try {
             const response = await resetPasswordVerify({ resetCode });
-            toast.success('Código válido');
+            toast.success('Valid code');
             setTimeout(() => {
                 navigate('/newPassword');
             }, 3000);

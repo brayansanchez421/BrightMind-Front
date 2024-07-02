@@ -37,11 +37,11 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
         layout="vertical"
         initialValues={user}
       >
-        <h1 className="text-xl font-black text-center">Actualizar Usuario</h1>
+        <h1 className="text-xl font-black text-center">UPDATE USER</h1>
         <Form.Item
           className="text-base font-semibold mx-10 mt-4"
           name="username"
-          label="Nombre de Usuario"
+          label="Username"
           rules={[{ required: true, message: "Por favor ingrese un nombre de usuario" }]}
         >
           <Input />
@@ -49,7 +49,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
         <Form.Item
           className="text-base font-semibold mx-10"
           name="email"
-          label="Correo Electrónico"
+          label="Email"
           rules={[{ required: true, message: "Por favor ingrese un correo electrónico" }]}
         >
           <Input />
@@ -57,7 +57,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
         <Form.Item
           className="text-base font-semibold mx-10"
           name="role"
-          label="Rol"
+          label="Role"
           rules={[{ required: true, message: "Por favor seleccione un rol" }]}
         >
           <Select className="text-center">
@@ -71,12 +71,12 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
         <Form.Item
           className="text-base font-semibold mx-10"
           name="state"
-          label="Estado"
+          label="State"
           rules={[{ required: true, message: "Por favor seleccione un estado" }]}
         >
           <Select className="text-center">
-            <Option value={true}>Activo</Option>
-            <Option value={false}>Inactivo</Option>
+            <Option value={true}>Active</Option>
+            <Option value={false}>Inactivate</Option>
           </Select>
         </Form.Item>
         <div className="flex justify-center mt-10">
@@ -85,7 +85,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
             key="cancel"
             onClick={onCancel}
           >
-            Cancelar
+            Cancel
           </Button>
           <Button
             className="bg-sky-700 font-medium ml-2"
@@ -93,7 +93,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
             type="primary"
             onClick={handleFormSubmit}
           >
-            Actualizar
+            Update
           </Button>
         </div>
       </Form>
