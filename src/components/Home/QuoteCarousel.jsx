@@ -5,29 +5,34 @@ import 'slick-carousel/slick/slick-theme.css';
 
 function QuoteCarousel({ phrases }) {
     const settings = {
-        dots: false,
+        dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 5000,
+        arrows: true,
     };
 
     return (
-        <div className="lg:mt-10"> {/* Ajuste del margen superior para dispositivos de diferentes tamaños */}
-            <Slider {...settings} className="mx-auto w-11/12 mt-10 ">
+        <div className="mt-10 lg:mt-20 max-w-6xl mx-auto">
+            <Slider {...settings} className="mx-auto w-11/12">
                 {phrases.map((phrase, index) => (
-                    <div className="flex flex-col items-center justify-center h-full mx-auto">
-                        <div className="text-center">
-                            <h2 className="text-4xl italic font-bold text-white mb-4">{phrase.text}</h2>
-                        </div>
+                    <div key={index} className="flex flex-col items-center justify-center h-full text-center p-6">
+                        <h2 className="text-2xl md:text-3xl italic font-bold text-white mb-4 transition-transform transform hover:scale-105">
+                            "{phrase.text}"
+                        </h2>
                         <div className="flex justify-center mt-6">
-                            <img className="h-40 rounded-full object-cover" src={phrase.imageUrl} alt={`Image ${index + 1}`} />
+                            <img 
+                                className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-gray-200 shadow-lg transition-transform transform hover:scale-110" 
+                                src={phrase.imageUrl} 
+                                alt={`Image ${index + 1}`} 
+                            />
                         </div>
-                        <div>
-                        <p className="text-right mt-4 mr-10 font-black">— {phrase.author}</p>
-                        </div>
+                        <p className="text-lg md:text-xl text-gray-300 mt-4 font-semibold">
+                            — {phrase.author}
+                        </p>
                     </div>
                 ))}
             </Slider>
