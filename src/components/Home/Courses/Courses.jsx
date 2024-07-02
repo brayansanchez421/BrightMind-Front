@@ -93,11 +93,11 @@ const Course = () => {
             {isConfirmModalOpen && selectedCourse && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold mb-4">Confirmar Registro</h2>
+                        <h2 className="text-2xl font-bold mb-4">Confirm Registration</h2>
                         {isRegistered ? (
-                            <p className="mb-4">Ya te encuentras registrado en el curso <strong>{selectedCourse.title}</strong>.</p>
+                            <p className="mb-4">You are already registered in the course <strong>{selectedCourse.title}</strong>.</p>
                         ) : (
-                            <p className="mb-4">¿Deseas confirmar el registro del curso <strong>{selectedCourse.title}</strong>?</p>
+                            <p className="mb-4">¿Do you want to confirm your course registration <strong>{selectedCourse.title}</strong>?</p>
                         )}
                         <div className="flex justify-end gap-4">
                             <button
@@ -105,13 +105,13 @@ const Course = () => {
                                 onClick={handleRegister}
                                 disabled={isRegistered}
                             >
-                                Registrar
+                                Register
                             </button>
                             <button
                                 className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-400 transition-colors"
                                 onClick={closeConfirmModal}
                             >
-                                Cerrar
+                                Close
                             </button>
                         </div>
                     </div>
@@ -120,13 +120,13 @@ const Course = () => {
             {isSuccessModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold mb-4">Registro Exitoso</h2>
-                        <p className="mb-4">¡Te has registrado con éxito en el curso!</p>
+                        <h2 className="text-2xl font-bold mb-4">Successful registration</h2>
+                        <p className="mb-4">¡You have successfully registered for the course!</p>
                         <button
                             className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400 transition-colors"
                             onClick={closeSuccessModal}
                         >
-                            Cerrar
+                            Close
                         </button>
                     </div>
                 </div>

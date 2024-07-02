@@ -70,7 +70,7 @@ const DataTablete = () => {
   };
 
   const handleUpdateCourse = async (updatedCourse) => {
-    message.success("Curso actualizado exitosamente");
+    message.success("Successfully updated course");
     window.location.reload();
     setShowUpdateForm(false);
     setSelectedCourse(null);
@@ -118,10 +118,10 @@ const DataTablete = () => {
     try {
       await deleteCourse(courseToDelete._id);
       console.log(courseToDelete._id);
-      message.success("Curso eliminado exitosamente");
+      message.success("Course successfully deleted");
       getAllCourses();
     } catch (error) {
-      message.error("Error al eliminar el curso");
+      message.error("Error deleting course");
     } finally {
       setIsDeleteModalVisible(false);
       setCourseToDelete(null);
@@ -139,9 +139,9 @@ const DataTablete = () => {
           ...prevCourse,
           content: updatedContent,
         }));
-        message.success("Recurso eliminado exitosamente");
+        message.success("Resource deleted successfully");
       } catch (error) {
-        message.error("Error al eliminar el recurso");
+        message.error("Error deleting resource");
       }
     }
   };
@@ -318,10 +318,10 @@ const DataTablete = () => {
             maskStyle={{ backdropFilter: "blur(10px)" }}
             footer={[
               <Button key="back" onClick={handleAssignModalClose}>
-                Cancelar
+                Cancel
               </Button>,
               <Button key="submit" type="primary" onClick={handleAssignContent}>
-                Asignar
+                Assing
               </Button>,
             ]}
           >
@@ -331,7 +331,7 @@ const DataTablete = () => {
                   <Panel
                     header={(
                       <div className="flex justify-between items-center">
-                        <span>Recurso {index + 1}</span>
+                        <span>Resource {index + 1}</span>
                         <Button
                           type="danger"
                           icon={<DeleteFilled />}
@@ -344,7 +344,7 @@ const DataTablete = () => {
                     {url.endsWith('.mp4') && (
                       <video controls className="w-full mb-4">
                         <source src={url} type="video/mp4" />
-                        Tu navegador no soporta el elemento de video.
+                        Your browser does not support the video element.
                       </video>
                     )}
                     {url.endsWith('.pdf') && (
@@ -354,7 +354,7 @@ const DataTablete = () => {
                         style={{ minHeight: '600px' }}
                         frameBorder="0"
                       >
-                        Tu navegador no soporta PDFs. Por favor descarga el PDF para verlo: <a href={url}>Descargar PDF</a>
+                        Your browser does not support PDFs. Please download the PDF to view: <a href={url}>Download PDF</a>
                       </iframe>
                     )}
                     {!url.endsWith('.mp4') && !url.endsWith('.pdf') && (
@@ -366,7 +366,7 @@ const DataTablete = () => {
             )}
             <div className="mb-4">
               <label className="block text-lg font-bold mb-4">
-                Recurso:
+              Resource:
                 <input
                   type="file"
                   onChange={(e) => setContentFile(e.target.files[0])}
@@ -377,20 +377,20 @@ const DataTablete = () => {
           </Modal>
 
           <Modal
-            title="Confirmar eliminación"
+            title="Confirm deletion"
             visible={isDeleteModalVisible}
             onCancel={handleDeleteModalClose}
             maskStyle={{ backdropFilter: "blur(10px)" }}
             footer={[
               <Button key="cancel" onClick={handleDeleteModalClose}>
-                Cancelar
+                Cancel
               </Button>,
               <Button key="delete" type="primary" danger onClick={handleDeleteConfirm}>
-                Eliminar
+                Delete
               </Button>,
             ]}
           >
-            <p>¿Estás seguro de que deseas eliminar este curso?</p>
+            <p>Are you sure you want to delete this course?</p>
           </Modal>
         </div>
       </div>
