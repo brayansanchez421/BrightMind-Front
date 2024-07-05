@@ -95,7 +95,7 @@ const Navbar = () => {
             {isMenuVisible && (
               <div
                 ref={menuRef}
-                className="absolute right-0 mt-3 w-56 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-700"
+                className="absolute right-0 mt-48 w-56 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-700"
               >
                 <ul className="py-2">
                   <li className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded">

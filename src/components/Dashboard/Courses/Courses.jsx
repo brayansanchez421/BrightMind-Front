@@ -159,7 +159,7 @@ const DataTablete = () => {
         <LeftBar onVisibilityChange={setIsLeftBarVisible} />
         <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? "ml-56 max-w-full" : ""}`}>
           <Navbar />
-          <div className="flex flex-col mt-10 px-4">
+          <div className="flex flex-col mt-8 px-4">
             <div>
               <h2 className="text-2xl font-black text-white text-center">Courses</h2>
               <div className="flex flex-col items-center justify-center mt-4">

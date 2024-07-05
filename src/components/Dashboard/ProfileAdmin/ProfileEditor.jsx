@@ -35,21 +35,15 @@ const ProfileEditor = () => {
   
 
   return (
-    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600">
-      <div className="flex h-screen overflow-hidden">
-        
+    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 h-full">
         <LeftBar  onVisibilityChange={handleLeftBarVisibilityChange} />
-
-        <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? 'ml-80' : ''}`}>
+        <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? 'ml-56' : ''}`}>
           <Navbar/>
         
+        <div className="flex justify-center">
         
-        <div className="flex flex-1 overflow-hidden">
-         
-          <div className='flex-1 ml-20'>
+          <div className=''>
             <SettingsBar />
-          </div>
-          <div className="flex-1 mr-20">
             <ProfileForm
               name={name}
               email={email}
@@ -61,7 +55,7 @@ const ProfileEditor = () => {
           </div>
         </div>
       </div>
-    </div>
+    
   </div>
   );
 };
