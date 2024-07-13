@@ -29,17 +29,18 @@ const DeleteAccountConfirmation = () => {
         e.preventDefault();
         const code = confirmationCode.join('');
         try {
-            console.log("Código de confirmación a enviar:", code);
+            console.log("Confirmation code to send:", code);
             await deleteUserConfirmation(user.data.id, code);
-            toast.success('Cuenta eliminada correctamente');
+            toast.success('Account deleted successfully');
             setTimeout(() => {
                 navigate('/');
             }, 3000);
         } catch (error) {
             console.error(error);
-            toast.error('Código de confirmación inválido o expirado.');
+            toast.error('Invalid or expired confirmation code.');
         }
     };
+    
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600">
