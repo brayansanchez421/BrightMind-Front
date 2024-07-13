@@ -309,72 +309,80 @@ const DataTablete = () => {
               </button>
             </div>
           )}
-
-          <Modal
-            className="mt-16"
-            title={`Curso ${selectedCourse ? selectedCourse.title : ''}`}
-            visible={isAssignModalVisible}
-            onCancel={handleAssignModalClose}
-            maskStyle={{ backdropFilter: "blur(10px)" }}
-            footer={[
-              <Button key="back" onClick={handleAssignModalClose}>
-                Cancel
-              </Button>,
-              <Button key="submit" type="primary" onClick={handleAssignContent}>
-                Assing
-              </Button>,
-            ]}
-          >
-            {selectedCourse && (
-              <Collapse>
-                {selectedCourse.content.map((url, index) => (
-                  <Panel
-                    header={(
-                      <div className="flex justify-between items-center">
-                        <span>Resource {index + 1}</span>
-                        <Button
-                          type="danger"
-                          icon={<DeleteFilled />}
-                          onClick={() => handleRemoveResource(index)}
-                        />
-                      </div>
-                    )}
-                    key={index}
-                  >
-                    {url.endsWith('.mp4') && (
-                      <video controls className="w-full mb-4">
-                        <source src={url} type="video/mp4" />
-                        Your browser does not support the video element.
-                      </video>
-                    )}
-                    {url.endsWith('.pdf') && (
-                      <iframe
-                        src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`}
-                        className="w-full mb-4"
-                        style={{ minHeight: '600px' }}
-                        frameBorder="0"
-                      >
-                        Your browser does not support PDFs. Please download the PDF to view: <a href={url}>Download PDF</a>
-                      </iframe>
-                    )}
-                    {!url.endsWith('.mp4') && !url.endsWith('.pdf') && (
-                      <img src={url} alt={`Vista previa del curso ${index}`} className="w-full mb-4" />
-                    )}
-                  </Panel>
-                ))}
-              </Collapse>
-            )}
-            <div className="mb-4">
-              <label className="block text-lg font-bold mb-4">
-              Resource:
-                <input
-                  type="file"
-                  onChange={(e) => setContentFile(e.target.files[0])}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline mt-2"
+  <Modal
+    className="mt-16"
+    title={`Curso ${selectedCourse ? selectedCourse.title : ''}`}
+    visible={isAssignModalVisible}
+    onCancel={handleAssignModalClose}
+    maskStyle={{ backdropFilter: "blur(10px)" }}
+    footer={[
+      <Button key="back" onClick={handleAssignModalClose}>
+        Cancelar
+      </Button>,
+      <Button key="submit" type="primary" onClick={handleAssignContent}>
+        Asignar
+      </Button>,
+    ]}
+  >
+    {selectedCourse && (
+      <Collapse>
+        {selectedCourse.content.map((url, index) => (
+          <Panel
+            header={(
+              <div className="flex justify-between items-center">
+                <span>Recurso {index + 1}</span>
+                <Button
+                  type="danger"
+                  icon={<DeleteFilled />}
+                  onClick={() => handleRemoveResource(index)}
                 />
-              </label>
-            </div>
-          </Modal>
+              </div>
+            )}
+            key={index}
+          >
+            {url.endsWith('.mp4') && (
+              <video controls className="w-full mb-4">
+                <source src={url} type="video/mp4" />
+                Tu navegador no soporta el elemento de video.
+              </video>
+            )}
+            {url.endsWith('.pdf') && (
+              <div>
+                <p>Descargar PDF:</p>
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                  download
+                >
+                  {`Descargar PDF - Recurso ${index + 1}`}
+                </a>
+              </div>
+            )}
+            {!url.endsWith('.mp4') && !url.endsWith('.pdf') && (
+              <img src={url} alt={`Vista previa del curso ${index}`} className="w-full mb-4" />
+            )}
+          </Panel>
+        ))}
+      </Collapse>
+    )}
+    <div className="mb-4">
+      <label className="block text-lg font-bold mb-4">
+        Recurso:
+        <input
+          type="file"
+          onChange={(e) => setContentFile(e.target.files[0])}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline mt-2"
+        />
+      </label>
+    </div>
+  </Modal>
+
+
+
+
+
 
           <Modal
             title="Confirm deletion"
