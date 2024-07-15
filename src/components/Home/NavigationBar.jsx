@@ -102,13 +102,13 @@ function NavigationBar() {
                             onMouseEnter={() => setShowWelcomeModal(true)} // Mantener el modal visible al estar encima
                             onMouseLeave={() => setShowWelcomeModal(false)} // Ocultar al salir del modal
                         >
-                            <p className="text-gray-800 mb-2">¡Bienvenido, {username}!</p>
-                            <p className="text-gray-600 mb-4">Revisa aquí tus cursos:</p>
+                            <p className="text-gray-800 mb-2">Welcome, {username}!</p>
+                            <p className="text-gray-600 mb-4">Check out your courses here:</p>
                             <Link
                                 to="/MyCourses"
                                 className="text-blue-600 font-semibold hover:underline"
                             >
-                                Ver Mis Cursos
+                                See my courses
                             </Link>
                         </div>
                     )}

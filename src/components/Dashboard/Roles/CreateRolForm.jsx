@@ -10,7 +10,7 @@ const CreateRolForm = ({ visible, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setRole({ ...role, [name]: value });
+    setRole({ ...role, [name]: value.toLowerCase() });
     if (error && value.trim() !== "") {
       setError(false);
     }

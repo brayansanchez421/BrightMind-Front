@@ -15,14 +15,14 @@ const SettingsBar = () => {
 
   const handleDeleteAccount = async () => {
     MySwal.fire({
-      title: '¿Estás seguro?',
-      text: 'Esta acción no se puede deshacer',
+      title: 'Are you sure?',
+      text: 'This action cannot be undone',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar cuenta',
-      cancelButtonText: 'Cancelar'
+      confirmButtonText: 'Yes, delete account',
+      cancelButtonText: 'Cancel'      
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -37,7 +37,7 @@ const SettingsBar = () => {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Hubo un problema al intentar eliminar la cuenta. Por favor, inténtalo de nuevo más tarde.',
+            text: 'There was a problem trying to delete the account. Please try again later.',
           });
         }
       }
