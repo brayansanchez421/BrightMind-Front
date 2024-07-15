@@ -35,15 +35,15 @@ const HomePage = () => {
 
     return (
         <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 flex h-full overflow-auto">
-            <div className='flex  h-screen w-screen flex-col mx-auto'>
+            <div className='flex h-screen w-screen flex-col mx-auto'>
                 <NavigationBar/>
                 <QuoteCarousel phrases={phrases} />
                 <div className="text-center ">
-                    <h1 className="text-3xl sm:text-4xl mt-4 font-bold text-white">Explore Our Courses</h1>
+                    <h1 className="text-3xl sm:text-4xl mt-4 font-bold text-white">Explore Our Categories</h1>
                     <p className="mt-4 text-base sm:text-lg text-gray-200 font-semibold">Find the perfect course for you from our wide selection of categories</p>
                 </div>
                 <div className="flex justify-center ">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-10">
+                    <div className="grid grid-cols-3 mx-2 sm:grid-cols-4 sm:mx-3 md:grid-cols-5 md:mx-4 lg:grid-cols-6 lg:mx-5 xl:grid-cols-7 xl:mx-6 gap-4 mt-10 ">
                         {categories.map((category, index) => (
                             <HoverCard 
                                 key={index} 

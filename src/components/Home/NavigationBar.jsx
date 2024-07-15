@@ -61,7 +61,7 @@ function NavigationBar() {
     }, [menuRef, welcomeModalRef]);
 
     return (
-        <nav className="bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg p-2 md:p-2 flex justify-between items-center w-full" >
+        <nav className="bg-gradient-to-r from-purple-700 to-pink-600 shadow-orange shadow-sky-300 p-2 md:p-3 flex justify-between items-center w-full" >
             {/* Left section */}
             <div className="flex items-center">
                 <BiSearch className="text-white " size="24px" />
@@ -98,7 +98,7 @@ function NavigationBar() {
                     {showWelcomeModal && (
                         <div
                             ref={welcomeModalRef} // Referencia al modal de bienvenida
-                            className="absolute top-8 right-0 bg-white border border-gray-200 shadow-md rounded-md p-4 z-50"
+                            className="absolute top-8 right-0 w-56 bg-white shadow-md rounded-sm p-4 z-50"
                             onMouseEnter={() => setShowWelcomeModal(true)} // Mantener el modal visible al estar encima
                             onMouseLeave={() => setShowWelcomeModal(false)} // Ocultar al salir del modal
                         >
@@ -116,27 +116,27 @@ function NavigationBar() {
                 <img
                     src={userImage || BiUserCircle}
                     alt="User"
-                    className="h-10 md:h-10 w-10 md:w-10 cursor-pointer border rounded-full transition-all duration-300 hover:scale-110 mr-1"
+                    className="h-12 md:h-12 w-12 md:w-12 cursor-pointer border rounded-full transition-all duration-300 hover:scale-110 mr-1"
                     onClick={() => setIsMenuVisible(!isMenuVisible)}
                 />
                 {/* Menú desplegable */}
                 {isMenuVisible && (
                     <div
                         ref={menuRef}
-                        className="absolute right-0 top-16 w-48 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-300 ease-in-out z-50"
+                        className="absolute md:right-4 md:top-20 w-56 right-0 top-16 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-300 ease-in-out z-50"
                     >
                         <div className="flex flex-col py-2">
                             <Link
                                 to="/Account"
                                 className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded transition-all duration-300"
                             >
-                                Configurar Perfil
+                                Configure Profile
                             </Link>
                             <div
                                 onClick={handleLogout}
                                 className="px-4 py-3 hover:bg-red-600 cursor-pointer text-white rounded transition-all duration-300"
                             >
-                                Salir
+                                LogOut
                             </div>
                         </div>
                     </div>

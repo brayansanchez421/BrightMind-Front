@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Modal, Form, Input, Select, Button } from "antd";
 import { useRoleContext } from '../../../context/user/role.context';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const { Option } = Select;
 
@@ -18,86 +20,91 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
     try {
       const values = await form.validateFields();
       onUpdate(values);
+      onCancel(); // Close the modal
+      toast.success("User updated successfully", { autoClose: 1000 });
     } catch (error) {
-      console.error("Fallo al actualizar el usuario:", error);
+      console.error("Failed to update user:", error);
     }
   };
 
   return (
-    <Modal
-      className="mt-6"
-      visible={visible}
-      maskStyle={{ backdropFilter: "blur(10px)" }}
-      footer={null}
-      onCancel={onCancel}
-    >
-      <Form
-        className="py-6 bg-blue-100 shadow-orange shadow-sky-300"
-        form={form}
-        layout="vertical"
-        initialValues={user}
+    <>
+      <Modal
+        className="mt-6"
+        visible={visible}
+        maskStyle={{ backdropFilter: "blur(10px)" }}
+        footer={null}
+        onCancel={onCancel}
       >
-        <h1 className="text-xl font-black text-center">UPDATE USER</h1>
-        <Form.Item
-          className="text-base font-semibold mx-10 mt-4"
-          name="username"
-          label="Username"
-          rules={[{ required: true, message: "Por favor ingrese un nombre de usuario" }]}
+        <Form
+          className="py-6 bg-blue-100 shadow-orange shadow-sky-300"
+          form={form}
+          layout="vertical"
+          initialValues={user}
         >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          className="text-base font-semibold mx-10"
-          name="email"
-          label="Email"
-          rules={[{ required: true, message: "Por favor ingrese un correo electrónico" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          className="text-base font-semibold mx-10"
-          name="role"
-          label="Role"
-          rules={[{ required: true, message: "Por favor seleccione un rol" }]}
-        >
-          <Select className="text-center">
-            {rolesData.map((role) => (
-              <Option key={role._id} value={role.nombre}>
-                {role.nombre}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          className="text-base font-semibold mx-10"
-          name="state"
-          label="State"
-          rules={[{ required: true, message: "Por favor seleccione un estado" }]}
-        >
-          <Select className="text-center">
-            <Option value={true}>Active</Option>
-            <Option value={false}>Inactivate</Option>
-          </Select>
-        </Form.Item>
-        <div className="flex justify-center mt-10">
-          <Button
-            className="bg-rose-800 text-white font-medium"
-            key="cancel"
-            onClick={onCancel}
+          <h1 className="text-xl font-black text-center">UPDATE USER</h1>
+          <Form.Item
+            className="text-base font-semibold mx-10 mt-4"
+            name="username"
+            label="Username"
+            rules={[{ required: true, message: "Por favor ingrese un nombre de usuario" }]}
           >
-            Cancel
-          </Button>
-          <Button
-            className="bg-sky-700 font-medium ml-2"
-            key="submit"
-            type="primary"
-            onClick={handleFormSubmit}
+            <Input />
+          </Form.Item>
+          <Form.Item
+            className="text-base font-semibold mx-10"
+            name="email"
+            label="Email"
+            rules={[{ required: true, message: "Por favor ingrese un correo electrónico" }]}
           >
-            Update
-          </Button>
-        </div>
-      </Form>
-    </Modal>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            className="text-base font-semibold mx-10"
+            name="role"
+            label="Role"
+            rules={[{ required: true, message: "Por favor seleccione un rol" }]}
+          >
+            <Select className="text-center">
+              {rolesData.map((role) => (
+                <Option key={role._id} value={role.nombre}>
+                  {role.nombre}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            className="text-base font-semibold mx-10"
+            name="state"
+            label="State"
+            rules={[{ required: true, message: "Por favor seleccione un estado" }]}
+          >
+            <Select className="text-center">
+              <Option value={true}>Active</Option>
+              <Option value={false}>Inactive</Option>
+            </Select>
+          </Form.Item>
+          <div className="flex justify-center mt-10">
+            <Button
+              className="bg-rose-800 text-white font-medium"
+              key="cancel"
+              onClick={onCancel}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-sky-700 font-medium ml-2"
+              key="submit"
+              type="primary"
+              onClick={handleFormSubmit}
+            >
+              Update
+            </Button>
+          </div>
+        </Form>
+      </Modal>
+      <ToastContainer />
+    </>
   );
 };
 

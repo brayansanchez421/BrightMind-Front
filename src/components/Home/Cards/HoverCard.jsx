@@ -3,7 +3,7 @@ import React from 'react';
 const HoverCard = ({ title, description, ruta, onClick }) => {
   return (
     <div 
-      className="relative group cursor-pointer overflow-hidden bg-gradient-to-b from-purple-500 to-emerald-400 w-full rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105 mb-10"
+      className="group cursor-pointer overflow-hidden bg-gradient-to-b from-purple-500 to-emerald-400 w-full rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105 mb-10"
       onClick={onClick}
     >
       <div className="relative">

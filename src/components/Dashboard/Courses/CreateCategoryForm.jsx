@@ -34,13 +34,12 @@ const CreateCategoryForm = ({ visible, onClose }) => {
 
     try {
       await createCategory(category);
-      toast.success("Category created successfully!");
+      toast.success("Category created successfully!", { autoClose: 1000 });
       setTimeout(() => {
-        onClose();
-      }, 3000);
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error(error);
-      setErrorMessage("Failed to create category. Please try again.");
       toast.error("Failed to create category. Please try again.");
     }
   };
@@ -67,7 +66,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
       >
         <button
           type="button"
-          className="absolute top-2 right-2 text-white hover:text-red-500 focus:outline-none"
+          className="absolute top-2 right-2 text-white hover:text-red-500 bg-red-400 focus:outline-none"
           onClick={onClose}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -111,12 +110,12 @@ const CreateCategoryForm = ({ visible, onClose }) => {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring focus:border-teal-300 hover:bg-red-100"
+                className=" p-2 block w-full border rounded-md focus:outline-none focus:ring focus:border-teal-300 hover:bg-red-100"
                 required
               />
             </label>
             {imagePreview && (
-              <div className="mt-2">
+              <div className="mt-2 flex justify-center">
                 <img src={imagePreview} alt="preview" className="rounded-lg" style={{ maxWidth: "100%", maxHeight: "200px" }} />
               </div>
             )}
@@ -133,7 +132,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
             Cancel
           </Button>
           <Button
-            className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             htmlType="submit"
           >
             Create Category

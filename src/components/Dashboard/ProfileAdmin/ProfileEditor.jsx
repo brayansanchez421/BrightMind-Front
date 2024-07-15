@@ -35,7 +35,7 @@ const ProfileEditor = () => {
   
 
   return (
-    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 h-full">
+    <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600  flex">
         <LeftBar  onVisibilityChange={handleLeftBarVisibilityChange} />
         <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? 'ml-56' : ''}`}>
           <Navbar/>

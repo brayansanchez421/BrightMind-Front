@@ -45,7 +45,7 @@ const SettingsBar = () => {
   };
 
   return (
-    <div className=" mt-5 md:mt-4 bg-gradient-to-b from-blue-500 to-purple-400 rounded-lg shadow-md mx-4 px-4 py-4 border">
+    <div className=" mt-8 md:mt-10 bg-gradient-to-b from-blue-500 to-purple-400 rounded-lg shadow-md mx-4 px-4 py-4 border">
       <h2 className="text-center font-black text-white p-3 text-lg md:text-xl">Account Setting</h2>
       <ul className="list-disc pl-2 md:pl-4">
         <li>

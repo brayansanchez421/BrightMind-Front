@@ -76,10 +76,10 @@ const Course = () => {
     return (
         <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
             <NavigationBar />
-            <div className="flex justify-center mt-8">
-                <h1 className="text-4xl font-bold text-white">Cursos de {title}</h1>
+            <div className="flex justify-center lg:mt-10 mt-4 font-black italic">
+                <h1 className="text-4xl font-bold text-black text-center">Cursos de {title}</h1>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:mt-24 max-w-screen-2xl mx-auto ">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 gap-y-0 lg:mt-20 lg:mx-10 mt-10 mx-4">
                 {filteredCourses.map((course, index) => (
                     <HoverCard
                         key={index}
@@ -87,19 +87,20 @@ const Course = () => {
                         description={course.description}
                         ruta={course.image}
                         onClick={() => handleCardClick(course)}
+                        
                     />
                 ))}
             </div>
             {isConfirmModalOpen && selectedCourse && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold mb-4">Confirm Registration</h2>
+                <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center border">
+                    <div className="bg-purple-100 p-6 rounded-lg shadow-lg ">
+                        <h2 className="text-2xl font-bold mb-4 text-center">Confirm Registration</h2>
                         {isRegistered ? (
-                            <p className="mb-4">You are already registered in the course <strong>{selectedCourse.title}</strong>.</p>
+                            <p className="mb-4 text-center">You are already registered in the course <strong>{selectedCourse.title}</strong></p>
                         ) : (
-                            <p className="mb-4">¿Do you want to confirm your course registration <strong>{selectedCourse.title}</strong>?</p>
+                            <p className="mb-4 text-center">¿Do you want to confirm your course registration?<strong>{selectedCourse.title}</strong>?</p>
                         )}
-                        <div className="flex justify-end gap-4">
+                        <div className="flex justify-center gap-4 mt-2">
                             <button
                                 className={`py-2 px-4 rounded transition-colors ${isRegistered ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500 hover:bg-green-400 text-white'}`}
                                 onClick={handleRegister}

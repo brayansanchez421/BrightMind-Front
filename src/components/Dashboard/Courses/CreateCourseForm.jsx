@@ -10,27 +10,27 @@ const { Option } = Select;
 const CreateCourseForm = ({ visible, onClose, onCreate }) => {
   const { categories } = useCategoryContext();
   const { createCourse } = useCoursesContext();
-  const MAX_DESCRIPCION_LENGTH = 150;
+  const MAX_DESCRIPTION_LENGTH = 150;
 
-  const [curso, setCurso] = useState({
-    nombre: "",
-    categoria: "",
-    descripcion: "",
-    imagen: null,
+  const [course, setCourse] = useState({
+    name: "",
+    category: "",
+    description: "",
+    image: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
 
-  const imagenRef = useRef(null);
+  const imageRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCurso({ ...curso, [name]: value });
+    setCourse({ ...course, [name]: value });
   };
 
-  const handleImagenChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      setCurso({ ...curso, imagen: file });
+      setCourse({ ...course, image: file });
       setErrorMessage("");
     } else {
       e.target.value = null;
@@ -40,28 +40,42 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!curso.nombre || !curso.categoria || !curso.descripcion || !curso.imagen) {
+    if (!course.name || !course.category || !course.description || !course.image) {
       setErrorMessage("All fields are required.");
       return;
     }
 
     const courseData = {
-      title: curso.nombre,
-      category: curso.categoria,
-      description: curso.descripcion,
-      image: curso.imagen,
+      title: course.name,
+      category: course.category,
+      description: course.description,
+      image: course.image,
     };
     try {
       await createCourse(courseData);
-      toast.success("Course created successfully!");
+      toast.success("Course created successfully!", { autoClose: 1000 });
       setTimeout(() => {
         onCreate(courseData);
+        resetForm();
         onClose();
         window.location.reload();
-      }, 5000);
+      }, 1000); // Adjust the delay as needed
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create course. Please try again.");
+      toast.error("Failed to create course. Please try again.", { autoClose: 3000 });
+    }
+  };
+
+  const resetForm = () => {
+    setCourse({
+      name: "",
+      category: "",
+      description: "",
+      image: null,
+    });
+    setErrorMessage("");
+    if (imageRef.current) {
+      imageRef.current.value = null;
     }
   };
 
@@ -69,16 +83,18 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     <>
       <ToastContainer />
       <Modal
-        visible={visible}
+        open={visible}
         footer={null}
         closable={false}
         className="lg:absolute top-14 left-1/3"
         maskStyle={{ backdropFilter: "blur(10px)" }}
+        onCancel={onClose}
       >
-        <form onSubmit={handleSubmit} className="bg-gradient-to-r from-green-400 to-blue-500 shadow-lg rounded-lg p-6 relative">
+        <form onSubmit={handleSubmit} className="bg-gradient-to-r from-teal-400 to-blue-500 shadow-lg rounded-lg p-6 relative">
           <button
-            className="absolute top-2 right-2 text-white hover:text-red-600 focus:outline-none"
+            className="absolute top-2 right-2 text-white hover:text-red-600 bg-red-400 focus:outline-none"
             onClick={onClose}
+            type="button"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -90,10 +106,10 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
               <label className="block text-black text-base font-bold mb-2">
                 Name:
                 <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
+                  className="shadow font-normal appearance-none border rounded w-full py-1 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
                   type="text"
-                  name="nombre"
-                  value={curso.nombre}
+                  name="name"
+                  value={course.name}
                   onChange={handleChange}
                   required
                 />
@@ -105,8 +121,8 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                 <Select
                   className="w-full mt-1"
                   style={{ borderRadius: "0.375rem" }}
-                  value={curso.categoria}
-                  onChange={(value) => setCurso({ ...curso, categoria: value })}
+                  value={course.category}
+                  onChange={(value) => setCourse({ ...course, category: value })}
                   required
                 >
                   {categories.map((category) => (
@@ -121,15 +137,15 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
               <label className="block text-black text-base font-bold mb-2">
                 Description:
                 <textarea
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1 resize-none"
-                  name="descripcion"
-                  value={curso.descripcion}
+                  className="shadow appearance-none font-normal border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1 resize-none"
+                  name="description"
+                  value={course.description}
                   onChange={handleChange}
-                  maxLength={MAX_DESCRIPCION_LENGTH}
+                  maxLength={MAX_DESCRIPTION_LENGTH}
                   style={{ minHeight: "100px" }}
                   required
                 />
-                <div className="text-gray-300 text-right mt-1">{curso.descripcion.length}/{MAX_DESCRIPCION_LENGTH}</div>
+                <div className="text-gray-300 text-right mt-1">{course.description.length}/{MAX_DESCRIPTION_LENGTH}</div>
               </label>
             </div>
             <div className="mb-4">
@@ -139,8 +155,8 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
                   type="file"
                   accept="image/*"
-                  ref={imagenRef}
-                  onChange={handleImagenChange}
+                  ref={imageRef}
+                  onChange={handleImageChange}
                   required
                 />
                 {errorMessage && (

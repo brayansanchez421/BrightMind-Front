@@ -89,6 +89,7 @@ function App() {
           <Route path="/Courses" element={<Courses />} />
 
           <Route path="/CoursesHome" element={<CoursesHome />} />
+          
           <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<Dashboard />} />
           <Route path="/Usuarios" element={<Usuarios />} />
