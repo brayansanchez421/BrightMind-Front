@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Animation from "../assets/Video/Animation.mp4";
-import Prueba from "../assets/Video/Prueba.mp4";
-
+import Animation1 from "../assets/Video/Animation1.mp4";
+import Animation2 from "../assets/Video/Animation2.mp4";
+import Animation3 from "../assets/Video/Animation3.mp4";
+import Animation4 from "../assets/Video/Animation4.mp4";
 
 // Lista de videos disponibles
-const videos = [Animation, Prueba];
+const videos = [Animation1,Animation2,Animation3,Animation4];
 
 const VideoPage = ({ userRole }) => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const VideoPage = ({ userRole }) => {
       } else {
         navigate('/home');
       }
-    }, 3000); // Redirigir después de 3 segundos
+    }, 5000); // Redirigir después de 5 segundos
 
     return () => clearTimeout(timer);
   }, [userRole, navigate]);
