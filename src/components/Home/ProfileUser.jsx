@@ -85,36 +85,36 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
             console.error("Couldn't get user ID");
         }
     };
-    
+
     const transformCloudinaryURL = (imageUrl) => {
-        return imageUrl; 
+        return imageUrl;
     };
 
     return (
         <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
             <NavigationBar />
-            <div className="flex justify-center items-start">
+            <div className="flex justify-center items-start py-12">
                 <div>
                     <SettingsBar />
                 </div>
 
-                <div className="mx-36 p-6 md:mt-24 w-5/12">
+                <div className="mx-8 p-6 md:mt-12 w-full md:w-6/12 lg:w-5/12 xl:w-4/12">
                     <ToastContainer />
-                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-violet-500 to-fuchsia-400 shadow-lg shadow-pink-400 rounded px-10 pt-6 pb-8 mb-4 md:w-full ">
-                        <div className="mb-4">
-                            <h1 
-                            className="text-center font-black text-white md:text-3xl">Edit Profile
+                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 text-white transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                        <div className="mb-4 text-center">
+                            <h1 className="font-black text-white md:text-4xl mb-6">Edit Profile</h1>
                             {previewProfileImage && (
-                            <div className="mb-4">
-                                <img src={previewProfileImage} alt="Preview" className="mt-4 w-20 h-20 rounded-full mx-auto mb-4" />
-                            </div>
-                        )}
-                            </h1>
-                            <label className="block text-black text-base font-bold mb-2" htmlFor="name">
+                                <div className="mb-4">
+                                    <img src={previewProfileImage} alt="Preview" className="w-24 h-24 rounded-full mx-auto mb-4 shadow-lg" />
+                                </div>
+                            )}
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-white text-base font-bold mb-2" htmlFor="name">
                                 Name
                             </label>
                             <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
                                 id="name"
                                 type="text"
                                 name="name"
@@ -124,11 +124,11 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-black text-base font-bold mb-2" htmlFor="email">
+                            <label className="block text-white text-base font-bold mb-2" htmlFor="email">
                                 Email
                             </label>
                             <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
                                 id="email"
                                 type="email"
                                 name="email"
@@ -139,20 +139,20 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                             />
                         </div>
                         <div className="mb-4">
-                            <label htmlFor="profileImage" className="block text-lg font-semibold text-black">
+                            <label htmlFor="profileImage" className="block text-lg font-semibold text-white">
                                 Profile Image
                             </label>
                             <input
                                 type="file"
                                 id="profileImage"
                                 accept="image/*"
-                                className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
+                                className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100"
                                 onChange={handleImageChange}
                             />
                         </div>
                         <div className="flex items-center justify-center">
                             <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 type="submit"
                             >
                                 Save
