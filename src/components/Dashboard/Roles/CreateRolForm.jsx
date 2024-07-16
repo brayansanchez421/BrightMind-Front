@@ -3,14 +3,14 @@ import { Modal, message } from "antd";
 import { useRoleContext } from "../../../context/user/role.context";
 
 const CreateRolForm = ({ visible, onClose }) => {
-  const { createRole } = useRoleContext();
+  const { createRole, rolesData } = useRoleContext();
   const [role, setRole] = useState({ nombre: "" });
   const [error, setError] = useState(false);
   const [successMessageVisible, setSuccessMessageVisible] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setRole({ ...role, [name]: value.toLowerCase() });
+    setRole({ ...role, [name]: value.trim() });
     if (error && value.trim() !== "") {
       setError(false);
     }
@@ -23,6 +23,16 @@ const CreateRolForm = ({ visible, onClose }) => {
       return;
     }
     try {
+      // Verificar si el nombre del rol ya existe
+      if (rolesData.some((existingRole) => existingRole.nombre === role.nombre)) {
+        message.error({
+          content: "Role name already exists",
+          duration: 3,
+        });
+        return;
+      }
+
+      // Crear el nuevo rol
       await createRole(role);
       setSuccessMessageVisible(true);
       setTimeout(() => {
@@ -51,7 +61,6 @@ const CreateRolForm = ({ visible, onClose }) => {
       <form
         onSubmit={handleSubmit}
         className="w-full max p-6 bg-gradient-to-r from-blue-500 to-green-500 rounded-lg shadow-xl relative"
-        style={{ color: "black" }}
       >
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-white">Create Role</h1>
@@ -70,7 +79,6 @@ const CreateRolForm = ({ visible, onClose }) => {
             className={`block text-sm font-medium ${
               error ? "text-red-500" : "text-white"
             } mb-2`}
-            style={{ color: "black" }}
           >
             Name:
           </label>
@@ -105,7 +113,7 @@ const CreateRolForm = ({ visible, onClose }) => {
           </button>
         </div>
       </form>
-      
+
       {successMessageVisible && (
         <div className="absolute top-0 right-0 mt-4 mr-4">
           {message.success({

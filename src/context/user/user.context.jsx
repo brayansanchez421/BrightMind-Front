@@ -25,6 +25,10 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    const checkIfUserExists = (username, email) => {
+        return usersData.some(user => user.username === username || user.email === email);
+    };
+
     const activateAccount = async (_id) => {
         try {
             await ActivateAcc(_id);
@@ -138,6 +142,7 @@ export const UserProvider = ({ children }) => {
             value={{
                 usersData,
                 getUsers,
+                checkIfUserExists, // Añadir la función al contexto
                 activateAccount,
                 getUserById,
                 updateUser,

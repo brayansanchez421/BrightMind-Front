@@ -1,17 +1,27 @@
 import React, { useState } from "react";
 import { Modal, Form, Input, Select, Button, message } from "antd";
 import { useRoleContext } from '../../../context/user/role.context';
+import { useUserContext } from '../../../context/user/user.context'; // Importa el contexto de usuario
 
 const { Option } = Select;
 
 const CreateUserModal = ({ visible, onCancel, onCreate }) => {
   const { rolesData } = useRoleContext();
+  const { checkIfUserExists } = useUserContext(); // Usa la función del contexto de usuario
   const [form] = Form.useForm();
   const [successMessageVisible, setSuccessMessageVisible] = useState(false);
 
   const handleFormSubmit = async () => {
     try {
       const values = await form.validateFields();
+      const { username, email } = values;
+
+      // Verifica si el usuario ya existe
+      if (checkIfUserExists(username, email)) {
+        message.error("User with this username or email already exists");
+        return;
+      }
+
       onCreate(values);
       setSuccessMessageVisible(true); // Mostrar el mensaje de éxito
       form.resetFields();
