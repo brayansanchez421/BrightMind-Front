@@ -91,18 +91,17 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
     };
 
     return (
-        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen ">
             <NavigationBar />
-            <div className="flex justify-center items-start py-12">
+            <div className="grid grid-cols-1">
                 <div>
                     <SettingsBar />
                 </div>
-
-                <div className="mx-8 p-6 md:mt-12 w-full md:w-6/12 lg:w-5/12 xl:w-4/12">
                     <ToastContainer />
-                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 text-white transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    <div className='flex justify-center mt-2 w-full'>
+                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg rounded-lg px-6 py-2 text-white lg:w-12/12 mx-2">
                         <div className="mb-4 text-center">
-                            <h1 className="font-black text-white md:text-4xl mb-6">Edit Profile</h1>
+                            <h1 className="font-black text-white md:text-4xl text-2xl mb-6">Edit Profile</h1>
                             {previewProfileImage && (
                                 <div className="mb-4">
                                     <img src={previewProfileImage} alt="Preview" className="w-24 h-24 rounded-full mx-auto mb-4 shadow-lg" />
@@ -159,9 +158,9 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                             </button>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
-        </div>
     );
 };
 

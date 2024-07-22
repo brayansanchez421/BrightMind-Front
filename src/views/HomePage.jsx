@@ -11,6 +11,9 @@ const HomePage = () => {
     const { categories, getCategories } = useCategoryContext();
     const navigate = useNavigate();
     const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const categoriesPerPage = 15;
 
     useEffect(() => {
         if (!categoriesLoaded) {
@@ -33,29 +36,70 @@ const HomePage = () => {
         navigate(`/CoursesHome`, { state: { title: category.name } });
     };
 
+    const handleNextPage = () => {
+        if ((currentPage * categoriesPerPage) < categories.length) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
+    };
+
+    const totalPages = Math.ceil(categories.length / categoriesPerPage);
+    const paginatedCategories = categories.slice((currentPage - 1) * categoriesPerPage, currentPage * categoriesPerPage);
+
     return (
-        <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 flex h-full overflow-auto">
-            <div className='flex h-screen w-screen flex-col mx-auto'>
+        <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 min-h-screen">
+            <div className='flex flex-col'>
                 <NavigationBar/>
                 <QuoteCarousel phrases={phrases} />
-                <div className="text-center ">
-                    <h1 className="text-3xl sm:text-4xl mt-4 font-bold text-white">Explore Our Categories</h1>
-                    <p className="mt-4 text-base sm:text-lg text-gray-200 font-semibold">Find the perfect course for you from our wide selection of categories</p>
+                <div className="text-center justify-center items-center">
+                    <h1 className="flex justify-center p-2 text-4xl mt-8 font-black text-white sm:text-3xl md:text-5xl">Explore Our Categories</h1>
+                    <p className="mt-4 text-base sm:text-lg text-gray-200 font-semibold flex justify-center">Find the perfect course for you from our wide selection of categories</p>
                 </div>
-                <div className="flex justify-center ">
-                    <div className="grid grid-cols-3 mx-2 sm:grid-cols-4 sm:mx-3 md:grid-cols-5 md:mx-4 lg:grid-cols-6 lg:mx-5 xl:grid-cols-7 xl:mx-6 gap-4 mt-10 ">
-                        {categories.map((category, index) => (
+                <div className="flex justify-center">
+                    <div className="grid grid-cols-1 w-full mx-2 gap-1 mt-10 sm:grid-cols-2 sm:mx-3 sm:gap-3 sm:mt-16 md:grid-cols-3 md:mx-4 lg:grid-cols-4 lg:mx-5 xl:grid-cols-5 xl:mx-6">
+                        {paginatedCategories.map((category, index) => (
                             <HoverCard 
                                 key={index} 
                                 title={category.name} 
                                 description={category.description} 
                                 ruta={category.image} 
                                 onClick={() => handleCardClick(category)}
-                                className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-lg cursor-pointer"
                             />
                         ))}
                     </div>
                 </div>
+                {totalPages > 1 && (
+                    <div className="flex justify-center mb-8 mt-10">
+                        <button
+                            onClick={handlePreviousPage}
+                            disabled={currentPage === 1}
+                            className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+                        >
+                            Previous
+                        </button>
+                        {Array.from({ length: totalPages }, (_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentPage(index + 1)}
+                                className={`px-3 py-1 mx-1 ${currentPage === index + 1 ? "bg-black border text-white" : "bg-gray-200 text-gray-800 border"}`}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                        <button
+                            onClick={handleNextPage}
+                            disabled={currentPage === totalPages}
+                            className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+                        >
+                            Next
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -29,19 +29,17 @@ function Carousel() {
 
     return (
         <div
-            className="flex w-1/2 justify-center items-center rounded-r-3xl relative"
+            className="w-full h-full rounded-r-3xl border hidden sm:block"
             style={{ backgroundImage: gradient }}
         >
-            <div className="text-center p-12">
-                {/* Imagen en la parte izquierda superior */}
-                <div className="absolute top-0 left-1/3 p-4 ">
-                    <img className="h-80" src={imagen} alt="Logo" />
-                </div>
-                {/* Imagen sobre las frases */}
-               
-                <p className="font-bold text-white text-2xl">
-                    "{phrases[currentPhraseIndex].text}" - {phrases[currentPhraseIndex].author}
-                </p>
+            <div className="flex justify-center">
+                <img className="h-80 sm:h-56" src={imagen} alt="Logo" />
+            </div>
+
+            <div>
+                <p className="font-bold text-white text-3xl italic text-center sm:mt-20 mx-6">
+                    "{phrases[currentPhraseIndex].text}" </p> 
+                <p className='font-extrabold text-black text-right text-2xl sm:mt-20 mr-10'>{phrases[currentPhraseIndex].author}</p>
             </div>
         </div>
     );

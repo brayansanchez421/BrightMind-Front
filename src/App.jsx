@@ -31,7 +31,7 @@ import ChangePassword from "./components/Dashboard/ProfileAdmin/Changepassword";
 import ProfileEditor from "./components/Dashboard/ProfileAdmin/ProfileEditor";
 import Courses from "./components/Dashboard/Courses/Courses";
 import Roles from "./components/Dashboard/Roles/Roltable";
-
+import Categories from "./components/Dashboard/Categories/Categories";
 
 //Vista usuarios                
 import HomePage from "./views/HomePage";
@@ -97,6 +97,7 @@ function App() {
           <Route path="/Account" element={<ProfileUser/>} />
           <Route path="/roles" element={<Roles/>} />
           <Route path="/course/:courseId" element={<CourseView />} />
+          <Route path="/Categories" element={<Categories/>}/>
 
           </Route>
           </Routes>

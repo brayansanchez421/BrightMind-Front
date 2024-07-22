@@ -91,14 +91,16 @@ const LeftBar = ({ onVisibilityChange }) => {
       } md:w-72 w-56 sm:w-56 lg:w-72 xl:w-72`}
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
+      
     >
-      <div className="mt-10 mb-10">
+      <div className="mt-5 mb-15">
         <img src={logo} alt="Logo" className="h-40 md:h-60 lg:h-80" />
       </div>
       <div className="flex flex-col items-center w-full">
         <Link to="/admin" className="py-2 px-4 md:py-4 md:px-6 text-left text-lg font-semibold hover:bg-purple-500 w-full transition duration-300">Start</Link>
         <Link to="/usuarios" className="py-2 px-4 md:py-4 md:px-6 text-left text-lg font-semibold hover:bg-purple-600 w-full transition duration-300">Users</Link>
         <Link to="/Courses" className="py-2 px-4 md:py-4 md:px-6 text-left text-lg font-semibold hover:bg-blue-700 w-full transition duration-300">Courses</Link>
+        <Link to="/Categories" className="py-2 px-4 md:py-4 md:px-6 text-left text-lg font-semibold hover:bg-blue-900 w-full transition duration-300">Categories</Link>
         <Link to="/Roles" className="py-2 px-4 md:py-4 md:px-6 text-left text-lg font-semibold hover:bg-blue-800 w-full transition duration-300">Roles</Link>
         <Link to="/ProfileEditor" className="py-2 px-4 md:py-4 md:px-6 text-left text-lg font-semibold hover:bg-blue-900 w-full transition duration-300">ProfileEditor</Link>
       </div>

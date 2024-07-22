@@ -23,7 +23,6 @@ const CreateRolForm = ({ visible, onClose }) => {
       return;
     }
     try {
-      // Verificar si el nombre del rol ya existe
       if (rolesData.some((existingRole) => existingRole.nombre === role.nombre)) {
         message.error({
           content: "Role name already exists",

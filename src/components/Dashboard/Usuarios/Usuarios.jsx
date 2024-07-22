@@ -154,12 +154,12 @@ const DataTable = () => {
           }`}
         >
           <Navbar className="" />
-          <div className="flex flex-col mt-8">
+          <div className="flex flex-col mt-10">
             <div>
               <h2 className="text-2xl font-black  text-white text-center">
                 Users
               </h2>
-              <div className="flex flex-col items-center justify-center mt-10">
+              <div className="flex flex-col items-center justify-center mt-4">
                 <Button
                   type="primary"
                   style={{ backgroundColor: "green" }}

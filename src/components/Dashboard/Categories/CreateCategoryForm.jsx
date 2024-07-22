@@ -34,10 +34,10 @@ const CreateCategoryForm = ({ visible, onClose }) => {
 
     try {
       await createCategory(category);
-      toast.success("Category created successfully!", { autoClose: 1000 });
+      toast.success("Category created successfully!", { autoClose: 3000 });
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 3000);
     } catch (error) {
       console.error(error);
       toast.error("Failed to create category. Please try again.");
@@ -134,6 +134,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
           <Button
             className="bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             htmlType="submit"
+            onClick={toast}
           >
             Create Category
           </Button>

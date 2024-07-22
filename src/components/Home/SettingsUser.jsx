@@ -41,23 +41,22 @@ const SettingsBar = () => {
   };
 
   return (
-    <div className="w-80 mt-10 mx-auto bg-gradient-to-r from-violet-500 via-pink-500 to-red-500 rounded-lg shadow-lg text-white transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105">
-      <h2 className="text-center font-black p-4 text-lg md:text-2xl">Account Settings</h2>
-      <ul className="list-none p-4">
-        <li className="mb-4">
-          <LanguagePreferences />
-        </li>
+    <div className='flex justify-center'>
+    <div className="w-full mx-2 sm:w-2/6  mt-4 py-2 bg-gradient-to-r from-violet-500 via-pink-500 to-red-500 rounded-lg shadow-lg text-white">
+      <h2 className="text-center font-black text-lg md:text-2xl">Account Settings</h2>
+      <ul className="">
         <li className="text-base font-bold mb-4">
-          <Link to="/ChangePasswordUser" className="block py-2 px-4 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition duration-300">
+          <Link to="/ChangePasswordUser" className="block py-1 px-4 rounded-lg hover:bg-cyan-700">
             Change Password
           </Link>
         </li>
         <li className="text-base font-bold">
-          <button onClick={handleDeleteAccount} className="block w-full py-2 px-4 rounded-lg bg-red-600 hover:bg-red-700 transition duration-300">
+          <button onClick={handleDeleteAccount} className="w-full text-left py-1 px-4 rounded-lg hover:bg-red-700 ">
             Delete Account
           </button>
         </li>
       </ul>
+    </div>
     </div>
   );
 };

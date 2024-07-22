@@ -73,14 +73,15 @@ function Changepassword() {
     };
 
     return (
-        <div className="flex max-h-screen bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600">
-            <div className="flex h-screen overflow-hidden flex-1">
+        <div className="flex min-h-screen bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600">
+        
                 <LeftBar onVisibilityChange={handleLeftBarVisibilityChange} />
                 <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? 'ml-44' : ''}`}>
                     <Navbar />
                     <ToastContainer />
-                    <div className="flex w-full mx-auto justify-center items-center mt-6 p-4 sm:p-6 lg:p-8">
-                        <div className="p-4 sm:p-6 lg:p-6 bg-white rounded-3xl shadow-2xl w-full  max-w-lg bg-gradient-to-bl from-green-400 to-blue-500"> 
+                    <div className="flex justify-center items-center mx-2 mt-20 sm:mt-10 mb-5">
+                        <div className="bg-gradient-to-tl from-green-400 to-blue-500
+                        p-4 rounded-3xl shadow-2xl w-full sm:w-5/6 md:w-7/12 lg:w-5/12"> 
                             <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black text-center mb-2 text-white">Change Password</h2>
                             <form onSubmit={formik.handleSubmit} className="py-4 sm:py-6 lg:py-10 flex flex-col space-y-4 sm:space-y-6 lg:space-y-8">
                                 <div>
@@ -122,9 +123,9 @@ function Changepassword() {
                                     {formik.touched.confirmPassword && formik.errors.confirmPassword ? <div>{formik.errors.confirmPassword}</div> : null}
                                 </div>
                                 {error && <div className="text-red-500">{error}</div>}
-                                <div className="flex justify-between items-center">
+                                <div className="flex justify-center items-center space-x-4">
                                     <button
-                                        className={`w-32 sm:w-48 text-center block h-8 sm:h-10 mx-auto py-1 sm:py-2 font-medium text-sm text-white rounded-full ${passwordsMatch ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'} disabled:opacity-50`}
+                                        className={`w-48 font-bold py-2 text-lg text-white rounded-full ${passwordsMatch ? 'bg-green-700 hover:bg-green-600 shadow-green-400 shadow-orange' : 'bg-red-500 hover:bg-red-600 shadow-orange shadow-red-400'} disabled:opacity-80`}
                                         type="submit"
                                         disabled={!formik.isValid || !passwordsMatch}
                                     >
@@ -132,8 +133,7 @@ function Changepassword() {
                                     </button>
                                     <Link
                                         to="/ProfileEditor"
-                                        className="text-white bg-gradient-to-r from-green-600 to-green-500 shadow-orange shadow-sky-400 rounded-full font-semibold inline-flex space-x-1 items-center h-8 sm:h-10 mx-2 sm:mx-4 px-4 sm:px-6 py-1 sm:py-2"
-                                        style={{ textDecoration: 'none' }}
+                                        className="text-white text-lg bg-slate-700 hover:bg-slate-600 shadow-orange shadow-sky-600 rounded-full font-bold w-48 text-center py-2 "
                                     >
                                         Return Settings
                                     </Link>
@@ -143,7 +143,6 @@ function Changepassword() {
                     </div>
                 </div>
             </div>
-        </div>
     );
 }
 
