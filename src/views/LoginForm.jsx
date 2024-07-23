@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Link } from 'react-router-dom';
-import Carousel from './../components/Login_components/Carousel';
-import { useAuth } from '../context/auth.context';
-import VideoPage from './VideoPage';
+import React, { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
+import Carousel from "./../components/Login_components/Carousel";
+import { useAuth } from "../context/auth.context";
+import VideoPage from "./VideoPage";
 
 const LoginForm = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [userRole, setUserRole] = useState('');
+  const [userRole, setUserRole] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { login } = useAuth();
 
   const validationSchema = yup.object().shape({
-    email: yup.string().email('Invalid email').required('Email is required'),
-    password: yup.string().required('Password is required'),
+    email: yup.string().email("Invalid email").required("Email is required"),
+    password: yup.string().required("Password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log('Valores enviados al hacer inicio de sesión:', values);
+      console.log("Valores enviados al hacer inicio de sesión:", values);
       try {
         setLoading(true);
         const response = await login(values);
@@ -35,14 +35,14 @@ const LoginForm = () => {
         const user = response?.user;
         const message = response?.message;
 
-        console.log('Inicio de sesión exitoso:', success);
+        console.log("Inicio de sesión exitoso:", success);
 
         if (success) {
           const userRole = user?.data?.role || null;
           const userToken = user?.data?.token || null;
           console.log(userRole);
 
-          toast.success(message || 'Login successful');
+          toast.success(message || "Login successful");
           document.cookie = `token=${userToken}; path=/`;
           setUserRole(userRole);
           setIsAuthenticated(true);
@@ -51,8 +51,9 @@ const LoginForm = () => {
           toast.error(message);
         }
       } catch (error) {
-        console.log('Error capturado en el catch:', error);
-        const errorMessage = error?.response?.data?.message || 'An error occurred';
+        console.log("Error capturado en el catch:", error);
+        const errorMessage =
+          error?.response?.data?.message || "An error occurred";
         setError(errorMessage);
         toast.error(errorMessage);
       } finally {
@@ -75,22 +76,24 @@ const LoginForm = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 ">
-      <div className="hidden sm:block sm:w-full">
-        <Carousel />
-      </div>
-      <ToastContainer />
-      <div className="flex w-full h-full justify-center items-center border">
-        <form onSubmit={formik.handleSubmit} className="bg-white rounded-3xl shadow-2xl w-full py-10 mx-10 sm:h-full mt-10">
+    <div className="flex min-h-screen bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400">
+      <Carousel />
+      <div className="flex flex-col justify-center items-center w-full sm:w-1/2 mx-4">
+        <ToastContainer />
+        <form
+          onSubmit={formik.handleSubmit}
+          className="bg-white rounded-3xl shadow-2xl w-full p-10 border border-black"
+        >
           <div className="text-2xl w-36 mx-auto text-center font-black bg-gradient-to-r from-purple-500 to-emerald-400 py-3 rounded-xl text-white">
             Sign In
           </div>
           <div className="mb-5 mt-10 text-lg text-center font-semibold">
             Haven't you registered yet?
-            <Link to="/register">
-              <button className="text-xl text-pink-500 hover:text-pink-600 font-semibold hover:bg-red-100">
-                -Register
-              </button>
+            <Link
+              to="/register"
+              className="text-xl text-pink-500 hover:text-pink-600 font-semibold hover:bg-red-100"
+            >
+              - Register
             </Link>
           </div>
           <div className="flex flex-col space-y-10 mx-10">
@@ -133,14 +136,14 @@ const LoginForm = () => {
               className="w-full py-4 px-8 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
               disabled={!formik.isValid || loading}
             >
-              LOGIN
+              {loading ? "Loading..." : "LOGIN"}
             </button>
           </div>
           <div className="mt-4 text-center">
             <Link
               to="/reset"
               className="text-gray-600 hover:text-blue-600 font-bold text-lg"
-              style={{ textDecoration: 'none' }}
+              style={{ textDecoration: "none" }}
             >
               ¿Have you forgotten your password?
             </Link>

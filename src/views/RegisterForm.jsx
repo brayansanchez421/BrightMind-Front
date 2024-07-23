@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Carousel from "../components/Login_components/Carousel";
-import { Link, useNavigate  } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import { registerRequest } from "../api/auth";
 
 function RegisterForm() {
@@ -13,7 +13,6 @@ function RegisterForm() {
 
   const navigate = useNavigate();
 
-
   const validationSchema = yup.object().shape({
     username: yup.string().required("Username is required"),
     email: yup.string().email("Invalid email").required("Email is required"),
@@ -21,8 +20,13 @@ function RegisterForm() {
       .string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters")
-      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, "Password must contain at least one uppercase, one lowercase, one number, and one special character"),
-    confirmPassword: yup.string().oneOf([yup.ref("password"), null], "Passwords must match"),
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+        "Password must contain at least one uppercase, one lowercase, one number, and one special character"
+      ),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "Passwords must match"),
   });
 
   const formik = useFormik({
@@ -36,17 +40,24 @@ function RegisterForm() {
     onSubmit: async (values) => {
       try {
         const { confirmPassword, ...userData } = values;
-        console.log("Values:", userData); 
-  
+        console.log("Values:", userData);
+
         const response = await registerRequest(values);
         console.log("Response:", response.data); // Check response structure
-  
-        if (response && response.data && response.data.error && response.data.error === "Email already exists") {
+
+        if (
+          response &&
+          response.data &&
+          response.data.error &&
+          response.data.error === "Email already exists"
+        ) {
           toast.error("Email already exists");
         } else {
           setSuccess(true);
           toast.success("User created successfully");
-          setTimeout(() => { navigate('/'); }, 5000);
+          setTimeout(() => {
+            navigate("/");
+          }, 5000);
         }
       } catch (error) {
         console.error(error);
@@ -54,26 +65,29 @@ function RegisterForm() {
       }
     },
   });
-  
 
   return (
     <div className="flex min-h-screen bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400">
-      <Carousel />
+      <Carousel className="" />
       <ToastContainer />
-      <div className="flex w-1/2 justify-center items-center">
-        <div className="p-6 bg-white rounded-3xl shadow-2xl w-4/5">
-        <div className="text-2xl w-36 mx-auto text-center font-black bg-gradient-to-r from-purple-500 to-emerald-400 py-3 rounded-xl text-white">Register</div>
-          <div className="mb-5 mt-10 text-lg text-center font-semibold">¿Already registered? 
+      <div className="flex flex-col justify-center items-center w-full sm:w-1/2 mx-4 overflow-auto">
+        <div className="bg-white rounded-3xl shadow-2xl w-full px-2 py-2 border border-black ">
+          <div className="text-2xl w-36 mx-auto text-center font-black bg-gradient-to-r from-purple-500 to-emerald-400 py-3 rounded-xl text-white">
+            Register
+          </div>
+          <div className="mb-5 mt-10 text-lg text-center font-semibold">
+            ¿Already registered?
             <Link to="/">
               <button className="text-xl text-pink-500 hover:text-pink-600 font-semibold hover:bg-red-100">
                 -Login
               </button>
             </Link>
           </div>
-          
           <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-6">
             <div>
-              <label className="text-lg font-bold text-gray-600 block mb-2">Username</label>
+              <label className="text-lg font-bold text-gray-600 block mb-2">
+                Username
+              </label>
               <input
                 type="text"
                 name="username"
@@ -83,10 +97,14 @@ function RegisterForm() {
                 className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
                 placeholder="Enter username"
               />
-              {formik.touched.username && formik.errors.username ? <div>{formik.errors.username}</div> : null}
+              {formik.touched.username && formik.errors.username ? (
+                <div>{formik.errors.username}</div>
+              ) : null}
             </div>
             <div>
-              <label className="text-lg font-bold text-gray-600 block mb-2">Email</label>
+              <label className="text-lg font-bold text-gray-600 block mb-2">
+                Email
+              </label>
               <input
                 type="email"
                 name="email"
@@ -96,10 +114,14 @@ function RegisterForm() {
                 className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
                 placeholder="Enter email"
               />
-              {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
+              {formik.touched.email && formik.errors.email ? (
+                <div>{formik.errors.email}</div>
+              ) : null}
             </div>
             <div>
-              <label className="text-lg font-bold text-gray-600 block mb-2">Password</label>
+              <label className="text-lg font-bold text-gray-600 block mb-2">
+                Password
+              </label>
               <input
                 type="password"
                 name="password"
@@ -109,10 +131,14 @@ function RegisterForm() {
                 className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
                 placeholder="Enter password"
               />
-              {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
+              {formik.touched.password && formik.errors.password ? (
+                <div>{formik.errors.password}</div>
+              ) : null}
             </div>
             <div>
-              <label className="text-lg font-bold text-gray-600 block mb-2">Confirm Password</label>
+              <label className="text-lg font-bold text-gray-600 block mb-2">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 name="confirmPassword"
