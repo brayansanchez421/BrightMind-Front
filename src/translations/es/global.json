@@ -1,0 +1,178 @@
+{
+    "login": {
+        "sign_in": "Iniciar sesión",
+        "not_registered": "¿No te has registrado todavía?",
+        "register": "- Registrarse",
+        "email": "Correo electrónico",
+        "enter_email": "Ingresa correo electrónico",
+        "invalid_email": "Correo electrónico no válido",
+        "email_required": "El correo electrónico es obligatorio",
+        "password": "Contraseña",
+        "enter_password": "Ingresa contraseña",
+        "password_required": "La contraseña es obligatoria",
+        "loading": "Cargando...",
+        "login": "INICIAR SESIÓN",
+        "forgot_password": "¿Has olvidado tu contraseña?",
+        "login_successful": "Inicio de sesión exitoso",
+        "error_occurred": "Ocurrió un error"
+    },
+    "carousel": {
+        "phrases": {
+            "mandela": {
+                "text": "La educación es el arma más poderosa que puedes usar para cambiar el mundo."
+            },
+            "dewey": {
+                "text": "La educación no es preparación para la vida; la educación es la vida misma."
+            },
+            "malcolm": {
+                "text": "La educación es el pasaporte al futuro, porque el mañana pertenece a quienes se preparan para él hoy."
+            },
+            "bloom": {
+                "text": "La educación es el movimiento de la oscuridad a la luz."
+            },
+            "ebbinghaus": {
+                "text": "La educación es el acto de aprender cosas que no se conocían previamente."
+            }
+        }
+    },
+    "register": {
+        "register": "Registrarse",
+        "already_registered": "¿Ya estás registrado?",
+        "login": "Iniciar sesión",
+        "username": "Nombre de usuario",
+        "enter_username": "Ingresa nombre de usuario",
+        "username_required": "Nombre de usuario es requerido",
+        "email": "Correo electrónico",
+        "enter_email": "Ingresa correo electrónico",
+        "invalid_email": "Correo electrónico inválido",
+        "email_required": "Correo electrónico es requerido",
+        "password": "Contraseña",
+        "enter_password": "Ingresa contraseña",
+        "password_required": "Contraseña es requerida",
+        "password_min": "La contraseña debe tener al menos 8 caracteres",
+        "password_matches": "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial",
+        "confirm_password": "Confirmar contraseña",
+        "repeat_password": "Repite la contraseña",
+        "passwords_match": "Las contraseñas deben coincidir",
+        "user_created": "Usuario creado exitosamente",
+        "email_exists": "El correo electrónico ya existe"
+    },
+    "reset_password": {
+        "invalid_email": "Correo electrónico no válido",
+        "email_required": "El correo electrónico es obligatorio",
+        "email_sent_success": "Correo enviado exitosamente",
+        "email_not_registered": "Este correo electrónico no está registrado",
+        "forgot_password": "¿Olvidaste tu contraseña?",
+        "enter_email": "Ingresa tu correo electrónico y te enviaremos un código para recuperarla",
+        "email": "Correo electrónico",
+        "enter_registered_email": "Ingresa el correo electrónico registrado",
+        "send_recovery_code": "Enviar código de recuperación",
+        "not_registered_yet": "¿No te has registrado todavía?",
+        "register_now": "Regístrate ahora"
+    },
+    "reset_password_verify": {
+        "sent_code": "Te enviamos un código",
+        "enter_code": "Ingresa el código que has recibido por correo 📧",
+        "valid_code": "Código válido",
+        "invalid_code": "Código de recuperación inválido o expirado.",
+        "confirm_code": "Confirmar Código",
+        "not_received": "¿No has recibido el código?",
+        "request_new": "solicita uno nuevo"
+    },
+    "new_password": {
+        "change_password": "Cambiar Contraseña",
+        "new_password": "Nueva contraseña",
+        "confirm_password": "Confirmar contraseña",
+        "required": "La contraseña es obligatoria",
+        "password_format": "La contraseña debe tener al menos 8 caracteres, contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial",
+        "passwords_match": "Las contraseñas deben coincidir",
+        "success": "Contraseña cambiada con éxito",
+        "error": "Hubo un error al cambiar la contraseña",
+        "return_to_login": "Volver a la pantalla de inicio de sesión"
+    },
+    "notFound": {
+        "title": "Ooops! Página no encontrada",
+        "description": "La página que estás buscando no existe. ¿Quieres volver a la página de inicio?",
+        "returnHome": "Volver a la página de inicio"
+    },
+    "home": {
+        "explore_categories": "Explora Nuestras Categorías",
+        "find_course": "Encuentra el curso perfecto para ti entre nuestra amplia selección de categorías",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "quotes": {
+            "da_vinci": "El aprendizaje nunca agota la mente.",
+            "mandela": "La educación es el arma más poderosa que puedes usar para cambiar el mundo.",
+            "sassoon": "El único lugar donde el éxito viene antes que el trabajo es en el diccionario.",
+            "einstein_idea": "La mente que se abre a una nueva idea nunca vuelve a su tamaño original.",
+            "davis": "El camino al éxito y el camino al fracaso son casi exactamente iguales.",
+            "einstein_knowledge": "La única fuente de conocimiento es la experiencia."
+        }
+    },
+    "settingsBar": {
+        "account_settings": "Configuración de la Cuenta",
+        "change_password": "Cambiar Contraseña",
+        "delete_account": "Eliminar Cuenta",
+        "are_you_sure": "¿Estás seguro?",
+        "cannot_undo": "Esta acción no se puede deshacer",
+        "yes_delete_account": "Sí, eliminar cuenta",
+        "cancel": "Cancelar",
+        "problem_deleting": "Hubo un problema al intentar eliminar la cuenta. Por favor, inténtelo de nuevo más tarde.",
+        "deleted_account": "La cuenta ha sido eliminada con éxito."
+    },
+    "userProfileSettings": {
+        "edit_profile": "Editar Perfil",
+        "name": "Nombre",
+        "email": "Correo Electrónico",
+        "profile_image": "Imagen de Perfil",
+        "save": "Guardar",
+        "changes_saved_successfully": "¡Cambios guardados con éxito!",
+        "failed_to_save_changes": "Error al guardar los cambios. Por favor, inténtelo de nuevo.",
+        "are_you_sure": "¿Estás seguro?",
+        "cannot_undo": "Esta acción no se puede deshacer",
+        "yes_delete_account": "Sí, eliminar cuenta",
+        "cancel": "Cancelar"
+    },
+    "navigationBar": {
+        "search_placeholder": "Buscar...",
+        "my_courses": "Mis Cursos",
+        "bright": "Bright",
+        "mind": "Mind",
+        "welcome_message": "¡Bienvenido, {{username}}!",
+        "check_courses": "Mira tus cursos aquí:",
+        "see_my_courses": "Ver mis cursos",
+        "configure_profile": "Configurar Perfil",
+        "logout": "Cerrar Sesión"
+    },
+    "newPasswordUser": {
+        "change_password": "Cambiar Contraseña",
+        "email": "Correo Electrónico",
+        "new_password": "Nueva Contraseña",
+        "confirm_password": "Confirmar Contraseña",
+        "change_password_button": "Cambiar Contraseña",
+        "return_to_settings": "Volver a Configuración",
+        "password_required": "La contraseña es obligatoria",
+        "password_invalid": "La contraseña debe tener al menos 8 caracteres, contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial",
+        "passwords_must_match": "Las contraseñas deben coincidir",
+        "password_changed_success": "Contraseña cambiada exitosamente",
+        "password_change_error": "Hubo un error al cambiar la contraseña",
+        "fetch_email_error": "Error al obtener el correo del usuario"
+    },
+    "coursesComponent": {
+        "your_courses": "Tus cursos",
+        "previous": "Anterior",
+        "next": "Siguiente"
+    },
+    "courseComponent": {
+        "courses_of": "Cursos de",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "confirm_registration": "Confirmar registro",
+        "already_registered": "Ya estás registrado en el curso",
+        "confirm_message": "¿Quieres confirmar tu registro en el curso?",
+        "register": "Registrar",
+        "close": "Cerrar",
+        "successful_registration": "Registro exitoso",
+        "success_message": "¡Te has registrado exitosamente en el curso!"
+    }
+}

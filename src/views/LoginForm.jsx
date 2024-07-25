@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Carousel from "./../components/Login_components/Carousel";
 import { useAuth } from "../context/auth.context";
 import VideoPage from "./VideoPage";
+import { useTranslation } from 'react-i18next';
 
 const LoginForm = () => {
   const [error, setError] = useState(null);
@@ -14,10 +15,11 @@ const LoginForm = () => {
   const [userRole, setUserRole] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { login } = useAuth();
+  const { t } = useTranslation("global");
 
   const validationSchema = yup.object().shape({
-    email: yup.string().email("Invalid email").required("Email is required"),
-    password: yup.string().required("Password is required"),
+    email: yup.string().email(t("login.invalid_email")).required(t("login.email_required")),
+    password: yup.string().required(t("login.password_required")),
   });
 
   const formik = useFormik({
@@ -42,7 +44,7 @@ const LoginForm = () => {
           const userToken = user?.data?.token || null;
           console.log(userRole);
 
-          toast.success(message || "Login successful");
+          toast.success(message || t("login.login_successful"));
           document.cookie = `token=${userToken}; path=/`;
           setUserRole(userRole);
           setIsAuthenticated(true);
@@ -53,7 +55,7 @@ const LoginForm = () => {
       } catch (error) {
         console.log("Error capturado en el catch:", error);
         const errorMessage =
-          error?.response?.data?.message || "An error occurred";
+          error?.response?.data?.message || t("login.error_occurred");
         setError(errorMessage);
         toast.error(errorMessage);
       } finally {
@@ -85,21 +87,21 @@ const LoginForm = () => {
           className="bg-white rounded-3xl shadow-2xl w-full p-10 border border-black"
         >
           <div className="text-2xl w-36 mx-auto text-center font-black bg-gradient-to-r from-purple-500 to-emerald-400 py-3 rounded-xl text-white">
-            Sign In
+            {t("login.sign_in")}
           </div>
           <div className="mb-5 mt-10 text-lg text-center font-semibold">
-            Haven't you registered yet?
+            {t("login.not_registered")}
             <Link
               to="/register"
               className="text-xl text-pink-500 hover:text-pink-600 font-semibold hover:bg-red-100"
             >
-              - Register
+              {t("login.register")}
             </Link>
           </div>
           <div className="flex flex-col space-y-10 mx-10">
             <div>
               <label className="text-lg font-bold text-gray-600 block mb-2">
-                Email
+                {t("login.email")}
               </label>
               <input
                 type="email"
@@ -108,7 +110,7 @@ const LoginForm = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
-                placeholder="Enter email"
+                placeholder={t("login.enter_email")}
               />
               {formik.touched.email && formik.errors.email ? (
                 <div className="text-red-500">{formik.errors.email}</div>
@@ -116,7 +118,7 @@ const LoginForm = () => {
             </div>
             <div>
               <label className="text-lg font-bold text-gray-600 block mb-2">
-                Password
+                {t("login.password")}
               </label>
               <input
                 type="password"
@@ -125,7 +127,7 @@ const LoginForm = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
-                placeholder="Enter password"
+                placeholder={t("login.enter_password")}
               />
               {formik.touched.password && formik.errors.password ? (
                 <div className="text-red-500">{formik.errors.password}</div>
@@ -136,7 +138,7 @@ const LoginForm = () => {
               className="w-full py-4 px-8 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
               disabled={!formik.isValid || loading}
             >
-              {loading ? "Loading..." : "LOGIN"}
+              {loading ? t("login.loading") : t("login.login")}
             </button>
           </div>
           <div className="mt-4 text-center">
@@ -145,7 +147,7 @@ const LoginForm = () => {
               className="text-gray-600 hover:text-blue-600 font-bold text-lg"
               style={{ textDecoration: "none" }}
             >
-              ¿Have you forgotten your password?
+              {t("login.forgot_password")}
             </Link>
           </div>
         </form>

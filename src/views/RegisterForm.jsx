@@ -6,27 +6,29 @@ import "react-toastify/dist/ReactToastify.css";
 import Carousel from "../components/Login_components/Carousel";
 import { Link, useNavigate } from "react-router-dom";
 import { registerRequest } from "../api/auth";
+import { useTranslation } from 'react-i18next';
 
 function RegisterForm() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
+  const { t } = useTranslation("global");
 
   const validationSchema = yup.object().shape({
-    username: yup.string().required("Username is required"),
-    email: yup.string().email("Invalid email").required("Email is required"),
+    username: yup.string().required(t("register.username_required")),
+    email: yup.string().email(t("register.invalid_email")).required(t("register.email_required")),
     password: yup
       .string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
+      .required(t("register.password_required"))
+      .min(8, t("register.password_min"))
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-        "Password must contain at least one uppercase, one lowercase, one number, and one special character"
+        t("register.password_matches")
       ),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password"), null], "Passwords must match"),
+      .oneOf([yup.ref("password"), null], t("register.passwords_match")),
   });
 
   const formik = useFormik({
@@ -51,17 +53,17 @@ function RegisterForm() {
           response.data.error &&
           response.data.error === "Email already exists"
         ) {
-          toast.error("Email already exists");
+          toast.error(t("register.email_exists"));
         } else {
           setSuccess(true);
-          toast.success("User created successfully");
+          toast.success(t("register.user_created"));
           setTimeout(() => {
             navigate("/");
           }, 5000);
         }
       } catch (error) {
         console.error(error);
-        toast.error("Email already exists");
+        toast.error(t("register.email_exists"));
       }
     },
   });
@@ -73,20 +75,20 @@ function RegisterForm() {
       <div className="flex flex-col justify-center items-center w-full sm:w-1/2 mx-4 overflow-auto">
         <div className="bg-white rounded-3xl shadow-2xl w-full px-2 py-2 border border-black ">
           <div className="text-2xl w-36 mx-auto text-center font-black bg-gradient-to-r from-purple-500 to-emerald-400 py-3 rounded-xl text-white">
-            Register
+            {t("register.register")}
           </div>
           <div className="mb-5 mt-10 text-lg text-center font-semibold">
-            ¿Already registered?
+            {t("register.already_registered")}
             <Link to="/">
               <button className="text-xl text-pink-500 hover:text-pink-600 font-semibold hover:bg-red-100">
-                -Login
+                {t("register.login")}
               </button>
             </Link>
           </div>
           <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-6">
             <div>
               <label className="text-lg font-bold text-gray-600 block mb-2">
-                Username
+                {t("register.username")}
               </label>
               <input
                 type="text"
@@ -95,7 +97,7 @@ function RegisterForm() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
-                placeholder="Enter username"
+                placeholder={t("register.enter_username")}
               />
               {formik.touched.username && formik.errors.username ? (
                 <div>{formik.errors.username}</div>
@@ -103,7 +105,7 @@ function RegisterForm() {
             </div>
             <div>
               <label className="text-lg font-bold text-gray-600 block mb-2">
-                Email
+                {t("register.email")}
               </label>
               <input
                 type="email"
@@ -112,7 +114,7 @@ function RegisterForm() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
-                placeholder="Enter email"
+                placeholder={t("register.enter_email")}
               />
               {formik.touched.email && formik.errors.email ? (
                 <div>{formik.errors.email}</div>
@@ -120,7 +122,7 @@ function RegisterForm() {
             </div>
             <div>
               <label className="text-lg font-bold text-gray-600 block mb-2">
-                Password
+                {t("register.password")}
               </label>
               <input
                 type="password"
@@ -129,7 +131,7 @@ function RegisterForm() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
-                placeholder="Enter password"
+                placeholder={t("register.enter_password")}
               />
               {formik.touched.password && formik.errors.password ? (
                 <div>{formik.errors.password}</div>
@@ -137,7 +139,7 @@ function RegisterForm() {
             </div>
             <div>
               <label className="text-lg font-bold text-gray-600 block mb-2">
-                Confirm Password
+                {t("register.confirm_password")}
               </label>
               <input
                 type="password"
@@ -146,7 +148,7 @@ function RegisterForm() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
-                placeholder="Repeat password"
+                placeholder={t("register.repeat_password")}
               />
               {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
                 <div>{formik.errors.confirmPassword}</div>
@@ -157,7 +159,7 @@ function RegisterForm() {
               className="w-full py-4 px-8 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
               disabled={!formik.isValid || formik.values.password !== formik.values.confirmPassword}
             >
-              Register
+              {t("register.register")}
             </button>
           </form>
         </div>

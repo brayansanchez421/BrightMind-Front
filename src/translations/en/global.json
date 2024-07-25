@@ -1,0 +1,178 @@
+{
+    "login": {
+        "sign_in": "Sign In",
+        "not_registered": "Haven't you registered yet?",
+        "register": "- Register",
+        "email": "Email",
+        "enter_email": "Enter email",
+        "invalid_email": "Invalid email",
+        "email_required": "Email is required",
+        "password": "Password",
+        "enter_password": "Enter password",
+        "password_required": "Password is required",
+        "loading": "Loading...",
+        "login": "LOGIN",
+        "forgot_password": "Have you forgotten your password?",
+        "login_successful": "Login successful",
+        "error_occurred": "An error occurred"
+    },
+    "carousel": {
+        "phrases": {
+            "mandela": {
+                "text": "Education is the most powerful weapon which you can use to change the world."
+            },
+            "dewey": {
+                "text": "Education is not preparation for life; education is life itself."
+            },
+            "malcolm": {
+                "text": "Education is the passport to the future, for tomorrow belongs to those who prepare for it today."
+            },
+            "bloom": {
+                "text": "Education is the movement from darkness to light."
+            },
+            "ebbinghaus": {
+                "text": "Education is the act of learning things that are not previously known."
+            }
+        }
+    },
+    "register": {
+        "register": "Register",
+        "already_registered": "Already registered?",
+        "login": "Login",
+        "username": "Username",
+        "enter_username": "Enter username",
+        "username_required": "Username is required",
+        "email": "Email",
+        "enter_email": "Enter email",
+        "invalid_email": "Invalid email",
+        "email_required": "Email is required",
+        "password": "Password",
+        "enter_password": "Enter password",
+        "password_required": "Password is required",
+        "password_min": "Password must be at least 8 characters",
+        "password_matches": "Password must contain at least one uppercase, one lowercase, one number, and one special character",
+        "confirm_password": "Confirm Password",
+        "repeat_password": "Repeat password",
+        "passwords_match": "Passwords must match",
+        "user_created": "User created successfully",
+        "email_exists": "Email already exists"
+    },
+    "reset_password": {
+        "invalid_email": "Invalid email",
+        "email_required": "The email is required",
+        "email_sent_success": "Email sent successfully",
+        "email_not_registered": "This email is not registered",
+        "forgot_password": "Did you forget your password?",
+        "enter_email": "Enter your email and we will send you a code to recover it",
+        "email": "Email",
+        "enter_registered_email": "Enter registered email",
+        "send_recovery_code": "Send recovery code",
+        "not_registered_yet": "Haven’t you registered yet",
+        "register_now": "Register Now"
+    },
+    "reset_password_verify": {
+        "sent_code": "We sent you a code",
+        "enter_code": "Enter the code you have received by email 📧",
+        "valid_code": "Valid code",
+        "invalid_code": "Invalid or expired recovery code.",
+        "confirm_code": "Confirm Code",
+        "not_received": "Haven’t you received the code?",
+        "request_new": "request a new one"
+    },
+    "new_password": {
+        "change_password": "Change Password",
+        "new_password": "New password",
+        "confirm_password": "Confirm password",
+        "required": "The password is required",
+        "password_format": "The password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+        "passwords_match": "The passwords must match",
+        "success": "Password changed successfully",
+        "error": "There was an error changing the password",
+        "return_to_login": "Return to the login screen"
+    },
+    "notFound": {
+        "title": "Ooops! Page not found",
+        "description": "The page you are looking for does not exist. Would you like to return to the home page?",
+        "returnHome": "Return to Home Page"
+    },
+    "home": {
+        "explore_categories": "Explore Our Categories",
+        "find_course": "Find the perfect course for you from our wide selection of categories",
+        "previous": "Previous",
+        "next": "Next",
+        "quotes": {
+            "da_vinci": "Learning never exhausts the mind.",
+            "mandela": "Education is the most powerful weapon which you can use to change the world.",
+            "sassoon": "The only place where success comes before work is in the dictionary.",
+            "einstein_idea": "The mind that opens to a new idea never returns to its original size.",
+            "davis": "The road to success and the road to failure are almost exactly the same.",
+            "einstein_knowledge": "The only source of knowledge is experience."
+        }
+    },
+    "settingsBar": {
+        "account_settings": "Account Settings",
+        "change_password": "Change Password",
+        "delete_account": "Delete Account",
+        "are_you_sure": "Are you sure?",
+        "cannot_undo": "This action cannot be undone",
+        "yes_delete_account": "Yes, delete account",
+        "cancel": "Cancel",
+        "problem_deleting": "There was a problem trying to delete the account. Please try again later.",
+        "deleted_account": "The account has been deleted successfully."
+    },
+    "userProfileSettings": {
+        "edit_profile": "Edit Profile",
+        "name": "Name",
+        "email": "Email",
+        "profile_image": "Profile Image",
+        "save": "Save",
+        "changes_saved_successfully": "Changes saved successfully!",
+        "failed_to_save_changes": "Failed to save changes. Please try again.",
+        "are_you_sure": "Are you sure?",
+        "cannot_undo": "This action cannot be undone",
+        "yes_delete_account": "Yes, delete account",
+        "cancel": "Cancel"
+    },
+    "navigationBar": {
+        "search_placeholder": "Search...",
+        "my_courses": "My Courses",
+        "bright": "Bright",
+        "mind": "Mind",
+        "welcome_message": "Welcome, {{username}}!",
+        "check_courses": "Check out your courses here:",
+        "see_my_courses": "See my courses",
+        "configure_profile": "Configure Profile",
+        "logout": "Log Out"
+    },
+    "newPasswordUser": {
+        "change_password": "Change Password",
+        "email": "Email",
+        "new_password": "New Password",
+        "confirm_password": "Confirm Password",
+        "change_password_button": "Change Password",
+        "return_to_settings": "Return to Settings",
+        "password_required": "The password is required",
+        "password_invalid": "The password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+        "passwords_must_match": "The passwords must match",
+        "password_changed_success": "Password changed successfully",
+        "password_change_error": "There was an error changing the password",
+        "fetch_email_error": "Error fetching user email"
+    },
+    "coursesComponent": {
+        "your_courses": "Your courses",
+        "previous": "Previous",
+        "next": "Next"
+    },
+    "courseComponent": {
+        "courses_of": "Courses of",
+        "previous": "Previous",
+        "next": "Next",
+        "confirm_registration": "Confirm Registration",
+        "already_registered": "You are already registered in the course",
+        "confirm_message": "Do you want to confirm your course registration?",
+        "register": "Register",
+        "close": "Close",
+        "successful_registration": "Successful registration",
+        "success_message": "You have successfully registered for the course!"
+    }
+}

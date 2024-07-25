@@ -5,6 +5,7 @@ import { useCoursesContext } from '../context/courses/courses.context';
 import NavigationBar from '../components/Home/NavigationBar';
 import QuoteCarousel from '../components/Home/QuoteCarousel';
 import HoverCard from '../components/Home/Cards/HoverCard';
+import { useTranslation } from 'react-i18next';
 
 const HomePage = () => {
     const { getCoursesByCategory } = useCoursesContext();
@@ -12,6 +13,7 @@ const HomePage = () => {
     const navigate = useNavigate();
     const [categoriesLoaded, setCategoriesLoaded] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const { t } = useTranslation('global');
 
     const categoriesPerPage = 15;
 
@@ -23,12 +25,12 @@ const HomePage = () => {
     }, [categoriesLoaded, getCategories]);
 
     const phrases = [
-        { text: 'Learning never exhausts the mind.', author: 'Leonardo da Vinci', imageUrl: 'https://th.bing.com/th/id/OIG1._bdTJRgcKBp2wYC3oen1?pid=ImgGn' },
-        { text: 'Education is the most powerful weapon which you can use to change the world.', author: 'Nelson Mandela', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Nelson_Mandela_1994_%282%29.jpg/1200px-Nelson_Mandela_1994_%282%29.jpg' },
-        { text: 'The only place where success comes before work is in the dictionary.', author: 'Vidal Sassoon', imageUrl: 'https://cdijum.mx/wp-content/uploads/2018/01/sassoon-nyt.jpg' },
-        { text: 'The mind that opens to a new idea never returns to its original size.', author: 'Albert Einstein', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_Head.jpg' },
-        { text: 'The road to success and the road to failure are almost exactly the same.', author: 'Colin R. Davis', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/bf/Colin_Davis_%281967%29.jpg' },
-        { text: 'The only source of knowledge is experience.', author: 'Albert Einstein', imageUrl: 'https://c.files.bbci.co.uk/assets/aabea4fb-7ebf-43e9-b431-b1480f3ca926' }
+        { text: t('home.quotes.da_vinci'), author: 'Leonardo da Vinci', imageUrl: 'https://th.bing.com/th/id/OIG1._bdTJRgcKBp2wYC3oen1?pid=ImgGn' },
+        { text: t('home.quotes.mandela'), author: 'Nelson Mandela', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Nelson_Mandela_1994_%282%29.jpg/1200px-Nelson_Mandela_1994_%282%29.jpg' },
+        { text: t('home.quotes.sassoon'), author: 'Vidal Sassoon', imageUrl: 'https://cdijum.mx/wp-content/uploads/2018/01/sassoon-nyt.jpg' },
+        { text: t('home.quotes.einstein_idea'), author: 'Albert Einstein', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_Head.jpg' },
+        { text: t('home.quotes.davis'), author: 'Colin R. Davis', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/bf/Colin_Davis_%281967%29.jpg' },
+        { text: t('home.quotes.einstein_knowledge'), author: 'Albert Einstein', imageUrl: 'https://c.files.bbci.co.uk/assets/aabea4fb-7ebf-43e9-b431-b1480f3ca926' }
     ];
 
     const handleCardClick = (category) => {
@@ -54,20 +56,20 @@ const HomePage = () => {
     return (
         <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 min-h-screen">
             <div className='flex flex-col'>
-                <NavigationBar/>
+                <NavigationBar />
                 <QuoteCarousel phrases={phrases} />
                 <div className="text-center justify-center items-center">
-                    <h1 className="flex justify-center p-2 text-4xl mt-8 font-black text-white sm:text-3xl md:text-5xl">Explore Our Categories</h1>
-                    <p className="mt-4 text-base sm:text-lg text-gray-200 font-semibold flex justify-center">Find the perfect course for you from our wide selection of categories</p>
+                    <h1 className="flex justify-center p-2 text-4xl mt-8 font-black text-white sm:text-3xl md:text-5xl">{t('home.explore_categories')}</h1>
+                    <p className="mt-4 text-base sm:text-lg text-gray-200 font-semibold flex justify-center">{t('home.find_course')}</p>
                 </div>
                 <div className="flex justify-center">
                     <div className="grid grid-cols-1 w-full mx-2 gap-1 mt-10 sm:grid-cols-2 sm:mx-3 sm:gap-3 sm:mt-16 md:grid-cols-3 md:mx-4 lg:grid-cols-4 lg:mx-5 xl:grid-cols-5 xl:mx-6">
                         {paginatedCategories.map((category, index) => (
-                            <HoverCard 
-                                key={index} 
-                                title={category.name} 
-                                description={category.description} 
-                                ruta={category.image} 
+                            <HoverCard
+                                key={index}
+                                title={category.name}
+                                description={category.description}
+                                ruta={category.image}
                                 onClick={() => handleCardClick(category)}
                             />
                         ))}
@@ -80,7 +82,7 @@ const HomePage = () => {
                             disabled={currentPage === 1}
                             className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
                         >
-                            Previous
+                            {t('home.previous')}
                         </button>
                         {Array.from({ length: totalPages }, (_, index) => (
                             <button
@@ -96,7 +98,7 @@ const HomePage = () => {
                             disabled={currentPage === totalPages}
                             className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
                         >
-                            Next
+                            {t('home.next')}
                         </button>
                     </div>
                 )}

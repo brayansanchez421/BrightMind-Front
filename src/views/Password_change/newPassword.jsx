@@ -4,16 +4,18 @@ import * as yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
 import { Link, useParams, useNavigate } from 'react-router-dom'; // Importa useParams
 import { passwordReset } from '../../api/auth'; // Debes implementar esta función en tu API
+import { useTranslation } from 'react-i18next';
 
 function NewPassword() {
-    const { token } = useParams(); // Obtiene el token de los parámetros de la URL
+    const { token } = useParams();
     const [error, setError] = useState('');
     const [passwordsMatch, setPasswordsMatch] = useState(false);
     const navigate = useNavigate();
+    const { t } = useTranslation('global');
 
     const validationSchema = yup.object().shape({
-        password: yup.string().required('The  password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, 'The password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
-        confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'The passwords must match'),
+        password: yup.string().required(t('new_password.required')).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, t('new_password.password_format')),
+        confirmPassword: yup.string().oneOf([yup.ref('password'), null], t('new_password.passwords_match')),
     });
 
     const formik = useFormik({
@@ -26,13 +28,13 @@ function NewPassword() {
             try {
                 console.log(values)
                 await passwordReset(values);
-                toast.success('Password changed successfully');
+                toast.success(t('new_password.success'));
                 setTimeout(() => {
                     navigate('/');
                 }, 2000);
                 console.log(values);
             } catch (error) {
-                toast.error('There was an error changing the password');
+                toast.error(t('new_password.error'));
                 console.error(error);
             }
         },
@@ -48,11 +50,11 @@ function NewPassword() {
             <ToastContainer />
             <div className="flex w-1/2 mx-auto justify-center items-center ">
                 <div className="p-16 bg-white rounded-3xl shadow-2xl w-4/5 bg-gradient-to-r from-violet-600  to-rose-500  ">
-                    <h2 className="text-5xl font-black text-center mb-10 text-white ">Change Password</h2>
+                    <h2 className="text-5xl font-black text-center mb-10 text-white ">{t('new_password.change_password')}</h2>
                     <form onSubmit={formik.handleSubmit} className="py-10 flex flex-col space-y-6">
                        
                         <div>
-                            <label className="text-lg font-bold text-white block mb-4 mx-4">New password </label>
+                            <label className="text-lg font-bold text-white block mb-4 mx-4">{t('new_password.new_password')}</label>
                             <input
                                 type="password"
                                 name="password"
@@ -60,12 +62,12 @@ function NewPassword() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 className="w-full p-4 border border-cyan-300 rounded-full bg-pink-100 placeholder-gray-450 focus:outline-sky-600 focus:border-sky-950 focus:bg-slate-200"
-                                placeholder="New password"
+                                placeholder={t('new_password.new_password')}
                             />
                             {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
                         </div>
                         <div>
-                            <label className="text-lg font-bold text-white block mb-4 mx-4">Confirm password</label>
+                            <label className="text-lg font-bold text-white block mb-4 mx-4">{t('new_password.confirm_password')}</label>
                             <input
                                 type="password"
                                 name="confirmPassword"
@@ -73,7 +75,7 @@ function NewPassword() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 className="w-full p-4 border border-cyan-300 rounded-full bg-pink-100 placeholder-gray-450 focus:outline-sky-600 focus:border-sky-950 focus:bg-slate-200"
-                                placeholder="Confirm password "
+                                placeholder={t('new_password.confirm_password')}
                             />
                             {formik.touched.confirmPassword && formik.errors.confirmPassword ? <div>{formik.errors.confirmPassword}</div> : null}
                         </div>
@@ -83,7 +85,7 @@ function NewPassword() {
                             className={`w-full py-4 px-8 font-medium text-white rounded-full text-xl  ${passwordsMatch ? 'bg-green-500 hover:bg-green-600 ' : 'bg-red-500 hover:bg-red-600'} disabled:opacity-50`}
                             disabled={!formik.isValid || !passwordsMatch}
                         >
-                            Change password 
+                            {t('new_password.change_password')}
                         </button>
                     </form>
                     <div className="mt-4 text-center">
@@ -92,7 +94,7 @@ function NewPassword() {
                             className="text-white hover:bg-gradient-to-r from-green-600 to-green-500 shadow-lg shadow-red-300 font-semibold inline-flex space-x-1 items-center"
                             style={{ textDecoration: 'none' }}
                         >
-                            Return to the login screen
+                            {t('new_password.return_to_login')}
                         </Link>
                     </div>
                 </div>

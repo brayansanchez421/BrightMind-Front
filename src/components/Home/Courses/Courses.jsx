@@ -5,8 +5,10 @@ import NavigationBar from "../NavigationBar";
 import { useCoursesContext } from "../../../context/courses/courses.context";
 import { useUserContext } from "../../../context/user/user.context";
 import { useAuth } from "../../../context/auth.context";
+import { useTranslation } from 'react-i18next';
 
 const Course = () => {
+  const { t } = useTranslation("golbal");
   const location = useLocation();
   const { title } = location.state || { title: "" };
   const { courses } = useCoursesContext();
@@ -81,7 +83,7 @@ const Course = () => {
         sm:text-4xl 
         md:text-5xl 
         lg:text-5xl font-bold text-white text-center flex justify-center border px-4 mx-2">
-          Cursos de {title}
+          {t('courseComponent.courses_of')} {title}
         </h1>
       </div>
       <div className="grid grid-cols-1 gap-1 gap-y-0 mt-10 mx-2 
@@ -105,7 +107,7 @@ const Course = () => {
             disabled={currentPage === 1}
             className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
           >
-            Previous
+            {t('courseComponent.previous')}
           </button>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
@@ -125,7 +127,7 @@ const Course = () => {
             disabled={currentPage === totalPages}
             className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
           >
-            Next
+            {t('courseComponent.next')}
           </button>
         </div>
       )}
@@ -133,16 +135,16 @@ const Course = () => {
         <div className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center border px-4">
           <div className="bg-purple-200 p-6 rounded-lg shadow-lg w-full max-w-md mx-auto">
             <h2 className="text-2xl font-bold mb-4 text-center">
-              Confirm Registration
+              {t('courseComponent.confirm_registration')}
             </h2>
             {isRegistered ? (
               <p className="mb-4 text-center">
-                You are already registered in the course{" "}
+                {t('courseComponent.already_registered')}{" "}
                 <strong>{selectedCourse.title}</strong>
               </p>
             ) : (
               <p className="mb-4 text-center">
-                ¿Do you want to confirm your course registration?
+                {t('courseComponent.confirm_message')}{" "}
                 <strong>{selectedCourse.title}</strong>?
               </p>
             )}
@@ -156,13 +158,13 @@ const Course = () => {
                 onClick={handleRegister}
                 disabled={isRegistered}
               >
-                Register
+                {t('courseComponent.register')}
               </button>
               <button
                 className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-400 transition-colors"
                 onClick={closeConfirmModal}
               >
-                Close
+                {t('courseComponent.close')}
               </button>
             </div>
           </div>
@@ -171,15 +173,15 @@ const Course = () => {
       {isSuccessModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-85 flex items-center justify-center z-50 px-4">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-auto">
-            <h2 className="text-2xl font-bold mb-4 text-center">Successful registration</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">{t('courseComponent.successful_registration')}</h2>
             <p className="mb-4 text-center">
-              ¡You have successfully registered for the course!
+              {t('courseComponent.success_message')}
             </p>
             <button
               className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400 transition-colors flex justify-center"
               onClick={closeSuccessModal}
             >
-              Close
+              {t('courseComponent.close')}
             </button>
           </div>
         </div>

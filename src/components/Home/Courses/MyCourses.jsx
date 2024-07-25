@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import NavigationBar from "./../NavigationBar";
 import { useUserContext } from "../../../context/user/user.context";
 import { useAuth } from "../../../context/auth.context";
+import { useTranslation } from 'react-i18next';
 
 const CoursesComponent = () => {
+  const { t } = useTranslation("global");
   const { user } = useAuth();
   const { getUserCourses } = useUserContext();
   const [userCourses, setUserCourses] = useState([]);
@@ -45,7 +47,7 @@ const CoursesComponent = () => {
       <NavigationBar />
       <div className="mt-10 flex justify-center">
         <h1 className="text-center text-3xl text-white font-black flex justify-center shadow-orange italic shadow-red-400 p-3 border border-white bg-gradient-to-t from-red-400 to-pink-300">
-          Your courses
+          {t('coursesComponent.your_courses')}
         </h1>
       </div>
       <div
@@ -98,7 +100,7 @@ const CoursesComponent = () => {
             disabled={currentPage === 1}
             className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
           >
-            Previous
+            {t('coursesComponent.previous')}
           </button>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
@@ -118,7 +120,7 @@ const CoursesComponent = () => {
             disabled={currentPage === totalPages}
             className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
           >
-            Next
+            {t('coursesComponent.next')}
           </button>
         </div>
       )}

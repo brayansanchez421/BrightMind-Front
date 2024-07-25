@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import Logo from "../../assets/img/hola.png";
 import { useAuth } from "../../context/auth.context";
 import { useUserContext } from "../../context/user/user.context";
+import { useTranslation } from 'react-i18next';
 
 function NavigationBar() {
+  const { t } = useTranslation("global");
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false); // Estado para mostrar el modal de bienvenida
   const { logout, user } = useAuth();
@@ -62,36 +64,36 @@ function NavigationBar() {
 
   return (
     <nav className="bg-gradient-to-r from-purple-700 to-pink-600 shadow-orange shadow-sky-300 p-2 md:p-3 flex justify-between items-center w-full">
-      {/* Left section */}
+      {/* Sección izquierda */}
       <div className="flex items-center">
         <BiSearch className="text-white " size="24px" />
         <input
           type="search"
-          placeholder="Search..."
+          placeholder={t('navigationBar.search_placeholder')}
           className="mr-1 rounded-lg p-2 md:w-28 md:h-9 w-11 h-7 bg-purple-400 text-white placeholder-white focus:outline-none  border-2 border-transparent hover:border-white"
         />
         <Link
           to="/MyCourses"
           className="text-white font-semibold text-center w-28 h-7 md:w-28 md:h-9 md:text-base flex items-center justify-center bg-gradient-to-r from-violet-500 via-sky-500 to-pink-500 rounded-lg py-1 px-2 hover:bg-gradient-xy hover:animate-gradient-xy transition-all duration-300 shadow-md transform hover:scale-105"
         >
-          My Courses
+          {t('navigationBar.my_courses')}
         </Link>
       </div>
 
-      {/* Center section */}
+      {/* Sección central */}
       <div className="flex justify-center items-center md:mr-20">
         <Link to="/Home" className="flex justify-center items-center">
           <span className="text-white font-black text-xl md:text-2xl hidden sm:block">
-            Bright
+            {t('navigationBar.bright')}
           </span>
           <img className="h-12 " src={Logo} alt="Logo" />
           <span className="text-white font-black text-xl md:text-2xl hidden sm:block">
-            Mind
+            {t('navigationBar.mind')}
           </span>
         </Link>
       </div>
 
-      {/* Right section */}
+      {/* Sección derecha */}
       <div className="flex items-center">
         <div
           className="relative text-white md:text-lg font-bold mr-2 md:mr-4 cursor-pointer text-base hidden sm:block"
@@ -106,13 +108,13 @@ function NavigationBar() {
               onMouseEnter={() => setShowWelcomeModal(true)} // Mantener el modal visible al estar encima
               onMouseLeave={() => setShowWelcomeModal(false)} // Ocultar al salir del modal
             >
-              <p className="text-gray-800 mb-2">Welcome, {username}!</p>
-              <p className="text-gray-600 mb-4">Check out your courses here:</p>
+              <p className="text-gray-800 mb-2">{t('navigationBar.welcome_message', { username })}</p>
+              <p className="text-gray-600 mb-4">{t('navigationBar.check_courses')}</p>
               <Link
                 to="/MyCourses"
                 className="text-blue-600 font-semibold hover:underline"
               >
-                See my courses
+                {t('navigationBar.see_my_courses')}
               </Link>
             </div>
           )}
@@ -134,13 +136,13 @@ function NavigationBar() {
                 to="/Account"
                 className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded transition-all duration-300"
               >
-                Configure Profile
+                {t('navigationBar.configure_profile')}
               </Link>
               <div
                 onClick={handleLogout}
                 className="px-4 py-3 hover:bg-red-600 cursor-pointer text-white rounded transition-all duration-300"
               >
-                LogOut
+                {t('navigationBar.logout')}
               </div>
             </div>
           </div>
