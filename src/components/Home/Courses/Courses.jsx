@@ -8,7 +8,7 @@ import { useAuth } from "../../../context/auth.context";
 import { useTranslation } from 'react-i18next';
 
 const Course = () => {
-  const { t } = useTranslation("golbal");
+  const { t } = useTranslation("global"); //Pequeño ajuste de correcion de global, estaba mal escrito.
   const location = useLocation();
   const { title } = location.state || { title: "" };
   const { courses } = useCoursesContext();

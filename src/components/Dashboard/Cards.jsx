@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../../context/user/user.context.jsx';
+import { useCoursesContext } from '../../context/courses/courses.context.jsx';
 import { useTranslation } from 'react-i18next';
 
 const Cards = ({ isLeftBarVisible }) => {
   const { usersData } = useUserContext();
+  const { courses } = useCoursesContext(); // Obtén los cursos desde el contexto
   const { t } = useTranslation("global");
   const [stats, setStats] = useState({
     cursos: 0,
@@ -17,12 +19,12 @@ const Cards = ({ isLeftBarVisible }) => {
     const inactiveUsers = usersData.filter(user => !user.state);
 
     setStats({
-      cursos: 10,
+      cursos: courses.length, // Actualiza el número de cursos
       usuariosRegistrados: usersData.length,
       usuariosActivos: activeUsers.length,
       usuariosInactivos: inactiveUsers.length,
     });
-  }, [usersData]);
+  }, [usersData, courses]); // Incluye `courses` en las dependencias
 
   const maxUsers = Math.max(stats.usuariosRegistrados, stats.usuariosActivos, stats.usuariosInactivos, stats.cursos);
 
