@@ -3,12 +3,14 @@ import { Modal, Form, Input, Select, Button } from "antd";
 import { useRoleContext } from '../../../context/user/role.context';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTranslation } from 'react-i18next';
 
 const { Option } = Select;
 
 const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
   const { rolesData } = useRoleContext();
   const [form] = Form.useForm();
+  const { t } = useTranslation("global");
 
   useEffect(() => {
     if (visible) {
@@ -21,7 +23,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
       const values = await form.validateFields();
       onUpdate(values);
       onCancel(); // Close the modal
-      toast.success("User updated successfully", { autoClose: 1000 });
+      toast.success(t('UpdateUserModal.userUpdatedSuccess'), { autoClose: 1000 });
     } catch (error) {
       console.error("Failed to update user:", error);
     }
@@ -42,28 +44,30 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
           layout="vertical"
           initialValues={user}
         >
-          <h1 className="text-xl font-black text-center">UPDATE USER</h1>
+          <h1 className="text-xl font-black text-center">
+            {t('UpdateUserModal.updateUserTitle')}
+          </h1>
           <Form.Item
             className="text-base font-semibold mx-10 mt-4"
             name="username"
-            label="Username"
-            rules={[{ required: true, message: "Por favor ingrese un nombre de usuario" }]}
+            label={t('UpdateUserModal.username')}
+            rules={[{ required: true, message: t('UpdateUserModal.usernameRequired') }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             className="text-base font-semibold mx-10"
             name="email"
-            label="Email"
-            rules={[{ required: true, message: "Por favor ingrese un correo electrónico" }]}
+            label={t('UpdateUserModal.email')}
+            rules={[{ required: true, message: t('UpdateUserModal.emailRequired') }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             className="text-base font-semibold mx-10"
             name="role"
-            label="Role"
-            rules={[{ required: true, message: "Por favor seleccione un rol" }]}
+            label={t('UpdateUserModal.role')}
+            rules={[{ required: true, message: t('UpdateUserModal.roleRequired') }]}
           >
             <Select className="text-center">
               {rolesData.map((role) => (
@@ -76,12 +80,12 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
           <Form.Item
             className="text-base font-semibold mx-10"
             name="state"
-            label="State"
-            rules={[{ required: true, message: "Por favor seleccione un estado" }]}
+            label={t('UpdateUserModal.state')}
+            rules={[{ required: true, message: t('UpdateUserModal.stateRequired') }]}
           >
             <Select className="text-center">
-              <Option value={true}>Active</Option>
-              <Option value={false}>Inactive</Option>
+              <Option value={true}>{t('UpdateUserModal.active')}</Option>
+              <Option value={false}>{t('UpdateUserModal.inactive')}</Option>
             </Select>
           </Form.Item>
           <div className="flex justify-center mt-10">
@@ -90,7 +94,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
               key="cancel"
               onClick={onCancel}
             >
-              Cancel
+              {t('UpdateUserModal.cancel')}
             </Button>
             <Button
               className="bg-sky-700 font-medium ml-2"
@@ -98,7 +102,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
               type="primary"
               onClick={handleFormSubmit}
             >
-              Update
+              {t('UpdateUserModal.update')}
             </Button>
           </div>
         </Form>

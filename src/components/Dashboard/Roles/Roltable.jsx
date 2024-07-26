@@ -6,10 +6,12 @@ import { useRoleContext } from "../../../context/user/role.context";
 import { usePermissionContext } from "../../../context/user/permissions.context";
 import CreateRolForm from "../Roles/CreateRolForm";
 import Navbar from "../../Dashboard/NavBar";
+import { useTranslation } from 'react-i18next';
 
 const { useForm } = Form;
 
 const DataTable = () => {
+  const { t } = useTranslation("global");
   const [permissionsUpdated, setPermissionsUpdated] = useState(false);
 
   const { rolesData, updateRole, deleteRole } = useRoleContext();
@@ -243,7 +245,7 @@ const DataTable = () => {
         <Navbar />
         <div className="flex flex-col mt-10 mx-4">
           <div>
-            <h2 className="text-2xl font-black text-white text-center">Roles</h2>
+            <h2 className="text-2xl font-black text-white text-center">{t('roles.title')}</h2>
             <div className="flex flex-col items-center justify-center mt-6">
               <Button
                 type="primary"
@@ -251,10 +253,10 @@ const DataTable = () => {
                 onClick={() => setShowForm(true)}
                 className=""
               >
-                <b>Create Rol</b>
+                <b>{t('roles.createRole')}</b>
               </Button>
               <Input
-                placeholder="Search by roles"
+                placeholder={t('roles.SearchRoles')}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 className="w-40 mt-2"
@@ -268,7 +270,7 @@ const DataTable = () => {
                       className="px-6 py-4 bg-blue-500 text-white border-2 border-blue-800 cursor-pointer"
                       onClick={() => orderBy("id")}
                     >
-                      ID{" "}
+                      {t('roles.id')}{" "}
                       {sortConfig.key === "id" &&
                         (sortConfig.direction === "ascending" ? (
                           <CaretUpOutlined />
@@ -280,7 +282,7 @@ const DataTable = () => {
                       className="px-6 py-4 bg-green-500 text-white border-2 border-blue-800 cursor-pointer"
                       onClick={() => orderBy("nombre")}
                     >
-                      Name{" "}
+                      {t('roles.role')}{" "}
                       {sortConfig.key === "nombre" &&
                         (sortConfig.direction === "ascending" ? (
                           <CaretUpOutlined />
@@ -289,7 +291,7 @@ const DataTable = () => {
                         ))}
                     </th>
                     <th className="w-72 py-4 mx-20 bg-red-500 text-white border-2 border-blue-800">
-                      Actions
+                      {t('roles.actions')}
                     </th>
                   </tr>
                 </thead>
@@ -309,14 +311,14 @@ const DataTable = () => {
                             type="primary"
                             onClick={() => handleViewPermissions(role)}
                           >
-                            View
+                            {t('roles.viewPermissions')}
                           </Button>{" "}
                           <Button
                             className="bg-cyan-800 h-10"
                             type="primary"
                             onClick={() => handleAssignPermissions(role)}
                           >
-                            Assign
+                            {t('roles.assignPermissions')}
                           </Button>{" "}
                           <Button
                             className="bg-red-600 h-10"
@@ -337,7 +339,7 @@ const DataTable = () => {
                 disabled={currentPage === 1}
                 className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
               >
-                Previous
+                {t('roles.previous')}
               </button>
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
@@ -357,7 +359,7 @@ const DataTable = () => {
                 disabled={currentPage === totalPages}
                 className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
               >
-                Next
+                {t('roles.next')}
               </button>
             </div>
           )}
@@ -368,7 +370,7 @@ const DataTable = () => {
         <Modal
           className="shadow-md shadow-pink-400"
           title={
-            selectedRole ? `Permissions for ${selectedRole.nombre}` : "Role Details"
+            selectedRole ? `${t('roles.permissionsFor')} ${selectedRole.nombre}` : "Role Details"
           }
           visible={showDetailsModal}
           onCancel={handleModalClose}
@@ -379,13 +381,13 @@ const DataTable = () => {
           {selectedRole && (
             <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
               <p>
-                <b>Role ID:</b> {selectedRole._id}
+                <b>{t('roles.role')} ID:</b> {selectedRole._id}
               </p>
               <p>
-                <b>Name:</b> {selectedRole.nombre}
+                <b>{t('roles.name')}:</b> {selectedRole.nombre}
               </p>
               <p>
-                <b>Permissions:</b>
+                <b>{t('roles.permissions')}</b>
               </p>
               <ul>
                 {selectedRole &&
@@ -399,7 +401,7 @@ const DataTable = () => {
         </Modal>
         <Modal
           className="shadow-2xl shadow-pink-400"
-          title="Assign Permissions"
+          title={t('roles.assignPermissions')}
           visible={showAssignModal}
           onCancel={handleModalClose}
           footer={[
@@ -409,7 +411,7 @@ const DataTable = () => {
               type="primary"
               onClick={handleAssignPermissionsSubmit}
             >
-              Assign Permissions
+              {t('roles.assignPermissions')} 
             </Button>,
           ]}
           centered
@@ -448,14 +450,14 @@ const DataTable = () => {
               type="primary"
               onClick={confirmDeleteRole}
             >
-              Delete
+              {t('roles.confirm')}
             </Button>,
             <Button
               className="bg-gray-300 font-medium text-black hover:bg-gray-400"
               key="cancel"
               onClick={() => setShowDeleteModal(false)}
             >
-              Cancel
+              {t('roles.cancel')}
             </Button>,
           ]}
           centered
@@ -463,8 +465,8 @@ const DataTable = () => {
           maskClosable={false}
           keyboard={false}
         >
-          <p className="text-lg text-black">Are you sure you want to delete this role?</p>
-          <p className="text-md text-red-600"><b>This action cannot be undone.</b></p>
+          <p className="text-lg text-black">{t('roles.deleteConfirmation')}</p>
+          <p className="text-md text-red-600"><b>{t('roles.deleteCannot')}</b></p>
         </Modal>
       </div>
   );
