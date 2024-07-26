@@ -1,119 +1,91 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, Modal, message, Collapse } from "antd";
+import { Button, Input, message } from "antd";
 import {
   ReloadOutlined,
   InfoCircleOutlined,
   DeleteOutlined,
-  CheckCircleOutlined,
-  DeleteFilled,
 } from "@ant-design/icons";
 import LeftBar from "../../Dashboard/LeftBar";
-import { useUserContext } from "../../../context/user/user.context";
-import { useCoursesContext } from "../../../context/courses/courses.context";
-import CreateCourseForm from "../Courses/CreateCourseForm";
+import { useCategoryContext } from "../../../context/courses/category.context";
 import CreateCategoryForm from "./CreateCategoryForm";
-import UpdateCourseForm from "../Courses/UpdateCourseForm";
 import Navbar from "../NavBar";
-
-const { Panel } = Collapse;
+import DeleteCategory from "./DeleteCategory";
 
 const DataTablete = () => {
-  const { getUsers, usersData } = useUserContext();
-  const {
-    getAllCourses,
-    courses,
-    asignarContenido,
-    deleteCourse,
-    updateCourse,
-  } = useCoursesContext();
+  const { getCategories, categories, deleteCategory, createCategory } =
+    useCategoryContext();
   const [searchValue, setSearchValue] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [contentFile, setContentFile] = useState(null);
-
   const [itemsPerPage] = useState(5);
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
-  const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [courseToDelete, setCourseToDelete] = useState(null);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   useEffect(() => {
-    getUsers();
-    getAllCourses();
-  }, []);
+    getCategories();
+  }, [getCategories]);
 
   useEffect(() => {
-    setTotalPages(Math.ceil(courses.length / itemsPerPage));
-  }, [courses, itemsPerPage]);
+    setTotalPages(Math.ceil(categories.length / itemsPerPage));
+  }, [categories, itemsPerPage]);
 
-  const handleCreateCategory = (category) => {
-    console.log("Nueva categoría:", category);
-    setShowCategoryForm(false);
+  const handleCreateCategory = async (category) => {
+    try {
+      await createCategory(category);
+      message.success("Category successfully created");
+      getCategories();
+    } catch (error) {
+      message.error("Error creating category");
+    } finally {
+      setShowCategoryForm(false);
+    }
   };
 
   const handleCreateCategoryClick = () => {
+    setSelectedCategory(null);
     setShowCategoryForm(true);
   };
 
   const handleCategoryFormClose = () => {
     setShowCategoryForm(false);
+    setSelectedCategory(null);
   };
 
-  const handleCreateCourseClick = () => {
-    setShowCreateForm(true);
+  const handleUpdateButtonClick = (category) => {
+    setSelectedCategory(category);
+    setShowCategoryForm(true);
   };
 
-  const handleCreateFormClose = () => {
-    setShowCreateForm(false);
-  };
-
-  const handleUpdateButtonClick = (course) => {
-    setSelectedCourse(course);
-    setShowUpdateForm(true);
-  };
-
-  const handleUpdateFormClose = () => {
-    setShowUpdateForm(false);
-    setSelectedCourse(null);
-  };
-
-  const handleUpdateCourse = async (updatedCourse) => {
-    message.success("Successfully updated course");
-    window.location.reload();
-    setShowUpdateForm(false);
-    setSelectedCourse(null);
-  };
-
-  const handleDeleteButtonClick = (course) => {
-    setCourseToDelete(course);
+  const handleDeleteButtonClick = (category) => {
+    setCategoryToDelete(category);
     setIsDeleteModalVisible(true);
   };
 
   const handleDeleteModalClose = () => {
     setIsDeleteModalVisible(false);
-    setCourseToDelete(null);
+    setCategoryToDelete(null);
   };
 
   const handleDeleteConfirm = async () => {
     try {
-      await deleteCourse(courseToDelete._id);
-      console.log(courseToDelete._id);
-      message.success("Course successfully deleted");
-      getAllCourses();
+      await deleteCategory(categoryToDelete.categories_id);
+      message.success("Category successfully deleted");
+      getCategories();
     } catch (error) {
-      message.error("Error deleting course");
+      message.error("Error deleting category");
     } finally {
       setIsDeleteModalVisible(false);
-      setCourseToDelete(null);
+      setCategoryToDelete(null);
     }
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateIds = () => {
-    return courses
+    return categories
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map((_, index) => index + 1 + (currentPage - 1) * itemsPerPage);
   };
@@ -138,7 +110,7 @@ const DataTablete = () => {
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={handleCreateCategoryClick}
-                  className="text-center font-medium text-base mt-2 "
+                  className="text-center font-medium text-base mt-2"
                 >
                   <b>Create Category</b>
                 </Button>
@@ -160,30 +132,35 @@ const DataTablete = () => {
                         <th className="text-xl px-6 py-3 bg-green-500 text-white border-2 cursor-pointer border-blue-800">
                           Name
                         </th>
-                        <th className="text-xl px-48 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">
+                        <th className="text-xl px-20 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">
                           Description
                         </th>
-                        <th className="text-xl px-20 py-3 bg-red-500 text-white border-2 border-blue-800">
+                        <th className="text-xl px-10 py-3 bg-red-500 text-white border-2 border-blue-800">
                           Actions
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {courses
+                      {categories
+                        .filter((category) =>
+                          category.name
+                            .toLowerCase()
+                            .includes(searchValue.toLowerCase())
+                        )
                         .slice(
                           (currentPage - 1) * itemsPerPage,
                           currentPage * itemsPerPage
                         )
-                        .map((course, index) => (
-                          <tr key={course._id}>
+                        .map((category, index) => (
+                          <tr key={category._id}>
                             <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center font-black">
                               {generateIds()[index]}
                             </td>
                             <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center">
-                              {course.title}
+                              {category.name}
                             </td>
-                            <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-balance px-1">
-                              {course.description}
+                            <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-wrap px-1">
+                              {category.description}
                             </td>
                             <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300">
                               <div className="flex justify-center">
@@ -192,21 +169,21 @@ const DataTablete = () => {
                                   type="primary"
                                   icon={<ReloadOutlined />}
                                   onClick={() =>
-                                    handleUpdateButtonClick(course)
+                                    handleUpdateButtonClick(category)
                                   }
                                 />
                                 <Button
                                   className="bg-purple-600 text-white text-lg h-10 mr-2 ml-2"
                                   icon={<InfoCircleOutlined />}
                                   onClick={() =>
-                                    handleDetailsButtonClick(course)
+                                    handleDetailsButtonClick(category)
                                   }
                                 />
                                 <Button
                                   className="bg-red-500 h-10 text-lg text-white ml-2"
                                   icon={<DeleteOutlined />}
                                   onClick={() =>
-                                    handleDeleteButtonClick(course)
+                                    handleDeleteButtonClick(category)
                                   }
                                 />
                               </div>
@@ -224,6 +201,13 @@ const DataTablete = () => {
             visible={showCategoryForm}
             onClose={handleCategoryFormClose}
             onCreate={handleCreateCategory}
+            category={selectedCategory}
+          />
+
+          <DeleteCategory
+            visible={isDeleteModalVisible}
+            onClose={handleDeleteModalClose}
+            onConfirm={handleDeleteConfirm}
           />
 
           {totalPages > 1 && (
@@ -257,27 +241,6 @@ const DataTablete = () => {
               </button>
             </div>
           )}
-          <Modal
-            title="Confirm deletion"
-            visible={isDeleteModalVisible}
-            onCancel={handleDeleteModalClose}
-            maskStyle={{ backdropFilter: "blur(10px)" }}
-            footer={[
-              <Button key="cancel" onClick={handleDeleteModalClose}>
-                Cancel
-              </Button>,
-              <Button
-                key="delete"
-                type="primary"
-                danger
-                onClick={handleDeleteConfirm}
-              >
-                Delete
-              </Button>,
-            ]}
-          >
-            <p>Are you sure you want to delete this course?</p>
-          </Modal>
         </div>
       </div>
     </div>

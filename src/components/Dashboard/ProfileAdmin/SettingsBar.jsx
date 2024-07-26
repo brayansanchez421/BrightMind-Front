@@ -50,7 +50,7 @@ const SettingsBar = () => {
         <li className="text-base hover:bg-cyan-400 py-1 font-bold mt-1 rounded-lg">
           <Link to="/ChangePassword">Change Password</Link>
         </li>
-        <li className="text-base mt-1 hover:bg-red-600 py-1 font-bold rounded-lg">
+        <li className="text-base mt-1 hover:bg-red-600 py-1 font-bold rounded-lg mb-1">
           <a href="#" onClick={handleDeleteAccount}>Delete account</a>
         </li>
       </ul>

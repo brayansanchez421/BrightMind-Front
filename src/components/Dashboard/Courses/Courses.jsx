@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Button, Input, Modal, message, Collapse } from "antd";
-import { ReloadOutlined, InfoCircleOutlined, DeleteOutlined, CheckCircleOutlined, DeleteFilled } from "@ant-design/icons";
+import {
+  ReloadOutlined,
+  InfoCircleOutlined,
+  DeleteOutlined,
+  CheckCircleOutlined,
+  DeleteFilled,
+} from "@ant-design/icons";
 import LeftBar from "../../Dashboard/LeftBar";
 import { useUserContext } from "../../../context/user/user.context";
 import { useCoursesContext } from "../../../context/courses/courses.context";
@@ -12,7 +18,13 @@ const { Panel } = Collapse;
 
 const DataTablete = () => {
   const { getUsers, usersData } = useUserContext();
-  const { getAllCourses, courses, asignarContenido, deleteCourse, updateCourse } = useCoursesContext();
+  const {
+    getAllCourses,
+    courses,
+    asignarContenido,
+    deleteCourse,
+    updateCourse,
+  } = useCoursesContext();
   const [searchValue, setSearchValue] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
@@ -35,7 +47,6 @@ const DataTablete = () => {
   useEffect(() => {
     setTotalPages(Math.ceil(courses.length / itemsPerPage));
   }, [courses, itemsPerPage]);
-
 
   const handleCreateCourseClick = () => {
     setShowCreateForm(true);
@@ -120,7 +131,10 @@ const DataTablete = () => {
       updatedContent.splice(index, 1);
 
       try {
-        await updateCourse(selectedCourse._id, { ...selectedCourse, content: updatedContent });
+        await updateCourse(selectedCourse._id, {
+          ...selectedCourse,
+          content: updatedContent,
+        });
         setSelectedCourse((prevCourse) => ({
           ...prevCourse,
           content: updatedContent,
@@ -135,7 +149,8 @@ const DataTablete = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateIds = () => {
-    return courses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    return courses
+      .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map((_, index) => index + 1 + (currentPage - 1) * itemsPerPage);
   };
 
@@ -143,13 +158,19 @@ const DataTablete = () => {
     <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 overflow-hidden min-h-screen">
       <div className="flex h-full">
         <LeftBar onVisibilityChange={setIsLeftBarVisible} />
-        <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? "ml-56 max-w-full" : ""}`}>
+        <div
+          className={`w-full transition-all duration-300 ${
+            isLeftBarVisible ? "ml-56 max-w-full" : ""
+          }`}
+        >
           <Navbar />
           <div className="flex flex-col mt-6 px-4">
             <div>
-              <h2 className="text-2xl font-black text-white text-center">Courses</h2>
+              <h2 className="text-2xl font-black text-white text-center">
+                Courses
+              </h2>
               <div className="flex flex-col items-center justify-center mt-4">
-                <Button 
+                <Button
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={handleCreateCourseClick}
@@ -188,7 +209,10 @@ const DataTablete = () => {
                     </thead>
                     <tbody>
                       {courses
-                        .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                        .slice(
+                          (currentPage - 1) * itemsPerPage,
+                          currentPage * itemsPerPage
+                        )
                         .map((course, index) => (
                           <tr key={course._id}>
                             <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center font-black">
@@ -207,24 +231,32 @@ const DataTablete = () => {
                               <div className="flex justify-center">
                                 <Button
                                   className="mb-2 bg-green-500 h-10 text-lg text-white mr-2 ml-2"
-                                  onClick={() => handleAssignButtonClick(course)}
+                                  onClick={() =>
+                                    handleAssignButtonClick(course)
+                                  }
                                   icon={<CheckCircleOutlined />}
                                 />
                                 <Button
                                   className="mb-2 bg-blue-500 h-10 text-lg mr-2 ml-2"
                                   type="primary"
                                   icon={<ReloadOutlined />}
-                                  onClick={() => handleUpdateButtonClick(course)}
+                                  onClick={() =>
+                                    handleUpdateButtonClick(course)
+                                  }
                                 />
                                 <Button
                                   className="bg-purple-600 text-white text-lg h-10 mr-2 ml-2"
                                   icon={<InfoCircleOutlined />}
-                                  onClick={() => handleDetailsButtonClick(course)}
+                                  onClick={() =>
+                                    handleDetailsButtonClick(course)
+                                  }
                                 />
                                 <Button
                                   className="bg-red-500 h-10 text-lg text-white ml-2"
                                   icon={<DeleteOutlined />}
-                                  onClick={() => handleDeleteButtonClick(course)}
+                                  onClick={() =>
+                                    handleDeleteButtonClick(course)
+                                  }
                                 />
                               </div>
                             </td>
@@ -242,7 +274,6 @@ const DataTablete = () => {
             onClose={handleCreateFormClose}
             onCreate={handleCreateCourse}
           />
-
 
           <UpdateCourseForm
             visible={showUpdateForm}
@@ -282,81 +313,81 @@ const DataTablete = () => {
               </button>
             </div>
           )}
-  <Modal
-    className="mt-16"
-    title={`Curso ${selectedCourse ? selectedCourse.title : ''}`}
-    visible={isAssignModalVisible}
-    onCancel={handleAssignModalClose}
-    maskStyle={{ backdropFilter: "blur(10px)" }}
-    footer={[
-      <Button key="back" onClick={handleAssignModalClose}>
-        Cancelar
-      </Button>,
-      <Button key="submit" type="primary" onClick={handleAssignContent}>
-        Asignar
-      </Button>,
-    ]}
-  >
-    {selectedCourse && (
-      <Collapse>
-        {selectedCourse.content.map((url, index) => (
-          <Panel
-            header={(
-              <div className="flex justify-between items-center">
-                <span>Recurso {index + 1}</span>
-                <Button
-                  type="danger"
-                  icon={<DeleteFilled />}
-                  onClick={() => handleRemoveResource(index)}
-                />
-              </div>
-            )}
-            key={index}
+          <Modal
+            centered
+            visible={isAssignModalVisible}
+            onCancel={handleAssignModalClose}
+            maskStyle={{ backdropFilter: "blur(20px)" }}
+            footer={[
+              <Button key="back" onClick={handleAssignModalClose}>
+                Cancelar
+              </Button>,
+              <Button key="submit" type="primary" onClick={handleAssignContent}>
+                Asignar
+              </Button>,
+            ]}
           >
-            {url.endsWith('.mp4') && (
-              <video controls className="w-full mb-4">
-                <source src={url} type="video/mp4" />
-                Tu navegador no soporta el elemento de video.
-              </video>
+            <div>
+            <h1 className="font-bold text-center text-xl">Agregar Contenido A <span className="font-black">{selectedCourse ? selectedCourse.title : ''}</span></h1>
+            {selectedCourse && (
+              <Collapse className="mt-6">
+                {selectedCourse.content.map((url, index) => (
+                  <Panel className="hover:bg-slate-400"
+                    header={
+                      <div className="flex justify-between items-center">
+                        <span className="">Recurso {index + 1}</span>
+                        <Button
+                          type="danger"
+                          icon={<DeleteFilled />}
+                          onClick={() => handleRemoveResource(index)}
+                        />
+                      </div>
+                    }
+                    key={index}
+                  >
+                    {url.endsWith(".mp4") && (
+                      <video controls className="w-full mb-4">
+                        <source src={url} type="video/mp4" />
+                        Tu navegador no soporta el elemento de video.
+                      </video>
+                    )}
+                    {url.endsWith(".pdf") && (
+                      <div>
+                        <p>Descargar PDF:</p>
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:underline"
+                          download
+                        >
+                          {`Descargar PDF - Recurso ${index + 1}`}
+                        </a>
+                      </div>
+                    )}
+                    {!url.endsWith(".mp4") && !url.endsWith(".pdf") && (
+                      <img
+                        src={url}
+                        alt={`Vista previa del curso ${index}`}
+                        className="w-full mb-4"
+                      />
+                    )}
+                  </Panel>
+                ))}
+              </Collapse>
             )}
-            {url.endsWith('.pdf') && (
-              <div>
-                <p>Descargar PDF:</p>
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                  download
-                >
-                  {`Descargar PDF - Recurso ${index + 1}`}
-                </a>
-              </div>
-            )}
-            {!url.endsWith('.mp4') && !url.endsWith('.pdf') && (
-              <img src={url} alt={`Vista previa del curso ${index}`} className="w-full mb-4" />
-            )}
-          </Panel>
-        ))}
-      </Collapse>
-    )}
-    <div className="mb-4">
-      <label className="block text-lg font-bold mb-4">
-        Recurso:
-        <input
-          type="file"
-          onChange={(e) => setContentFile(e.target.files[0])}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline mt-2"
-        />
-      </label>
-    </div>
-  </Modal>
-
-
-
-
-
-
+            </div>
+            <div className="mb-4">
+              <label className="block text-lg font-bold mb-4">
+                Recurso:
+                <input
+                  type="file"
+                  onChange={(e) => setContentFile(e.target.files[0])}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                />
+              </label>
+            </div>
+          </Modal>
           <Modal
             title="Confirm deletion"
             visible={isDeleteModalVisible}
@@ -366,7 +397,12 @@ const DataTablete = () => {
               <Button key="cancel" onClick={handleDeleteModalClose}>
                 Cancel
               </Button>,
-              <Button key="delete" type="primary" danger onClick={handleDeleteConfirm}>
+              <Button
+                key="delete"
+                type="primary"
+                danger
+                onClick={handleDeleteConfirm}
+              >
                 Delete
               </Button>,
             ]}
