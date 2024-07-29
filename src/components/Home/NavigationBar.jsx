@@ -46,11 +46,10 @@ function NavigationBar() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target) &&
-        !welcomeModalRef.current?.contains(event.target) // No cerrar si el clic está dentro del modal de bienvenida
-      ) {
+      const menu = menuRef.current;
+      const welcomeModal = welcomeModalRef.current;
+
+      if (menu && !menu.contains(event.target) && welcomeModal && !welcomeModal.contains(event.target)) {
         setIsMenuVisible(false);
         setShowWelcomeModal(false); // Ocultar el modal de bienvenida al cerrar el menú
       }
@@ -95,58 +94,82 @@ function NavigationBar() {
 
       {/* Sección derecha */}
       <div className="flex items-center">
-        <div
-          className="relative text-white md:text-lg font-bold mr-2 md:mr-4 cursor-pointer text-base hidden sm:block"
-          onMouseEnter={() => setShowWelcomeModal(true)}
-          onMouseLeave={() => setShowWelcomeModal(false)}
-        >
-          {username}
-          {showWelcomeModal && (
-            <div
-              ref={welcomeModalRef} // Referencia al modal de bienvenida
-              className="absolute top-8 right-0 w-56 bg-white shadow-md rounded-sm p-4 z-50 "
-              onMouseEnter={() => setShowWelcomeModal(true)} // Mantener el modal visible al estar encima
-              onMouseLeave={() => setShowWelcomeModal(false)} // Ocultar al salir del modal
+      <div
+        className="relative text-white md:text-lg font-bold mr-2 md:mr-4 cursor-pointer text-base hidden sm:block"
+        onMouseEnter={() => setShowWelcomeModal(true)}
+        onMouseLeave={() => setShowWelcomeModal(false)}
+      >
+        {username}
+        {showWelcomeModal && (
+          <div
+            ref={welcomeModalRef}
+            className="absolute top-8 right-0 w-72 bg-white shadow-lg rounded-lg p-6 z-50"
+            onMouseEnter={() => setShowWelcomeModal(true)}
+            onMouseLeave={() => setShowWelcomeModal(false)}
+          >
+            {userImage && (
+              <img
+                src={userImage}
+                alt="User"
+                className="h-16 w-16 rounded-full mx-auto mb-4"
+              />
+            )}
+            <p className={`text-gray-800 font-semibold text-center mb-2 ${!userImage && 'mt-4'}`}>
+              {t('navigationBar.welcome_message', { username })}
+            </p>
+            <p className="text-gray-600 text-center mb-4">
+              {t('navigationBar.check_courses')}
+            </p>
+            <Link
+              to="/MyCourses"
+              className="text-blue-600 font-semibold hover:underline text-center block"
             >
-              <p className="text-gray-800 mb-2">{t('navigationBar.welcome_message', { username })}</p>
-              <p className="text-gray-600 mb-4">{t('navigationBar.check_courses')}</p>
-              <Link
-                to="/MyCourses"
-                className="text-blue-600 font-semibold hover:underline"
-              >
-                {t('navigationBar.see_my_courses')}
-              </Link>
+              {t('navigationBar.see_my_courses')}
+            </Link>
+          </div>
+        )}
+      </div>
+
+        <div className="relative">  {/* Contiene la imagen de navegación */}
+          <div
+            className={`h-12 md:h-12 w-12 md:w-12 cursor-pointer border rounded-full transition-all duration-300 hover:scale-110 mr-1 ${
+              userImage ? '' : 'bg-gradient-to-r from-purple-700 to-pink-600 flex items-center justify-center'
+            }`}
+            onClick={() => setIsMenuVisible(!isMenuVisible)}
+            style={{
+              backgroundImage: userImage ? `url(${userImage})` : 'none',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          >
+            {!userImage && (
+              <BiUserCircle className="h-12 w-12 text-white" />
+            )}
+          </div>
+
+          {/* Menú desplegable */}
+          {isMenuVisible && (
+            <div
+              ref={menuRef}
+              className="absolute md:right-4 md:top-20 w-56 right-0 top-16 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-300 ease-in-out z-50"
+            >
+              <div className="flex flex-col py-2">
+                <Link
+                  to="/Account"
+                  className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded transition-all duration-300"
+                >
+                  {t('navigationBar.configure_profile')}
+                </Link>
+                <div
+                  onClick={handleLogout}
+                  className="px-4 py-3 hover:bg-red-600 cursor-pointer text-white rounded transition-all duration-300"
+                >
+                  {t('navigationBar.logout')}
+                </div>
+              </div>
             </div>
           )}
         </div>
-        <img
-          src={userImage || BiUserCircle}
-          alt="User"
-          className="h-12 md:h-12 w-12 md:w-12 cursor-pointer border rounded-full transition-all duration-300 hover:scale-110 mr-1"
-          onClick={() => setIsMenuVisible(!isMenuVisible)}
-        />
-        {/* Menú desplegable */}
-        {isMenuVisible && (
-          <div
-            ref={menuRef}
-            className="absolute md:right-4 md:top-20 w-56 right-0 top-16 bg-gradient-to-r from-purple-700 to-pink-600 shadow-lg rounded-md transition-all duration-300 ease-in-out z-50"
-          >
-            <div className="flex flex-col py-2">
-              <Link
-                to="/Account"
-                className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded transition-all duration-300"
-              >
-                {t('navigationBar.configure_profile')}
-              </Link>
-              <div
-                onClick={handleLogout}
-                className="px-4 py-3 hover:bg-red-600 cursor-pointer text-white rounded transition-all duration-300"
-              >
-                {t('navigationBar.logout')}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </nav>
   );
