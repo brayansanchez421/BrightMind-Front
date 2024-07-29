@@ -86,20 +86,12 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
         open={visible}
         footer={null}
         closable={false}
-        className="lg:absolute top-14 left-1/3"
-        maskStyle={{ backdropFilter: "blur(10px)" }}
+        className="shadow-orange shadow-white border-2 border-black rounded-lg"
+        centered
+        maskStyle={{ backdropFilter: "blur(15px)" }}
         onCancel={onClose}
       >
-        <form onSubmit={handleSubmit} className="bg-gradient-to-r from-teal-400 to-blue-500 shadow-lg rounded-lg p-6 relative">
-          <button
-            className="absolute top-2 right-2 text-white hover:text-red-600 bg-red-400 focus:outline-none"
-            onClick={onClose}
-            type="button"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
+        <form onSubmit={handleSubmit} className="bg-gradient-to-tr from-teal-400 to-blue-500 shadow-lg rounded-lg p-6">
           <div>
             <h1 className="text-3xl font-bold text-white text-center mb-6">Create Course</h1>
             <div className="mb-4">
@@ -165,19 +157,19 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
               </label>
             </div>
           </div>
-          <div className="flex items-center justify-center mt-6">
+          <div className="flex justify-center mt-4 space-x-4">
+          <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
+              type="submit"
+            >
+              Create Course
+            </button>
             <button
-              className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-gray-500 mr-4"
+              className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
               type="button"
               onClick={onClose}
             >
               Close
-            </button>
-            <button
-              className="bg-green-400 hover:bg-white text-white hover:text-green-400 font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-green-500"
-              type="submit"
-            >
-              Create Course
             </button>
           </div>
         </form>

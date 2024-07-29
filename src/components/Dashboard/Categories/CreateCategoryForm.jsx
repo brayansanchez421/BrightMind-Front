@@ -54,25 +54,18 @@ const CreateCategoryForm = ({ visible, onClose }) => {
 
   return (
     <Modal
+      className="shadow-orange shadow-white border-2 border-black rounded-lg"
+      centered
       visible={visible}
       footer={null}
       closable={false}
       onCancel={onClose}
-      maskStyle={{ backdropFilter: "blur(10px)" }}
+      maskStyle={{ backdropFilter: "blur(15px)" }}
     >
       <form
-        className="w-full p-6 bg-gradient-to-r from-teal-400 to-blue-500 rounded-lg shadow-lg relative"
+        className="w-full p-6 bg-gradient-to-tr from-teal-400 to-blue-500 rounded-lg shadow-lg relative"
         onSubmit={handleSubmit}
       >
-        <button
-          type="button"
-          className="absolute top-2 right-2 text-white hover:text-red-500 bg-red-400 focus:outline-none"
-          onClick={onClose}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
         <div>
           <h1 className="text-3xl font-bold text-center mb-4 text-white">Create Category</h1>
           <div className="mb-4">
@@ -125,19 +118,19 @@ const CreateCategoryForm = ({ visible, onClose }) => {
           )}
         </div>
         <div className="flex justify-center mt-6 space-x-4">
-          <Button
-            className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            onClick={onClose}
-          >
-            Cancel
-          </Button>
-          <Button
-            className="bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            htmlType="submit"
+        <button
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
             onClick={toast}
           >
             Create Category
-          </Button>
+          </button>
+          <button
+            className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          
         </div>
       </form>
     </Modal>

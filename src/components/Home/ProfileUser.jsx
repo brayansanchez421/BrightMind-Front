@@ -17,6 +17,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
     const [userId, setUserId] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
     const [previewProfileImage, setPreviewProfileImage] = useState(null);
+    const [deleteProfileImage, setDeleteProfileImage] = useState(false);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -44,6 +45,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
         if (file) {
             setProfileImage(file);
             setPreviewProfileImage(URL.createObjectURL(file));
+            setDeleteProfileImage(false); // Reset delete flag if new image is selected
         }
     };
 
@@ -54,11 +56,8 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                 const userData = {
                     username: name,
                     email,
+                    userImage: deleteProfileImage ? null : profileImage,
                 };
-
-                if (profileImage) {
-                    userData.userImage = profileImage;
-                }
 
                 await updateUserPartial(userId, userData);
                 toast.success(t('userProfileSettings.changes_saved_successfully'), {
@@ -71,6 +70,12 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                     progress: undefined,
                     onClose: () => window.location.reload(), // Añadido para recargar la página
                 });
+
+                if (deleteProfileImage) {
+                    setProfileImage(null);
+                    setPreviewProfileImage(null);
+                    setDeleteProfileImage(false); // Reset flag after saving changes
+                }
                 
             } catch (error) {
                 toast.error(t('userProfileSettings.failed_to_save_changes'), {
@@ -88,6 +93,38 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
         }
     };
 
+    const handleDeleteImage = async () => {
+        setProfileImage(null);
+        setPreviewProfileImage(null);
+        setDeleteProfileImage(true);
+
+        try {
+            if (userId) {
+                await updateUserPartial(userId, { userImage: null });
+                toast.success("Image deleted successfully!", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        } catch (error) {
+            toast.error("Failed to delete image. Please try again.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        window.location.reload();
+    };
+
     const transformCloudinaryURL = (imageUrl) => {
         return imageUrl;
     };
@@ -95,27 +132,32 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
     return (
         <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen ">
             <NavigationBar />
-            <div className="grid grid-cols-1">
-                <div>
-                    <SettingsBar />
-                </div>
+            <div className="flex justify-center 2xl:mt-20">
+                <div className='grid grid-cols-1 lg:w-4/12 border'>
+                <SettingsBar className=""/>
                 <ToastContainer />
-                <div className='flex justify-center mt-2 w-full'>
-                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg rounded-lg px-6 py-2 text-white lg:w-12/12 mx-2">
-                        <div className="mb-4 text-center">
-                            <h1 className="font-black text-white md:text-4xl text-2xl mb-6">{t('userProfileSettings.edit_profile')}</h1>
+                    <form onSubmit={handleSubmit} className="bg-gradient-to-br w-full from-purple-500 to-violet-800 shadow-lg rounded-lg px-6 mt-2 text-white">
+                        <div className="mb-4 text-center mt-4">
+                            <h1 className="font-bold text-white  text-2xl mb-6">{t('userProfileSettings.edit_profile')}</h1>
                             {previewProfileImage && (
                                 <div className="mb-4">
-                                    <img src={previewProfileImage} alt="Preview" className="w-24 h-24 rounded-full mx-auto mb-4 shadow-lg" />
+                                    <img src={previewProfileImage} alt="Preview" className="w-20 h-20 rounded-full mx-auto mb-4 shadow-lg" />
+                                    <button
+                                        type="button"
+                                        className="bg-red-500 text-white rounded-lg w-28 hover:bg-red-600 h-6 font-semibold"
+                                        onClick={handleDeleteImage}
+                                    >
+                                        Delete Image
+                                    </button>
                                 </div>
                             )}
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-white text-base font-bold mb-2" htmlFor="name">
+                        <div className="mt-2">
+                            <label className="block text-white text-lg font-semibold " htmlFor="name">
                                 {t('userProfileSettings.name')}
                             </label>
                             <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+                                className="border rounded w-full py-1 text-gray-800 text-sm"
                                 id="name"
                                 type="text"
                                 name="name"
@@ -124,12 +166,12 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                                 onChange={(e) => setName(e.target.value)}
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-white text-base font-bold mb-2" htmlFor="email">
+                        <div className="mt-2">
+                            <label className="block text-white text-lg font-semibold " htmlFor="email">
                                 {t('userProfileSettings.email')}
                             </label>
                             <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+                                className="rounded w-full text-gray-800 py-1 text-sm"
                                 id="email"
                                 type="email"
                                 name="email"
@@ -139,7 +181,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                                 required
                             />
                         </div>
-                        <div className="mb-4">
+                        <div className="mt-2">
                             <label htmlFor="profileImage" className="block text-lg font-semibold text-white">
                                 {t('userProfileSettings.profile_image')}
                             </label>
@@ -147,13 +189,13 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                                 type="file"
                                 id="profileImage"
                                 accept="image/*"
-                                className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100"
+                                className=" p-1 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100"
                                 onChange={handleImageChange}
                             />
                         </div>
-                        <div className="flex items-center justify-center">
+                        <div className="flex items-center justify-center mt-2 mb-2">
                             <button
-                                className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="bg-blue-600 px-4 py-2 hover:bg-blue-700 text-white font-medium rounded-lg"
                                 type="submit"
                             >
                                 {t('userProfileSettings.save')}

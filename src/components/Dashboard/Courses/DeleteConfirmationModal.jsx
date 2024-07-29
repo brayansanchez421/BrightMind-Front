@@ -1,14 +1,14 @@
 import React from "react";
-import { Modal,} from "antd";
+import { Modal, Button } from "antd";
 
-const DeleteCategory = ({ visible, onClose, onConfirm }) => {
+const DeleteConfirmationModal = ({ visible, onClose, onConfirm }) => {
   return (
     <Modal
       className="shadow-orange shadow-white border-2 border-black rounded-lg"
       centered
-      closable={false}
       visible={visible}
       onCancel={onClose}
+      closable={false}
       maskStyle={{ backdropFilter: "blur(10px)" }}
       footer={null}
     >
@@ -38,4 +38,4 @@ const DeleteCategory = ({ visible, onClose, onConfirm }) => {
   );
 };
 
-export default DeleteCategory;
+export default DeleteConfirmationModal;

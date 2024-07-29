@@ -4,8 +4,10 @@ import { useUserContext } from '../../context/user/user.context.jsx';
 import { useAuth } from '../../context/auth.context.jsx';
 import { Link } from 'react-router-dom';
 import LeftBar from './LeftBar';
+import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
+  const { t } = useTranslation("global");
   const { logout } = useAuth();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
@@ -99,13 +101,13 @@ const Navbar = () => {
               >
                 <ul className="py-2">
                   <li className="px-4 py-3 hover:bg-gray-600 cursor-pointer text-white rounded">
-                    <Link to="/ProfileEditor">Configure profile</Link>
+                    <Link to="/ProfileEditor">{t('navigationBar.configure_profile')}</Link>
                   </li>
                   <li
                     className="px-4 py-3 hover:bg-red-600 cursor-pointer text-white rounded"
                     onClick={handleLogout}
                   >
-                    Go out
+                    {t('navigationBar.logout')}
                   </li>
                 </ul>
               </div>

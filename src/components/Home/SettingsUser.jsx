@@ -44,20 +44,16 @@ const SettingsBar = () => {
 
   return (
     <div className='flex justify-center'>
-      <div className="w-full mx-2 sm:w-2/6 mt-4 py-2 bg-gradient-to-r from-violet-500 via-pink-500 to-red-500 rounded-lg shadow-lg text-white">
-        <h2 className="text-center font-black text-lg md:text-2xl">{t('settingsBar.account_settings')}</h2>
-        <ul>
-          <li className="text-base font-bold mb-4">
-            <Link to="/ChangePasswordUser" className="block py-1 px-4 rounded-lg hover:bg-cyan-700">
+      <div className="mt-4 w-full bg-gradient-to-b from-violet-500 to-purple-800 rounded-lg shadow-md px-4">
+        <h2 className="text-center font-black text-white p-3 text-lg md:text-xl">{t('settingsBar.account_settings')}</h2>
+        <div className=''>
+            <Link to="/ChangePasswordUser" className="block py-1 text-center text-white font-semibold px-4 rounded-lg hover:bg-cyan-700">
               {t('settingsBar.change_password')}
             </Link>
-          </li>
-          <li className="text-base font-bold">
-            <button onClick={handleDeleteAccount} className="w-full text-left py-1 px-4 rounded-lg hover:bg-red-700">
+            <button onClick={handleDeleteAccount} className="w-full text-center text-white font-semibold py-1 px-4 rounded-lg hover:bg-red-700">
               {t('settingsBar.delete_account')}
             </button>
-          </li>
-        </ul>
+        </div>
       </div>
     </div>
   );

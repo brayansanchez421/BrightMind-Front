@@ -80,19 +80,11 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
         visible={visible}
         footer={null}
         closable={false}
-        className="lg:absolute top-14 left-1/3"
-        maskStyle={{ backdropFilter: "blur(10px)" }}
+        className="shadow-orange shadow-white border-2 border-black rounded-lg"
+        centered
+        maskStyle={{ backdropFilter: "blur(15px)" }}
       >
-        <form onSubmit={handleSubmit} className="bg-gradient-to-r from-teal-400 to-blue-500 p-4 relative  rounded overflow-x-hidden">
-          <button
-            className="absolute top-2 right-2 text-white hover:text-red-600 hover:bg-red-500 w-6 h-6 text-base bg-red-400"
-            onClick={onClose}
-            type="button"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
+        <form onSubmit={handleSubmit} className="bg-gradient-to-tr from-teal-400 to-blue-500 p-4 ">
           <div>
             <h1 className="text-4xl font-black text-center mb-4 text-white">Update Course</h1>
             <div className="mb-4">
@@ -135,7 +127,7 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
                   maxLength={MAX_DESCRIPCION_LENGTH}
                   style={{ minHeight: "100px" }}
                 />
-                <div className="text-gray-500 text-right">{curso.descripcion.length}/{MAX_DESCRIPCION_LENGTH}</div>
+                <div className="text-white mt-1 text-right">{curso.descripcion.length}/{MAX_DESCRIPCION_LENGTH}</div>
               </label>
             </div>
             <div className="">
@@ -154,19 +146,19 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
               </label>
             </div>
           </div>
-          <div className="flex items-center justify-center mt-4">
+          <div className="flex justify-center mt-4 space-x-4">
+          <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+              type="submit"
+            >
+              Update Course
+            </button>
             <button
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-4 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg"
               type="button"
               onClick={onClose}
             >
               Close
-            </button>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded focus:outline-none focus:shadow-outline ml-4"
-              type="submit"
-            >
-              Update Course
             </button>
           </div>
         </form>

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, Modal, message, Collapse } from "antd";
+import { Button, Input, message } from "antd";
 import {
   ReloadOutlined,
   InfoCircleOutlined,
   DeleteOutlined,
   CheckCircleOutlined,
-  DeleteFilled,
 } from "@ant-design/icons";
 import LeftBar from "../../Dashboard/LeftBar";
 import { useUserContext } from "../../../context/user/user.context";
@@ -13,8 +12,9 @@ import { useCoursesContext } from "../../../context/courses/courses.context";
 import CreateCourseForm from "../Courses/CreateCourseForm";
 import UpdateCourseForm from "../Courses/UpdateCourseForm";
 import Navbar from "../NavBar";
-
-const { Panel } = Collapse;
+import AssignContentModal from "./AssignContentModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import CourseDetailsModal from "./CourseDetailsModal"; // Import the new modal
 
 const DataTablete = () => {
   const { getUsers, usersData } = useUserContext();
@@ -31,13 +31,14 @@ const DataTablete = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [contentFile, setContentFile] = useState(null);
-
   const [itemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
   const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
   const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState(null);
+  const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
+  const [selectedCourseDetails, setSelectedCourseDetails] = useState(null);
 
   useEffect(() => {
     getUsers();
@@ -48,13 +49,9 @@ const DataTablete = () => {
     setTotalPages(Math.ceil(courses.length / itemsPerPage));
   }, [courses, itemsPerPage]);
 
-  const handleCreateCourseClick = () => {
-    setShowCreateForm(true);
-  };
+  const handleCreateCourseClick = () => setShowCreateForm(true);
 
-  const handleCreateFormClose = () => {
-    setShowCreateForm(false);
-  };
+  const handleCreateFormClose = () => setShowCreateForm(false);
 
   const handleUpdateButtonClick = (course) => {
     setSelectedCourse(course);
@@ -67,7 +64,7 @@ const DataTablete = () => {
   };
 
   const handleUpdateCourse = async (updatedCourse) => {
-    message.success("Successfully updated course");
+    message.success("Curso actualizado con éxito");
     window.location.reload();
     setShowUpdateForm(false);
     setSelectedCourse(null);
@@ -83,16 +80,9 @@ const DataTablete = () => {
     setIsAssignModalVisible(true);
   };
 
-  const handleAssignModalClose = () => {
-    setIsAssignModalVisible(false);
-  };
-
   const handleAssignContent = async () => {
     if (selectedCourse && contentFile) {
       const courseId = selectedCourse._id;
-      console.log("Curso seleccionado:", selectedCourse._id);
-      console.log("Archivo adjunto:", contentFile);
-
       const res = await asignarContenido(courseId, contentFile);
 
       console.log("Contenido asignado:", res);
@@ -106,19 +96,13 @@ const DataTablete = () => {
     setIsDeleteModalVisible(true);
   };
 
-  const handleDeleteModalClose = () => {
-    setIsDeleteModalVisible(false);
-    setCourseToDelete(null);
-  };
-
   const handleDeleteConfirm = async () => {
     try {
       await deleteCourse(courseToDelete._id);
-      console.log(courseToDelete._id);
-      message.success("Course successfully deleted");
+      message.success("Curso eliminado con éxito");
       getAllCourses();
     } catch (error) {
-      message.error("Error deleting course");
+      message.error("Error al eliminar el curso");
     } finally {
       setIsDeleteModalVisible(false);
       setCourseToDelete(null);
@@ -139,11 +123,16 @@ const DataTablete = () => {
           ...prevCourse,
           content: updatedContent,
         }));
-        message.success("Resource deleted successfully");
+        message.success("Recurso eliminado con éxito");
       } catch (error) {
-        message.error("Error deleting resource");
+        message.error("Error al eliminar el recurso");
       }
     }
+  };
+
+  const handleDetailsButtonClick = (course) => {
+    setSelectedCourseDetails(course);
+    setIsDetailsModalVisible(true);
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -187,7 +176,7 @@ const DataTablete = () => {
               </div>
               <div className="mt-10 flex justify-center">
                 <div className="overflow-auto w-full">
-                  <table className="min-w-full overflow-x-auto">
+                  <table className="min-w-full overflow-x-auto mb-4">
                     <thead>
                       <tr>
                         <th className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800">
@@ -228,31 +217,30 @@ const DataTablete = () => {
                               {course.description}
                             </td>
                             <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300">
-                              <div className="flex justify-center">
+                              <div className="flex justify-center space-x-2">
                                 <Button
-                                  className="mb-2 bg-green-500 h-10 text-lg text-white mr-2 ml-2"
+                                  className=" bg-green-500 h-10 text-lg text-white"
                                   onClick={() =>
                                     handleAssignButtonClick(course)
                                   }
                                   icon={<CheckCircleOutlined />}
                                 />
                                 <Button
-                                  className="mb-2 bg-blue-500 h-10 text-lg mr-2 ml-2"
-                                  type="primary"
+                                  className=" bg-blue-500 h-10 text-lg text-white"
                                   icon={<ReloadOutlined />}
                                   onClick={() =>
                                     handleUpdateButtonClick(course)
                                   }
                                 />
                                 <Button
-                                  className="bg-purple-600 text-white text-lg h-10 mr-2 ml-2"
+                                  className="bg-purple-600 text-white text-lg h-10"
                                   icon={<InfoCircleOutlined />}
                                   onClick={() =>
                                     handleDetailsButtonClick(course)
                                   }
                                 />
                                 <Button
-                                  className="bg-red-500 h-10 text-lg text-white ml-2"
+                                  className="bg-red-500 h-10 text-lg text-white"
                                   icon={<DeleteOutlined />}
                                   onClick={() =>
                                     handleDeleteButtonClick(course)
@@ -282,135 +270,59 @@ const DataTablete = () => {
             courseId={selectedCourse ? selectedCourse._id : null}
           />
 
-          {totalPages > 1 && (
-            <div className="flex justify-center mb-8 mt-10">
-              <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
-              >
-                Previous
-              </button>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => paginate(index + 1)}
-                  className={`px-3 py-1 mx-1 ${
-                    currentPage === index + 1
-                      ? "bg-black border text-white"
-                      : "bg-gray-200 text-gray-800 border"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
-              >
-                Next
-              </button>
-            </div>
-          )}
-          <Modal
-            centered
+          <AssignContentModal
             visible={isAssignModalVisible}
-            onCancel={handleAssignModalClose}
-            maskStyle={{ backdropFilter: "blur(20px)" }}
-            footer={[
-              <Button key="back" onClick={handleAssignModalClose}>
-                Cancelar
-              </Button>,
-              <Button key="submit" type="primary" onClick={handleAssignContent}>
-                Asignar
-              </Button>,
-            ]}
-          >
-            <div>
-            <h1 className="font-bold text-center text-xl">Agregar Contenido A <span className="font-black">{selectedCourse ? selectedCourse.title : ''}</span></h1>
-            {selectedCourse && (
-              <Collapse className="mt-6">
-                {selectedCourse.content.map((url, index) => (
-                  <Panel className="hover:bg-slate-400"
-                    header={
-                      <div className="flex justify-between items-center">
-                        <span className="">Recurso {index + 1}</span>
-                        <Button
-                          type="danger"
-                          icon={<DeleteFilled />}
-                          onClick={() => handleRemoveResource(index)}
-                        />
-                      </div>
-                    }
-                    key={index}
-                  >
-                    {url.endsWith(".mp4") && (
-                      <video controls className="w-full mb-4">
-                        <source src={url} type="video/mp4" />
-                        Tu navegador no soporta el elemento de video.
-                      </video>
-                    )}
-                    {url.endsWith(".pdf") && (
-                      <div>
-                        <p>Descargar PDF:</p>
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:underline"
-                          download
-                        >
-                          {`Descargar PDF - Recurso ${index + 1}`}
-                        </a>
-                      </div>
-                    )}
-                    {!url.endsWith(".mp4") && !url.endsWith(".pdf") && (
-                      <img
-                        src={url}
-                        alt={`Vista previa del curso ${index}`}
-                        className="w-full mb-4"
-                      />
-                    )}
-                  </Panel>
-                ))}
-              </Collapse>
-            )}
-            </div>
-            <div className="mb-4">
-              <label className="block text-lg font-bold mb-4">
-                Recurso:
-                <input
-                  type="file"
-                  onChange={(e) => setContentFile(e.target.files[0])}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                />
-              </label>
-            </div>
-          </Modal>
-          <Modal
-            title="Confirm deletion"
+            onClose={() => setIsAssignModalVisible(false)}
+            onAssignContent={handleAssignContent}
+            selectedCourse={selectedCourse}
+            setContentFile={setContentFile}
+            handleRemoveResource={handleRemoveResource}
+          />
+
+          <DeleteConfirmationModal
             visible={isDeleteModalVisible}
-            onCancel={handleDeleteModalClose}
-            maskStyle={{ backdropFilter: "blur(10px)" }}
-            footer={[
-              <Button key="cancel" onClick={handleDeleteModalClose}>
-                Cancel
-              </Button>,
-              <Button
-                key="delete"
-                type="primary"
-                danger
-                onClick={handleDeleteConfirm}
-              >
-                Delete
-              </Button>,
-            ]}
-          >
-            <p>Are you sure you want to delete this course?</p>
-          </Modal>
+            onClose={() => setIsDeleteModalVisible(false)}
+            onConfirm={handleDeleteConfirm}
+          />
+
+          <CourseDetailsModal
+            visible={isDetailsModalVisible}
+            onClose={() => setIsDetailsModalVisible(false)}
+            course={selectedCourseDetails}
+          />
         </div>
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mb-8 mt-10">
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+          >
+            Previous
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => paginate(index + 1)}
+              className={`px-3 py-1 mx-1 ${
+                currentPage === index + 1
+                  ? "bg-black border text-white"
+                  : "bg-gray-200 text-gray-800 border"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

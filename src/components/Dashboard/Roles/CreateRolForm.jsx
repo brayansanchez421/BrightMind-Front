@@ -23,7 +23,9 @@ const CreateRolForm = ({ visible, onClose }) => {
       return;
     }
     try {
-      if (rolesData.some((existingRole) => existingRole.nombre === role.nombre)) {
+      if (
+        rolesData.some((existingRole) => existingRole.nombre === role.nombre)
+      ) {
         message.error({
           content: "Role name already exists",
           duration: 3,
@@ -52,67 +54,48 @@ const CreateRolForm = ({ visible, onClose }) => {
 
   return (
     <Modal
+      className="shadow-orange shadow-white border-2 border-black rounded-lg"
+      centered
       visible={visible}
       footer={null}
       closable={false}
-      afterClose={() => setSuccessMessageVisible(false)}
+      maskStyle={{backdropFilter:"blur(10px)"}}
+      
     >
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max p-6 bg-gradient-to-r from-blue-500 to-green-500 rounded-lg shadow-xl relative"
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-white">Create Role</h1>
-          <button
-            type="button"
-            onClick={handleModalClose}
-            className="text-white hover:text-red-500 focus:outline-none"
-            style={{ fontSize: "1.5rem" }}
-          >
-            &times;
-          </button>
-        </div>
-        <div className="mb-6">
-          <label
-            htmlFor="nombre"
-            className={`block text-sm font-medium ${
-              error ? "text-red-500" : "text-white"
-            } mb-2`}
-          >
-            Name:
-          </label>
-          <input
-            id="nombre"
-            type="text"
-            name="nombre"
-            value={role.nombre}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 placeholder-gray-300 bg-white border rounded-md focus:outline-none focus:ring-2 ${
-              error ? "ring-red-500 border-red-500" : "ring-green-500 border-gray-300"
-            }`}
-            required
-          />
-          {error && (
-            <p className="text-red-500 text-sm mt-1">Please enter a role name</p>
-          )}
-        </div>
-        <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={handleModalClose}
-            className="inline-block px-4 py-2 mr-2 text-sm font-medium text-gray-700 bg-gray-200 border border-gray-300 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
-          >
-            Close
-          </button>
-          <button
-            type="submit"
-            className="inline-block px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          >
-            Create Role
-          </button>
-        </div>
-      </form>
-
+      <div className="bg-gradient-to-tr from-teal-400 to-blue-500 shadow-lg rounded-lg p-6 ">
+      <div className="">
+        <h1 className="text-2xl text-center font-bold text-bold text-white">
+          Create Role
+        </h1>
+      </div>
+      <div className="mt-4">
+        <label className="text-base font-semibold ml-2 ">Name:</label>
+        <input
+          value={role.nombre}
+          onChange={handleChange}
+          className="w-full py-2 border border-black focus-visible:ring rounded-md mt-2"
+          required
+        />
+        {error && (
+          <p className="text-red-500 text-sm mt-1">Please enter a role name</p>
+        )}
+      </div>
+      <div className="flex justify-center mt-4 space-x-4">
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
+          onClick={handleSubmit}
+        >
+          Create Role
+        </button>
+        <button
+          type="button"
+          onClick={handleModalClose}
+          className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
+        >
+          Close
+        </button>
+      </div>
       {successMessageVisible && (
         <div className="absolute top-0 right-0 mt-4 mr-4">
           {message.success({
@@ -122,6 +105,7 @@ const CreateRolForm = ({ visible, onClose }) => {
           })}
         </div>
       )}
+      </div>
     </Modal>
   );
 };

@@ -84,7 +84,7 @@ const LoginForm = () => {
         <ToastContainer />
         <form
           onSubmit={formik.handleSubmit}
-          className="bg-white rounded-3xl shadow-2xl w-full p-10 border border-black"
+          className="bg-white rounded-3xl w-full p-10 border shadow-orange shadow-pink-300"
         >
           <div className="text-2xl w-36 mx-auto text-center font-black bg-gradient-to-r from-purple-500 to-emerald-400 py-3 rounded-xl text-white">
             {t("login.sign_in")}
@@ -133,13 +133,15 @@ const LoginForm = () => {
                 <div className="text-red-500">{formik.errors.password}</div>
               ) : null}
             </div>
-            <button
+            <div className="flex justify-center">
+            <button 
               type="submit"
-              className="w-full py-4 px-8 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
+              className="w-56 py-2  bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
               disabled={!formik.isValid || loading}
             >
               {loading ? t("login.loading") : t("login.login")}
             </button>
+            </div>
           </div>
           <div className="mt-4 text-center">
             <Link

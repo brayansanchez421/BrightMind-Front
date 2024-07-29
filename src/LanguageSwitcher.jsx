@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaGlobeAmericas, FaGlobeEurope } from 'react-icons/fa';
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
@@ -12,24 +13,39 @@ const LanguageSwitcher = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 flex space-x-4 bg-white p-2 rounded-full shadow-md">
-      <span className="text-gray-700">{isEnglish ? 'EN' : 'ES'}</span>
-      <label className="flex items-center cursor-pointer">
-        <span className="relative">
+    <div className="fixed bottom-2 right-2 flex items-center space-x-2 bg-white p-1 rounded-full shadow-lg border border-gray-300">
+      <div className="flex items-center space-x-1">
+        <span className="text-gray-700 font-medium text-sm">{isEnglish ? 'EN' : 'ES'}</span>
+        <label className="relative inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
             checked={isEnglish}
             onChange={handleToggle}
             className="sr-only"
           />
-          <div className="block bg-gray-400 w-14 h-8 rounded-full"></div>
-          <div
-            className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 ${
-              isEnglish ? 'translate-x-6' : 'translate-x-0'
-            }`}
-          ></div>
-        </span>
-      </label>
+          <div className="block bg-gray-200 w-10 h-5 rounded-full shadow-inner">
+            <div
+              className={`dot absolute left-1 top-0.5 bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
+                isEnglish ? 'translate-x-5' : ''
+              }`}
+            ></div>
+            <div
+              className={`absolute top-0.5 left-1 text-blue-500 transform transition-opacity duration-300 ${
+                isEnglish ? 'opacity-0' : 'opacity-100'
+              }`}
+            >
+              <FaGlobeEurope size={16} />
+            </div>
+            <div
+              className={`absolute top-0.5 right-1 text-green-500 transform transition-opacity duration-300 ${
+                isEnglish ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <FaGlobeAmericas size={16} />
+            </div>
+          </div>
+        </label>
+      </div>
     </div>
   );
 };

@@ -14,9 +14,10 @@ import CreateUserModal from "./CreateUserModal";
 import UpdateUserModal from "./UpdateUserModal";
 import { useUserContext } from "../../../context/user/user.context";
 import { useRoleContext } from "../../../context/user/role.context";
-
+import { useTranslation } from 'react-i18next';
 
 const DataTable = () => {
+  const { t } = useTranslation("global");
   const { rolesData } = useRoleContext();
   const { getUsers, usersData, activateAccount, updateUser, createUser } =
     useUserContext();
@@ -157,7 +158,7 @@ const DataTable = () => {
           <div className="flex flex-col mt-10">
             <div>
               <h2 className="text-2xl font-black  text-white text-center">
-                Users
+                {t("datatable.Users")}
               </h2>
               <div className="flex flex-col items-center justify-center mt-4">
                 <Button
@@ -166,10 +167,10 @@ const DataTable = () => {
                   onClick={() => setShowCreateModal(true)}
                   className="text-center font-medium text-base"
                 >
-                  <b>Create User</b>
+                  <b>{t("datatable.CreateUser")}</b>
                 </Button>
                 <Input
-                  placeholder="Search by Name"
+                  placeholder={t("datatable.SearchByName")}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   className="w-40 text-center font-medium text-base mt-2"
@@ -185,13 +186,13 @@ const DataTable = () => {
                       className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800"
                       onClick={() => orderBy("id")}
                     >
-                      ID{" "}
+                      {t("datatable.ID")}{" "}
                     </th>
                     <th
                       className="text-xl px-8 py-3  bg-yellow-500 text-white border-2 cursor-pointer border-blue-800"
                       onClick={() => orderBy("role")}
                     >
-                      Role{" "}
+                      {t("datatable.Role")}{" "}
                       {sortConfig.key === "role" &&
                         (sortConfig.direction === "ascending" ? (
                           <CaretUpOutlined />
@@ -203,7 +204,7 @@ const DataTable = () => {
                       className="text-xl px-6 py-3 bg-green-500 text-white border-2 cursor-pointer border-blue-800"
                       onClick={() => orderBy("username")}
                     >
-                      Name{" "}
+                      {t("datatable.Name")}{" "}
                       {sortConfig.key === "username" &&
                         (sortConfig.direction === "ascending" ? (
                           <CaretUpOutlined />
@@ -215,16 +216,16 @@ const DataTable = () => {
                       className="text-xl px-10 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800"
                       onClick={() => orderBy("email")}
                     >
-                      Email{" "}
+                      {t("datatable.Email")}{" "}
                     </th>
                     <th
                       className="text-xl px-10 py-3 bg-gray-500 text-white border-2 cursor-pointer border-blue-800"
                       onClick={() => orderBy("state")}
                     >
-                      Status{" "}  
+                      {t("datatable.Status")}{" "}  
                     </th>
                     <th className="px-40 py-3 bg-red-500 text-white text-xl border-2 border-blue-800">
-                      Actions
+                      {t("datatable.Actions")}
                     </th>
                   </tr>
                 </thead>
@@ -244,7 +245,7 @@ const DataTable = () => {
                         {item.email}
                       </td>
                       <td className="text-center border-2 border-blue-800 px-6 py-2 bg-gray-300 text-lg text-black mt-1">
-                        {item.state ? "Active" : "Inactive"}
+                        {item.state ? t("datatable.Active") : t("datatable.Inactive")}
                       </td> 
                       <td className="border-2 border-blue-800 px-6 py-2 bg-gray-300 text-lg text-black mt-1 text-center ">
                         <button 
@@ -255,13 +256,13 @@ const DataTable = () => {
                               : "bg-green-500 hover:bg-green-700"
                           } text-white font-bold py-2 px-4 rounded flex-1  `}
                         >
-                          {item.state ? "Desactivate" : "Activate"}
+                          {item.state ? t("datatable.Desactivate") : t("datatable.Activate")}
                         </button>
                         <button
                           onClick={() => handleUpdateButtonClick(item)}
                           className="bg-blue-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded ml-2 flex-1"
                         >
-                          Update
+                          {t("datatable.Update")}
                         </button>
                         <button
                           onClick={() => {
@@ -286,7 +287,7 @@ const DataTable = () => {
                 disabled={currentPage === 1}
                 className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
               >
-                Previous
+                {t("datatable.Previous")}
               </button>
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
@@ -306,7 +307,7 @@ const DataTable = () => {
                 disabled={currentPage === totalPages}
                 className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
               >
-                Next
+                {t("datatable.Next")}
               </button>
             </div>
           )}

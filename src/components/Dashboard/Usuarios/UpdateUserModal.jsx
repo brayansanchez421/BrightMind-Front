@@ -3,12 +3,14 @@ import { Modal, Form, Input, Select, Button } from "antd";
 import { useRoleContext } from '../../../context/user/role.context';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTranslation } from 'react-i18next';
 
 const { Option } = Select;
 
 const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
   const { rolesData } = useRoleContext();
   const [form] = Form.useForm();
+  const { t } = useTranslation("global");
 
   useEffect(() => {
     if (visible) {
@@ -21,7 +23,7 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
       const values = await form.validateFields();
       onUpdate(values);
       onCancel(); // Close the modal
-      toast.success("User updated successfully", { autoClose: 1000 });
+      toast.success(t('UpdateUserModal.userUpdatedSuccess'), { autoClose: 1000 });
     } catch (error) {
       console.error("Failed to update user:", error);
     }
@@ -30,40 +32,44 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
   return (
     <>
       <Modal
-        className="mt-6"
+        className="shadow-orange shadow-white border-2 border-black rounded-lg"
         visible={visible}
-        maskStyle={{ backdropFilter: "blur(10px)" }}
+        closable={false}
+        centered
+        maskStyle={{ backdropFilter: "blur(15px)" }}
         footer={null}
         onCancel={onCancel}
       >
         <Form
-          className="py-6 bg-blue-100 shadow-orange shadow-sky-300"
+          className="bg-gradient-to-tr from-teal-400 to-blue-500 shadow-lg rounded-lg py-2"
           form={form}
           layout="vertical"
           initialValues={user}
         >
-          <h1 className="text-xl font-black text-center">UPDATE USER</h1>
+          <h1 className="text-2xl text-white font-bold text-center">
+            {t('UpdateUserModal.updateUserTitle')}
+          </h1>
           <Form.Item
             className="text-base font-semibold mx-10 mt-4"
             name="username"
-            label="Username"
-            rules={[{ required: true, message: "Por favor ingrese un nombre de usuario" }]}
+            label={t('UpdateUserModal.username')}
+            rules={[{ required: true, message: t('UpdateUserModal.usernameRequired') }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             className="text-base font-semibold mx-10"
             name="email"
-            label="Email"
-            rules={[{ required: true, message: "Por favor ingrese un correo electrónico" }]}
+            label={t('UpdateUserModal.email')}
+            rules={[{ required: true, message: t('UpdateUserModal.emailRequired') }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             className="text-base font-semibold mx-10"
             name="role"
-            label="Role"
-            rules={[{ required: true, message: "Por favor seleccione un rol" }]}
+            label={t('UpdateUserModal.role')}
+            rules={[{ required: true, message: t('UpdateUserModal.roleRequired') }]}
           >
             <Select className="text-center">
               {rolesData.map((role) => (
@@ -76,30 +82,27 @@ const UpdateUserModal = ({ visible, onCancel, onUpdate, user }) => {
           <Form.Item
             className="text-base font-semibold mx-10"
             name="state"
-            label="State"
-            rules={[{ required: true, message: "Por favor seleccione un estado" }]}
+            label={t('UpdateUserModal.state')}
+            rules={[{ required: true, message: t('UpdateUserModal.stateRequired') }]}
           >
             <Select className="text-center">
-              <Option value={true}>Active</Option>
-              <Option value={false}>Inactive</Option>
+              <Option value={true}>{t('UpdateUserModal.active')}</Option>
+              <Option value={false}>{t('UpdateUserModal.inactive')}</Option>
             </Select>
           </Form.Item>
-          <div className="flex justify-center mt-10">
-            <Button
-              className="bg-rose-800 text-white font-medium"
-              key="cancel"
+          <div className="flex justify-center mt-6  space-x-4">
+            <button
+              className="bg-neutral-700 hover:bg-neutral-600 text-white font-medium px-4 py-2 rounded-lg"
               onClick={onCancel}
             >
-              Cancel
-            </Button>
-            <Button
-              className="bg-sky-700 font-medium ml-2"
-              key="submit"
-              type="primary"
+              {t('UpdateUserModal.cancel')}
+            </button>
+            <button
+              className="bg-blue-600 px-4 py-2 hover:bg-blue-700 text-white font-medium rounded-lg"
               onClick={handleFormSubmit}
             >
-              Update
-            </Button>
+              {t('UpdateUserModal.update')}
+            </button>
           </div>
         </Form>
       </Modal>

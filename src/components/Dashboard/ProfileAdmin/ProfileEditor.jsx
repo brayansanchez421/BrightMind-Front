@@ -40,7 +40,7 @@ const ProfileEditor = () => {
         <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? 'ml-56' : ''}`}>
           <Navbar/>
         
-        <div className="flex justify-center">
+        <div className="flex justify-center   ">
         
           <div className=''>
             <SettingsBar />
