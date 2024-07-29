@@ -18,12 +18,8 @@ function RegisterForm() {
   const validationSchema = yup.object().shape({
     username: yup.string().required(t("register.username_required")),
     email: yup.string().email(t("register.invalid_email")).required(t("register.email_required")),
-    password: yup
-      .string()
-      .required(t("register.password_required"))
-      .min(8, t("register.password_min"))
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+    password: yup.string().required(t("register.password_required"))
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, //Correcion
         t("register.password_matches")
       ),
     confirmPassword: yup
