@@ -1,138 +1,193 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import HoverCard from '../Cards/HoverCard';
-import NavigationBar from '../NavigationBar';
-import { useCoursesContext } from '../../../context/courses/courses.context';
-import { useUserContext } from '../../../context/user/user.context';
-import { useAuth } from '../../../context/auth.context';
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import HoverCard from "../Cards/HoverCard";
+import NavigationBar from "../NavigationBar";
+import { useCoursesContext } from "../../../context/courses/courses.context";
+import { useUserContext } from "../../../context/user/user.context";
+import { useAuth } from "../../../context/auth.context";
+import { useTranslation } from 'react-i18next';
 
 const Course = () => {
-    const location = useLocation();
-    const { title } = location.state || { title: '' };
-    const { courses } = useCoursesContext();
-    const { user } = useAuth();
-    const { registerToCourse } = useUserContext();
+  const { t } = useTranslation("global"); //Pequeño ajuste de correcion de global, estaba mal escrito.
+  const location = useLocation();
+  const { title } = location.state || { title: "" };
+  const { courses } = useCoursesContext();
+  const { user } = useAuth();
+  const { registerToCourse } = useUserContext();
+  const [itemsPerPage] = useState(15);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [userCourses, setUserCourses] = useState([]);
+  const [isRegistered, setIsRegistered] = useState(false);
 
-    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-    const [selectedCourse, setSelectedCourse] = useState(null);
-    const [userCourses, setUserCourses] = useState([]);
-    const [isRegistered, setIsRegistered] = useState(false);
+  useEffect(() => {
+    if (user && user.data) {
+      if (user.data.courses) {
+        setUserCourses(user.data.courses);
+      }
+    }
+  }, [user]);
 
-    useEffect(() => {
-        if (user && user.data) {
-            console.log('User data:', user.data); // Debug: log user data
-            if (user.data.courses) {
-                setUserCourses(user.data.courses);
-                console.log('User courses set in state:', user.data.courses); // Debug: log user courses
-            }
-        }
-    }, [user]);
+  useEffect(() => {
+    if (selectedCourse) {
+      const isUserRegistered = userCourses.includes(selectedCourse._id);
+      setIsRegistered(isUserRegistered);
+    }
+  }, [selectedCourse, userCourses]);
 
-    useEffect(() => {
-        if (selectedCourse) {
-            console.log("este: ", userCourses)
-            console.log("este1: ", selectedCourse._id)
+  const filteredCourses = courses.filter((course) => course.category === title);
 
-            const isUserRegistered = userCourses.includes(selectedCourse._id);
-            setIsRegistered(isUserRegistered);
-            console.log(`Is user registered for ${selectedCourse.title}:`, isUserRegistered); // Debug: log registration status
-        }
-    }, [selectedCourse, userCourses]);
+  const handleCardClick = (course) => {
+    setSelectedCourse(course);
+    setIsConfirmModalOpen(true);
+  };
 
-    const filteredCourses = courses.filter(course => course.category === title);
-    console.log('Filtered courses:', filteredCourses); // Debug: log filtered courses
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+  };
 
-    const handleCardClick = (course) => {
-        setSelectedCourse(course);
-        setIsConfirmModalOpen(true);
-        console.log('Selected course:', course); // Debug: log selected course
-    };
-
-    const closeConfirmModal = () => {
+  const handleRegister = async () => {
+    if (user && user.data && user.data.id) {
+      try {
+        await registerToCourse(user.data.id, selectedCourse._id);
         setIsConfirmModalOpen(false);
-    };
+        setIsSuccessModalOpen(true);
+        setUserCourses((prev) => [...prev, selectedCourse._id]);
+      } catch (error) {
+        console.error("Error al registrar el curso:", error);
+      }
+    } else {
+      console.error("Usuario no autenticado");
+    }
+  };
 
-    const handleRegister = async () => {
-        if (user && user.data && user.data.id) {
-            try {
-                await registerToCourse(user.data.id, selectedCourse._id);
-                setIsConfirmModalOpen(false);
-                setIsSuccessModalOpen(true);
-                setUserCourses(prev => [...prev, selectedCourse._id]);  // Update local userCourses state
-                console.log('User registered successfully:', selectedCourse._id); // Debug: log registration success
-            } catch (error) {
-                console.error('Error al registrar el curso:', error);
-            }
-        } else {
-            console.error('Usuario no autenticado');
-        }
-    };
+  const closeSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+  };
 
-    const closeSuccessModal = () => {
-        setIsSuccessModalOpen(false);
-    };
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    return (
-        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
-            <NavigationBar />
-            <div className="flex justify-center mt-8">
-                <h1 className="text-4xl font-bold text-white">Cursos de {title}</h1>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:mt-24 max-w-screen-2xl mx-auto ">
-                {filteredCourses.map((course, index) => (
-                    <HoverCard
-                        key={index}
-                        title={course.title}
-                        description={course.description}
-                        ruta={course.image}
-                        onClick={() => handleCardClick(course)}
-                    />
-                ))}
-            </div>
-            {isConfirmModalOpen && selectedCourse && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold mb-4">Confirm Registration</h2>
-                        {isRegistered ? (
-                            <p className="mb-4">You are already registered in the course <strong>{selectedCourse.title}</strong>.</p>
-                        ) : (
-                            <p className="mb-4">¿Do you want to confirm your course registration <strong>{selectedCourse.title}</strong>?</p>
-                        )}
-                        <div className="flex justify-end gap-4">
-                            <button
-                                className={`py-2 px-4 rounded transition-colors ${isRegistered ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500 hover:bg-green-400 text-white'}`}
-                                onClick={handleRegister}
-                                disabled={isRegistered}
-                            >
-                                Register
-                            </button>
-                            <button
-                                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-400 transition-colors"
-                                onClick={closeConfirmModal}
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {isSuccessModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold mb-4">Successful registration</h2>
-                        <p className="mb-4">¡You have successfully registered for the course!</p>
-                        <button
-                            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400 transition-colors"
-                            onClick={closeSuccessModal}
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
+  const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
+  const paginatedCourses = filteredCourses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  return (
+    <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
+      <NavigationBar />
+      <div className="flex justify-center mt-14 font-black italic">
+        <h1 className="text-3xl bg-gradient-to-br from-red-300 to-pink-500 py-1 border-white
+        sm:text-4xl 
+        md:text-5xl 
+        lg:text-5xl font-bold text-white text-center flex justify-center border px-4 mx-2">
+          {t('courseComponent.courses_of')} {title}
+        </h1>
+      </div>
+      <div className="grid grid-cols-1 gap-1 gap-y-0 mt-10 mx-2 
+      sm:grid-cols-2 sm:gap-2 sm:gap-y-1 sm:mt-16 sm:mx-4
+      md:grid-cols-3 md:gap-3 md:gap-y-2 md:mt-20 md:mx-4
+      lg:grid-cols-4 lg:gap-4 lg:gap-y-0 lg:mt-20  lg:mx-6 ">
+        {paginatedCourses.map((course, index) => (
+          <HoverCard
+            key={index}
+            title={course.title}
+            description={course.description}
+            ruta={course.image}
+            onClick={() => handleCardClick(course)}
+          />
+        ))}
+      </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mb-4 mt-8">
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+          >
+            {t('courseComponent.previous')}
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => paginate(index + 1)}
+              className={`px-3 py-1 mx-1 ${
+                currentPage === index + 1
+                  ? "bg-black border text-white"
+                  : "bg-gray-200 text-gray-800 border"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+          >
+            {t('courseComponent.next')}
+          </button>
         </div>
-    );
+      )}
+      {isConfirmModalOpen && selectedCourse && (
+        <div className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center border px-4">
+          <div className="bg-purple-200 p-6 rounded-lg shadow-lg w-full max-w-md mx-auto">
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              {t('courseComponent.confirm_registration')}
+            </h2>
+            {isRegistered ? (
+              <p className="mb-4 text-center">
+                {t('courseComponent.already_registered')}{" "}
+                <strong>{selectedCourse.title}</strong>
+              </p>
+            ) : (
+              <p className="mb-4 text-center">
+                {t('courseComponent.confirm_message')}{" "}
+                <strong>{selectedCourse.title}</strong>?
+              </p>
+            )}
+            <div className="flex justify-center gap-4 mt-2">
+              <button
+                className={`py-2 px-4 rounded transition-colors ${
+                  isRegistered
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-green-500 hover:bg-green-400 text-white"
+                }`}
+                onClick={handleRegister}
+                disabled={isRegistered}
+              >
+                {t('courseComponent.register')}
+              </button>
+              <button
+                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-400 transition-colors"
+                onClick={closeConfirmModal}
+              >
+                {t('courseComponent.close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isSuccessModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-85 flex items-center justify-center z-50 px-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-auto">
+            <h2 className="text-2xl font-bold mb-4 text-center">{t('courseComponent.successful_registration')}</h2>
+            <p className="mb-4 text-center">
+              {t('courseComponent.success_message')}
+            </p>
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400 transition-colors flex justify-center"
+              onClick={closeSuccessModal}
+            >
+              {t('courseComponent.close')}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Course;

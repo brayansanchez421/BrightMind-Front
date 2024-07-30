@@ -1,33 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, Modal, message, Collapse } from "antd";
-import { ReloadOutlined, InfoCircleOutlined, DeleteOutlined, CheckCircleOutlined, DeleteFilled } from "@ant-design/icons";
+import { Button, Input, message } from "antd";
+import {
+  ReloadOutlined,
+  InfoCircleOutlined,
+  DeleteOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons";
 import LeftBar from "../../Dashboard/LeftBar";
 import { useUserContext } from "../../../context/user/user.context";
 import { useCoursesContext } from "../../../context/courses/courses.context";
 import CreateCourseForm from "../Courses/CreateCourseForm";
-import CreateCategoryForm from "../Courses/CreateCategoryForm";
 import UpdateCourseForm from "../Courses/UpdateCourseForm";
 import Navbar from "../NavBar";
-
-const { Panel } = Collapse;
+import AssignContentModal from "./AssignContentModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import CourseDetailsModal from "./CourseDetailsModal"; // Import the new modal
+import { useTranslation } from "react-i18next";
 
 const DataTablete = () => {
+  const { t } = useTranslation("global");
   const { getUsers, usersData } = useUserContext();
-  const { getAllCourses, courses, asignarContenido, deleteCourse, updateCourse } = useCoursesContext();
+  const {
+    getAllCourses,
+    courses,
+    asignarContenido,
+    deleteCourse,
+    updateCourse,
+  } = useCoursesContext();
   const [searchValue, setSearchValue] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [contentFile, setContentFile] = useState(null);
-
   const [itemsPerPage] = useState(5);
-  const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
   const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState(null);
+  const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
+  const [selectedCourseDetails, setSelectedCourseDetails] = useState(null);
 
   useEffect(() => {
     getUsers();
@@ -38,26 +51,9 @@ const DataTablete = () => {
     setTotalPages(Math.ceil(courses.length / itemsPerPage));
   }, [courses, itemsPerPage]);
 
-  const handleCreateCategory = (category) => {
-    console.log("Nueva categoría:", category);
-    setShowCategoryForm(false);
-  };
+  const handleCreateCourseClick = () => setShowCreateForm(true);
 
-  const handleCreateCategoryClick = () => {
-    setShowCategoryForm(true);
-  };
-
-  const handleCategoryFormClose = () => {
-    setShowCategoryForm(false);
-  };
-
-  const handleCreateCourseClick = () => {
-    setShowCreateForm(true);
-  };
-
-  const handleCreateFormClose = () => {
-    setShowCreateForm(false);
-  };
+  const handleCreateFormClose = () => setShowCreateForm(false);
 
   const handleUpdateButtonClick = (course) => {
     setSelectedCourse(course);
@@ -70,14 +66,14 @@ const DataTablete = () => {
   };
 
   const handleUpdateCourse = async (updatedCourse) => {
-    message.success("Successfully updated course");
+    message.success(t('courses.updateSuccess'));
     window.location.reload();
     setShowUpdateForm(false);
     setSelectedCourse(null);
   };
 
   const handleCreateCourse = (curso) => {
-    console.log("Nuevo curso:", curso);
+    console.log(t('courses.newCourse'), curso);
     setShowCreateForm(false);
   };
 
@@ -86,19 +82,12 @@ const DataTablete = () => {
     setIsAssignModalVisible(true);
   };
 
-  const handleAssignModalClose = () => {
-    setIsAssignModalVisible(false);
-  };
-
   const handleAssignContent = async () => {
     if (selectedCourse && contentFile) {
       const courseId = selectedCourse._id;
-      console.log("Curso seleccionado:", selectedCourse._id);
-      console.log("Archivo adjunto:", contentFile);
-
       const res = await asignarContenido(courseId, contentFile);
 
-      console.log("Contenido asignado:", res);
+      console.log(t('courses.assignedContent'), res);
       setIsAssignModalVisible(false);
       window.location.reload();
     }
@@ -109,19 +98,13 @@ const DataTablete = () => {
     setIsDeleteModalVisible(true);
   };
 
-  const handleDeleteModalClose = () => {
-    setIsDeleteModalVisible(false);
-    setCourseToDelete(null);
-  };
-
   const handleDeleteConfirm = async () => {
     try {
       await deleteCourse(courseToDelete._id);
-      console.log(courseToDelete._id);
-      message.success("Course successfully deleted");
+      message.success(t('courses.deleteSuccess'));
       getAllCourses();
     } catch (error) {
-      message.error("Error deleting course");
+      message.error(t('courses.deleteError'));
     } finally {
       setIsDeleteModalVisible(false);
       setCourseToDelete(null);
@@ -134,22 +117,31 @@ const DataTablete = () => {
       updatedContent.splice(index, 1);
 
       try {
-        await updateCourse(selectedCourse._id, { ...selectedCourse, content: updatedContent });
+        await updateCourse(selectedCourse._id, {
+          ...selectedCourse,
+          content: updatedContent,
+        });
         setSelectedCourse((prevCourse) => ({
           ...prevCourse,
           content: updatedContent,
         }));
-        message.success("Resource deleted successfully");
+        message.success(t('courses.removeResourceSuccess'));
       } catch (error) {
-        message.error("Error deleting resource");
+        message.error(t('courses.removeResourceError'));
       }
     }
+  };
+
+  const handleDetailsButtonClick = (course) => {
+    setSelectedCourseDetails(course);
+    setIsDetailsModalVisible(true);
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateIds = () => {
-    return courses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    return courses
+      .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map((_, index) => index + 1 + (currentPage - 1) * itemsPerPage);
   };
 
@@ -157,30 +149,28 @@ const DataTablete = () => {
     <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 overflow-hidden min-h-screen">
       <div className="flex h-full">
         <LeftBar onVisibilityChange={setIsLeftBarVisible} />
-        <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? "ml-56 max-w-full" : ""}`}>
+        <div
+          className={`w-full transition-all duration-300 ${
+            isLeftBarVisible ? "ml-56 max-w-full" : ""
+          }`}
+        >
           <Navbar />
-          <div className="flex flex-col mt-8 px-4">
+          <div className="flex flex-col mt-6 px-4">
             <div>
-              <h2 className="text-2xl font-black text-white text-center">Courses</h2>
+              <h2 className="text-2xl font-black text-white text-center">
+                {t('courses.title')}
+              </h2>
               <div className="flex flex-col items-center justify-center mt-4">
-                <Button 
+                <Button
                   type="primary"
                   style={{ backgroundColor: "green" }}
                   onClick={handleCreateCourseClick}
                   className="text-center font-medium text-base"
                 >
-                  <b>Create Course</b>
-                </Button>
-                <Button
-                  type="primary"
-                  style={{ backgroundColor: "green" }}
-                  onClick={handleCreateCategoryClick}
-                  className="text-center font-medium text-base mt-2 "
-                >
-                  <b>Create Category</b>
+                  <b>{t('courses.createCourse')}</b>
                 </Button>
                 <Input
-                  placeholder="Search by Name"
+                  placeholder={t('courses.searchPlaceholder')}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   className="w-44 text-center font-medium text-base mt-2"
@@ -188,29 +178,32 @@ const DataTablete = () => {
               </div>
               <div className="mt-10 flex justify-center">
                 <div className="overflow-auto w-full">
-                  <table className="min-w-full overflow-x-auto">
+                  <table className="min-w-full overflow-x-auto mb-4">
                     <thead>
                       <tr>
                         <th className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800">
-                          ID
+                          {t('courses.id')}
                         </th>
                         <th className="text-xl px-8 py-3 bg-yellow-500 text-white border-2 cursor-pointer border-blue-800">
-                          Category
+                          {t('courses.category')}
                         </th>
                         <th className="text-xl px-6 py-3 bg-green-500 text-white border-2 cursor-pointer border-blue-800">
-                          Name
+                          {t('courses.name')}
                         </th>
                         <th className="text-xl px-48 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">
-                          Description
+                          {t('courses.description')}
                         </th>
                         <th className="text-xl px-20 py-3 bg-red-500 text-white border-2 border-blue-800">
-                          Actions
+                          {t('courses.actions')}
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       {courses
-                        .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                        .slice(
+                          (currentPage - 1) * itemsPerPage,
+                          currentPage * itemsPerPage
+                        )
                         .map((course, index) => (
                           <tr key={course._id}>
                             <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center font-black">
@@ -226,27 +219,34 @@ const DataTablete = () => {
                               {course.description}
                             </td>
                             <td className="border-2 border-blue-800 px-1 py-2 bg-gray-300">
-                              <div className="flex justify-center">
+                              <div className="flex justify-center space-x-2">
                                 <Button
-                                  className="mb-2 bg-green-500 h-10 text-lg text-white mr-2 ml-2"
-                                  onClick={() => handleAssignButtonClick(course)}
+                                  className=" bg-green-500 h-10 text-lg text-white"
+                                  onClick={() =>
+                                    handleAssignButtonClick(course)
+                                  }
                                   icon={<CheckCircleOutlined />}
                                 />
                                 <Button
-                                  className="mb-2 bg-blue-500 h-10 text-lg mr-2 ml-2"
-                                  type="primary"
+                                  className=" bg-blue-500 h-10 text-lg text-white"
                                   icon={<ReloadOutlined />}
-                                  onClick={() => handleUpdateButtonClick(course)}
+                                  onClick={() =>
+                                    handleUpdateButtonClick(course)
+                                  }
                                 />
                                 <Button
-                                  className="bg-purple-600 text-white text-lg h-10 mr-2 ml-2"
+                                  className="bg-purple-600 text-white text-lg h-10"
                                   icon={<InfoCircleOutlined />}
-                                  onClick={() => handleDetailsButtonClick(course)}
+                                  onClick={() =>
+                                    handleDetailsButtonClick(course)
+                                  }
                                 />
                                 <Button
-                                  className="bg-red-500 h-10 text-lg text-white ml-2"
+                                  className="bg-red-500 h-10 text-lg text-white"
                                   icon={<DeleteOutlined />}
-                                  onClick={() => handleDeleteButtonClick(course)}
+                                  onClick={() =>
+                                    handleDeleteButtonClick(course)
+                                  }
                                 />
                               </div>
                             </td>
@@ -265,12 +265,6 @@ const DataTablete = () => {
             onCreate={handleCreateCourse}
           />
 
-          <CreateCategoryForm
-            visible={showCategoryForm}
-            onClose={handleCategoryFormClose}
-            onCreate={handleCreateCategory}
-          />
-
           <UpdateCourseForm
             visible={showUpdateForm}
             onClose={handleUpdateFormClose}
@@ -278,130 +272,59 @@ const DataTablete = () => {
             courseId={selectedCourse ? selectedCourse._id : null}
           />
 
-          {totalPages > 1 && (
-            <div className="flex justify-center mb-8 mt-10">
-              <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
-              >
-                Previous
-              </button>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => paginate(index + 1)}
-                  className={`px-3 py-1 mx-1 ${
-                    currentPage === index + 1
-                      ? "bg-black border text-white"
-                      : "bg-gray-200 text-gray-800 border"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
-              >
-                Next
-              </button>
-            </div>
-          )}
-  <Modal
-    className="mt-16"
-    title={`Curso ${selectedCourse ? selectedCourse.title : ''}`}
-    visible={isAssignModalVisible}
-    onCancel={handleAssignModalClose}
-    maskStyle={{ backdropFilter: "blur(10px)" }}
-    footer={[
-      <Button key="back" onClick={handleAssignModalClose}>
-        Cancelar
-      </Button>,
-      <Button key="submit" type="primary" onClick={handleAssignContent}>
-        Asignar
-      </Button>,
-    ]}
-  >
-    {selectedCourse && (
-      <Collapse>
-        {selectedCourse.content.map((url, index) => (
-          <Panel
-            header={(
-              <div className="flex justify-between items-center">
-                <span>Recurso {index + 1}</span>
-                <Button
-                  type="danger"
-                  icon={<DeleteFilled />}
-                  onClick={() => handleRemoveResource(index)}
-                />
-              </div>
-            )}
-            key={index}
-          >
-            {url.endsWith('.mp4') && (
-              <video controls className="w-full mb-4">
-                <source src={url} type="video/mp4" />
-                Tu navegador no soporta el elemento de video.
-              </video>
-            )}
-            {url.endsWith('.pdf') && (
-              <div>
-                <p>Descargar PDF:</p>
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                  download
-                >
-                  {`Descargar PDF - Recurso ${index + 1}`}
-                </a>
-              </div>
-            )}
-            {!url.endsWith('.mp4') && !url.endsWith('.pdf') && (
-              <img src={url} alt={`Vista previa del curso ${index}`} className="w-full mb-4" />
-            )}
-          </Panel>
-        ))}
-      </Collapse>
-    )}
-    <div className="mb-4">
-      <label className="block text-lg font-bold mb-4">
-        Recurso:
-        <input
-          type="file"
-          onChange={(e) => setContentFile(e.target.files[0])}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline mt-2"
-        />
-      </label>
-    </div>
-  </Modal>
+          <AssignContentModal
+            visible={isAssignModalVisible}
+            onClose={() => setIsAssignModalVisible(false)}
+            onAssignContent={handleAssignContent}
+            selectedCourse={selectedCourse}
+            setContentFile={setContentFile}
+            handleRemoveResource={handleRemoveResource}
+          />
 
-
-
-
-
-
-          <Modal
-            title="Confirm deletion"
+          <DeleteConfirmationModal
             visible={isDeleteModalVisible}
-            onCancel={handleDeleteModalClose}
-            maskStyle={{ backdropFilter: "blur(10px)" }}
-            footer={[
-              <Button key="cancel" onClick={handleDeleteModalClose}>
-                Cancel
-              </Button>,
-              <Button key="delete" type="primary" danger onClick={handleDeleteConfirm}>
-                Delete
-              </Button>,
-            ]}
-          >
-            <p>Are you sure you want to delete this course?</p>
-          </Modal>
+            onClose={() => setIsDeleteModalVisible(false)}
+            onConfirm={handleDeleteConfirm}
+          />
+
+          <CourseDetailsModal
+            visible={isDetailsModalVisible}
+            onClose={() => setIsDetailsModalVisible(false)}
+            course={selectedCourseDetails}
+          />
         </div>
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mb-8 mt-10">
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+          >
+            {t('courses.previous')}
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => paginate(index + 1)}
+              className={`px-3 py-1 mx-1 ${
+                currentPage === index + 1
+                  ? "bg-black border text-white"
+                  : "bg-gray-200 text-gray-800 border"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+          >
+            {t('courses.next')}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

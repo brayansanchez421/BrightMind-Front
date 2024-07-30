@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
 import LeftBar from "../../Dashboard/LeftBar";
 import { Button, Modal, Checkbox, Pagination, Input, Form } from "antd";
-import { CaretUpOutlined, CaretDownOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  CaretUpOutlined,
+  CaretDownOutlined,
+  DeleteOutlined,
+  CheckCircleOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 import { useRoleContext } from "../../../context/user/role.context";
 import { usePermissionContext } from "../../../context/user/permissions.context";
 import CreateRolForm from "../Roles/CreateRolForm";
 import Navbar from "../../Dashboard/NavBar";
+import { useTranslation } from "react-i18next";
 
 const { useForm } = Form;
 
 const DataTable = () => {
+  const { t } = useTranslation("global");
   const [permissionsUpdated, setPermissionsUpdated] = useState(false);
 
   const { rolesData, updateRole, deleteRole } = useRoleContext();
@@ -92,7 +100,11 @@ const DataTable = () => {
 
   const orderBy = (key) => {
     let direction = "ascending";
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === "ascending") {
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "ascending"
+    ) {
       direction = "descending";
     }
     setSortConfig({ key, direction });
@@ -140,7 +152,7 @@ const DataTable = () => {
 
   const confirmDeleteRole = async () => {
     try {
-      console.log(selectedRoleId)
+      console.log(selectedRoleId);
       await deleteRole(selectedRoleId);
       setShowDeleteModal(false);
       setUpdatedDataFlag(true); // Trigger data refresh
@@ -233,199 +245,206 @@ const DataTable = () => {
   return (
     <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 overflow-hidden min-h-screen">
       <div className="flex h-full">
-      <LeftBar onVisibilityChange={setIsLeftBarVisible} />
-      <div
+        <LeftBar onVisibilityChange={setIsLeftBarVisible} />
+        <div
           className={`w-full transition-all duration-300 ${
             isLeftBarVisible ? "ml-56 max-w-full" : ""
           }`}
         >
-
-        <Navbar />
-        <div className="flex flex-col mt-10 mx-4">
-          <div>
-            <h2 className="text-2xl font-black text-white text-center">Roles</h2>
-            <div className="flex flex-col items-center justify-center mt-6">
-              <Button
-                type="primary"
-                style={{ backgroundColor: "green" }}
-                onClick={() => setShowForm(true)}
-                className=""
-              >
-                <b>Create Rol</b>
-              </Button>
-              <Input
-                placeholder="Search by roles"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                className="w-40 mt-2"
-              />
-            </div>
-            <div className="overflow-x-auto mt-10 flex justify-center">
-              <table className="md:w-10/12 bg-gray-300 ">
-                <thead>
-                  <tr>
-                    <th
-                      className="px-6 py-4 bg-blue-500 text-white border-2 border-blue-800 cursor-pointer"
-                      onClick={() => orderBy("id")}
-                    >
-                      ID{" "}
-                      {sortConfig.key === "id" &&
-                        (sortConfig.direction === "ascending" ? (
-                          <CaretUpOutlined />
-                        ) : (
-                          <CaretDownOutlined />
-                        ))}
-                    </th>
-                    <th
-                      className="px-6 py-4 bg-green-500 text-white border-2 border-blue-800 cursor-pointer"
-                      onClick={() => orderBy("nombre")}
-                    >
-                      Name{" "}
-                      {sortConfig.key === "nombre" &&
-                        (sortConfig.direction === "ascending" ? (
-                          <CaretUpOutlined />
-                        ) : (
-                          <CaretDownOutlined />
-                        ))}
-                    </th>
-                    <th className="w-72 py-4 mx-20 bg-red-500 text-white border-2 border-blue-800">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rolesData &&
-                    currentItems.map((role, index) => (
-                      <tr key={role._id}>
-                        <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg font-black">
-                          {generateIds()[index]}
-                        </td>
-                        <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg">
-                          {role.nombre}
-                        </td>
-                        <td className="border-2 border-blue-800 px-6 text-black text-center py-4 text-lg">
-                          <Button
-                            className="bg-blue-900 h-10"
-                            type="primary"
-                            onClick={() => handleViewPermissions(role)}
-                          >
-                            View
-                          </Button>{" "}
-                          <Button
-                            className="bg-cyan-800 h-10"
-                            type="primary"
-                            onClick={() => handleAssignPermissions(role)}
-                          >
-                            Assign
-                          </Button>{" "}
-                          <Button
-                            className="bg-red-600 h-10"
-                            type="primary"
-                            icon={<DeleteOutlined />}
-                            onClick={() => handleDeleteRole(role._id)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-            {totalPages > 1 && (
-            <div className="flex justify-center mb-6 mt-10">
-              <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
-              >
-                Previous
-              </button>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => paginate(index + 1)}
-                  className={`px-3 py-1 mx-1 ${
-                    currentPage === index + 1
-                      ? "bg-black border text-white"
-                      : "bg-gray-200 text-gray-800 border"
-                  }`}
+          <Navbar />
+          <div className="flex justify-center mt-10">
+            <div>
+              <h2 className="text-2xl font-black text-white text-center">
+                {t("roles.title")}
+              </h2>
+              <div className="flex flex-col items-center justify-center mt-6">
+                <Button
+                  type="primary"
+                  style={{ backgroundColor: "green" }}
+                  onClick={() => setShowForm(true)}
+                  className=""
                 >
-                  {index + 1}
-                </button>
-              ))}
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
-              >
-                Next
-              </button>
+                  <b>{t("roles.createRole")}</b>
+                </Button>
+                <Input
+                  placeholder={t("roles.SearchRoles")}
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  className="w-40 mt-2"
+                />
+              </div>
+              <div className="overflow-x-auto flex mt-10 mb-4 w-screen justify-center">
+                <table className="bg-gray-300 w-full mx-10">
+                  <thead>
+                    <tr>
+                      <th
+                        className="px-4 py-4 bg-blue-500 text-white border-2 border-blue-800 cursor-pointer"
+                        onClick={() => orderBy("id")}
+                      >
+                        ID {""}
+                      </th>
+                      <th
+                        className="px-6 py-4 bg-green-500 text-white border-2 border-blue-800 cursor-pointer"
+                        onClick={() => orderBy("nombre")}
+                      >
+                        {t("roles.role")} {""}
+                        {sortConfig.key === "nombre" &&
+                          (sortConfig.direction === "ascending" ? (
+                            <CaretUpOutlined />
+                          ) : (
+                            <CaretDownOutlined />
+                          ))}
+                      </th>
+                      <th className="px-10 py-4  bg-red-500 text-white border-2 border-blue-800">
+                        {t("roles.actions")}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rolesData &&
+                      currentItems.map((role, index) => (
+                        <tr key={role._id}>
+                          <td className="border-2 border-blue-800  text-black text-center py-4 text-lg font-black">
+                            {generateIds()[index]}
+                          </td>
+                          <td className="border-2 border-blue-800  text-black text-center py-4 text-lg">
+                            {role.nombre}
+                          </td>
+                          <td className="border-2 border-blue-800  text-black text-center py-4 text-lg">
+                            <div className="flex justify-center space-x-6">
+                              <Button
+                                className="bg-green-500 h-10 text-lg text-white"
+                                icon={<CheckCircleOutlined />}
+                                onClick={() => handleAssignPermissions(role)}
+                              ></Button>
+                              <Button
+                                className="bg-purple-600 h-10 text-lg text-white"
+                                icon={<InfoCircleOutlined />}
+                                onClick={() => handleViewPermissions(role)}
+                              ></Button>
+                              <Button
+                                className="bg-red-600 h-10 text-lg text-white"
+                                icon={<DeleteOutlined />}
+                                onClick={() => handleDeleteRole(role._id)}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+              {totalPages > 1 && (
+                <div className="flex justify-center mb-6 mt-10">
+                  <button
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+                  >
+                    {t("roles.previus")}
+                  </button>
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => paginate(index + 1)}
+                      className={`px-3 py-1 mx-1 ${
+                        currentPage === index + 1
+                          ? "bg-black border text-white"
+                          : "bg-gray-200 text-gray-800 border"
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+                  >
+                    {t("roles.next")}
+                  </button>
+                </div>
+              )}
             </div>
-          )}
           </div>
         </div>
       </div>
-      </div>  
-        <Modal
-          className="shadow-md shadow-pink-400"
-          title={
-            selectedRole ? `Permissions for ${selectedRole.nombre}` : "Role Details"
-          }
-          visible={showDetailsModal}
-          onCancel={handleModalClose}
-          footer={null}
-          centered
-          maskStyle={{ backdropFilter: "blur(10px)" }}
-        >
-          {selectedRole && (
-            <div className="bg-slate-700 p-4 py-4 rounded-md shadow-sky-500 shadow-lg text-white">
-              <p>
-                <b>Role ID:</b> {selectedRole._id}
-              </p>
-              <p>
-                <b>Name:</b> {selectedRole.nombre}
-              </p>
-              <p>
-                <b>Permissions:</b>
-              </p>
-              <ul>
+      <Modal
+        className="shadow-orange shadow-white border-2 border-black rounded-lg"
+        visible={showDetailsModal}
+        onCancel={handleModalClose}
+        footer={null}
+        centered
+        closable={false}
+        maskStyle={{ backdropFilter: "blur(15px)" }}
+      >
+        <h1 className="text-center text-xl font-bold">
+          {t("roles.permissions")}
+        </h1>
+        {selectedRole && (
+          <div className="mt-4">
+            <b className="text-lg">{t("roles.role")} ID:</b>{" "}
+            <span className="text-sm text-green-500 font-medium">
+              {selectedRole._id}{" "}
+            </span>
+            <p>
+              <b className="text-lg">{t("roles.name")}</b>{" "}
+              <span className="text-sm text-green-500 font-medium">
+                {selectedRole.nombre}{" "}
+              </span>
+            </p>
+            <p>
+              <b className="text-lg">{t("roles.permissions")}:</b>
+              <span className="text-base text-green-600 font-medium">
                 {selectedRole &&
                   selectedRole.permisos &&
                   selectedRole.permisos.map((permiso) => (
-                    <li key={permiso}>{permiso}</li>
+                    <li className="text-sm ml-10" key={permiso}>
+                      <span className="text-black text-lg">-</span> {permiso}
+                    </li>
                   ))}
-              </ul>
+              </span>
+            </p>
+            <div className="flex justify-center">
+              <button
+                className="px-4 py-2 mt-4 bg-neutral-700 text-base rounded-lg hover:bg-neutral-600 font-black text-white"
+                onClick={handleModalClose}
+              >
+                {t("roles.close")}
+              </button>
             </div>
-          )}
-        </Modal>
-        <Modal
-          className="shadow-2xl shadow-pink-400"
-          title="Assign Permissions"
-          visible={showAssignModal}
-          onCancel={handleModalClose}
-          footer={[
-            <Button
-              className="bg-sky-700 font-medium"
-              key="submit"
-              type="primary"
-              onClick={handleAssignPermissionsSubmit}
-            >
-              Assign Permissions
-            </Button>,
-          ]}
-          centered
-          maskStyle={{ backdropFilter: "blur(10px)" }}
-          maskClosable={false}
-          keyboard={false}
-        >
+          </div>
+        )}
+      </Modal>
+      <Modal
+        className="shadow-orange shadow-white border-2 border-black rounded-lg flex justify-center"
+        visible={showAssignModal}
+        onCancel={handleModalClose}
+        footer={null}
+        centered
+        closable={false}
+        maskStyle={{ backdropFilter: "blur(20px)" }}
+      >
+        <div>
+          <h1 className="text-center text-xl font-bold">
+            {t("roles.permissions")} 
+          </h1>
           {permissionsData &&
             permissionsData.info &&
             permissionsData.info.map((permission) => (
-              <div key={permission._id}>
+              <div key={permission._id} className="">
                 <Checkbox
-                  checked={selectedPermissionsMap[selectedRoleId]?.includes(permission._id)}
-                  onChange={() => handleCheckboxChange(selectedRoleId, permission._id)}
+                  className="text-lg"
+                  checked={selectedPermissionsMap[selectedRoleId]?.includes(
+                    permission._id
+                  )}
+                  onChange={() =>
+                    handleCheckboxChange(selectedRoleId, permission._id)
+                  }
                   style={{
-                    color: selectedPermissionsMap[selectedRoleId]?.includes(permission._id)
+                    color: selectedPermissionsMap[selectedRoleId]?.includes(
+                      permission._id
+                    )
                       ? "green"
                       : "red",
                   }}
@@ -434,39 +453,63 @@ const DataTable = () => {
                 </Checkbox>
               </div>
             ))}
-        </Modal>
-        <CreateRolForm visible={showForm} onClose={handleFormClose} onCreate={handleCreateRol} />
-        <Modal
-          className="shadow-2xl shadow-pink-400"
-          title="Confirm Delete"
-          visible={showDeleteModal}
-          onCancel={() => setShowDeleteModal(false)}
-          footer={[
-            <Button 
-              className="bg-red-700 font-medium text-white hover:bg-red-900"
-              key="submit"
-              type="primary"
+          <div className="space-x-2 flex justify-center mt-4">
+            <button
+              className=" bg-blue-500 text-white text-base font-medium px-4 py-2 rounded-lg hover:bg-blue-600"
+              onClick={handleAssignPermissionsSubmit}
+            >
+              {t("roles.assignPermissions")}
+            </button>
+            <button
+              className=" bg-neutral-700 text-white text-base font-medium px-4 py-2 rounded-lg hover:bg-neutral-600"
+              onClick={handleModalClose}
+            >
+              {t("roles.close")}
+            </button>
+          </div>
+        </div>
+      </Modal>
+      <CreateRolForm
+        visible={showForm}
+        onClose={handleFormClose}
+        onCreate={handleCreateRol}
+      />
+      <Modal
+        className="shadow-orange shadow-white border-2 border-black rounded-lg"
+        visible={showDeleteModal}
+        onCancel={() => setShowDeleteModal(false)}
+        footer={null}
+        closable={false}
+        centered
+        maskStyle={{ backdropFilter: "blur(20px)" }}
+      >
+        <div className="">
+          <h1 className="text-center text-xl font-bold">
+            {t("roles.confirmDeleteRole")}
+          </h1>
+          <p className="text-base text-black text-center mt-4 ">
+            {t("roles.deleteConfirmation")}
+          </p>
+          <p className="text-base text-red-600 text-center mt-2">
+            <b>{t("roles.deleteCannot")}</b>
+          </p>
+          <div className="flex justify-center mt-4 space-x-4">
+            <button
+              className="bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 border border-red-700"
               onClick={confirmDeleteRole}
             >
-              Delete
-            </Button>,
-            <Button
-              className="bg-gray-300 font-medium text-black hover:bg-gray-400"
-              key="cancel"
+              {t("roles.confirm")}
+            </button>
+            <button
+              className="bg-neutral-700 font-semibold px-4 py-2 rounded-xl hover:bg-neutral-600 text-white"
               onClick={() => setShowDeleteModal(false)}
             >
-              Cancel
-            </Button>,
-          ]}
-          centered
-          maskStyle={{ backdropFilter: "blur(10px)" }}
-          maskClosable={false}
-          keyboard={false}
-        >
-          <p className="text-lg text-black">Are you sure you want to delete this role?</p>
-          <p className="text-md text-red-600"><b>This action cannot be undone.</b></p>
-        </Modal>
-      </div>
+              {t("roles.cancel")}
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </div>
   );
 };
 

@@ -5,8 +5,10 @@ import SettingsBar from '../Home/SettingsUser';
 import { useUserContext } from '../../context/user/user.context';
 import { useAuth } from '../../context/auth.context';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
+    const { t } = useTranslation("global");
     const { updateUserPartial, getUserById } = useUserContext();
     const { user } = useAuth();
 
@@ -15,6 +17,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
     const [userId, setUserId] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
     const [previewProfileImage, setPreviewProfileImage] = useState(null);
+    const [deleteProfileImage, setDeleteProfileImage] = useState(false);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -42,6 +45,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
         if (file) {
             setProfileImage(file);
             setPreviewProfileImage(URL.createObjectURL(file));
+            setDeleteProfileImage(false); // Reset delete flag if new image is selected
         }
     };
 
@@ -52,14 +56,11 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                 const userData = {
                     username: name,
                     email,
+                    userImage: deleteProfileImage ? null : profileImage,
                 };
 
-                if (profileImage) {
-                    userData.userImage = profileImage;
-                }
-
                 await updateUserPartial(userId, userData);
-                toast.success('Changes saved successfully!', {
+                toast.success(t('userProfileSettings.changes_saved_successfully'), {
                     position: 'top-right',
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -69,9 +70,15 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                     progress: undefined,
                     onClose: () => window.location.reload(), // Añadido para recargar la página
                 });
+
+                if (deleteProfileImage) {
+                    setProfileImage(null);
+                    setPreviewProfileImage(null);
+                    setDeleteProfileImage(false); // Reset flag after saving changes
+                }
                 
             } catch (error) {
-                toast.error('Failed to save changes. Please try again.', {
+                toast.error(t('userProfileSettings.failed_to_save_changes'), {
                     position: 'top-right',
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -85,77 +92,113 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
             console.error("Couldn't get user ID");
         }
     };
-    
+
+    const handleDeleteImage = async () => {
+        setProfileImage(null);
+        setPreviewProfileImage(null);
+        setDeleteProfileImage(true);
+
+        try {
+            if (userId) {
+                await updateUserPartial(userId, { userImage: null });
+                toast.success("Image deleted successfully!", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        } catch (error) {
+            toast.error("Failed to delete image. Please try again.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        window.location.reload();
+    };
+
     const transformCloudinaryURL = (imageUrl) => {
-        return imageUrl; 
+        return imageUrl;
     };
 
     return (
-        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen ">
             <NavigationBar />
-            <div className="flex justify-center items-start">
-                <div>
-                    <SettingsBar />
-                </div>
-
-                <div className="mx-36 p-6 md:mt-24 w-5/12">
-                    <ToastContainer />
-                    <form onSubmit={handleSubmit} className="bg-gradient-to-r from-violet-500 to-fuchsia-400 shadow-lg shadow-pink-400 rounded px-10 pt-6 pb-8 mb-4 md:w-full ">
-                        <div className="mb-4">
-                            <h1 
-                            className="text-center font-black text-white md:text-3xl">Edit Profile
+            <div className="flex justify-center 2xl:mt-20">
+                <div className='grid grid-cols-1 lg:w-4/12 border'>
+                <SettingsBar className=""/>
+                <ToastContainer />
+                    <form onSubmit={handleSubmit} className="bg-gradient-to-br w-full from-purple-500 to-violet-800 shadow-lg rounded-lg px-6 mt-2 text-white">
+                        <div className="mb-4 text-center mt-4">
+                            <h1 className="font-bold text-white  text-2xl mb-6">{t('userProfileSettings.edit_profile')}</h1>
                             {previewProfileImage && (
-                            <div className="mb-4">
-                                <img src={previewProfileImage} alt="Preview" className="mt-4 w-20 h-20 rounded-full mx-auto mb-4" />
-                            </div>
-                        )}
-                            </h1>
-                            <label className="block text-black text-base font-bold mb-2" htmlFor="name">
-                                Name
+                                <div className="mb-4">
+                                    <img src={previewProfileImage} alt="Preview" className="w-20 h-20 rounded-full mx-auto mb-4 shadow-lg" />
+                                    <button
+                                        type="button"
+                                        className="bg-red-500 text-white rounded-lg w-28 hover:bg-red-600 h-6 font-semibold"
+                                        onClick={handleDeleteImage}
+                                    >
+                                        {t('userProfileSettings.deleteImage')}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                        <div className="mt-2">
+                            <label className="block text-white text-lg font-semibold " htmlFor="name">
+                                {t('userProfileSettings.name')}
                             </label>
                             <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="border rounded w-full py-1 text-gray-800 text-sm"
                                 id="name"
                                 type="text"
                                 name="name"
-                                placeholder="Name"
+                                placeholder={t('userProfileSettings.name')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-black text-base font-bold mb-2" htmlFor="email">
-                                Email
+                        <div className="mt-2">
+                            <label className="block text-white text-lg font-semibold " htmlFor="email">
+                                {t('userProfileSettings.email')}
                             </label>
                             <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="rounded w-full text-gray-800 py-1 text-sm"
                                 id="email"
                                 type="email"
                                 name="email"
-                                placeholder="Email"
+                                placeholder={t('userProfileSettings.email')}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
                         </div>
-                        <div className="mb-4">
-                            <label htmlFor="profileImage" className="block text-lg font-semibold text-black">
-                                Profile Image
+                        <div className="mt-2">
+                            <label htmlFor="profileImage" className="block text-lg font-semibold text-white">
+                                {t('userProfileSettings.profile_image')}
                             </label>
                             <input
                                 type="file"
                                 id="profileImage"
                                 accept="image/*"
-                                className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-red-100"
+                                className=" p-1 block w-full border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100"
                                 onChange={handleImageChange}
                             />
                         </div>
-                        <div className="flex items-center justify-center">
+                        <div className="flex items-center justify-center mt-2 mb-2">
                             <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="bg-blue-600 px-4 py-2 hover:bg-blue-700 text-white font-medium rounded-lg"
                                 type="submit"
                             >
-                                Save
+                                {t('userProfileSettings.save')}
                             </button>
                         </div>
                     </form>

@@ -2,7 +2,7 @@ import React from 'react';
 
 function CategorySection({ categories }) {
     return (
-        <div className="mt-8 sm:mt-12 lg:mt-16"> {/* Ajuste del margen superior para dispositivos de diferentes tamaños */}
+        <div className="mt-8 sm:mt-12 lg:mt-16 grid "> {/* Ajuste del margen superior para dispositivos de diferentes tamaños */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <h2 className="text-3xl font-semibold text-center mb-8">CATEGORIES</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

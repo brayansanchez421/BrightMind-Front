@@ -1,50 +1,38 @@
-import { useState, useEffect } from 'react';
-import imagen from '../../assets/img/hola.png';
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import imagen from "../../assets/img/hola.png";
 
 function Carousel() {
-    const gradient = 'linear-gradient(80deg, purple, #00FFA2)';
-    const phrases = [
-        { text: 'Education is the most powerful weapon which you can use to change the world.', author: 'Nelson Mandela', image: 'image_url1' },
-        { text: 'Education is not preparation for life; education is life itself.', author: 'John Dewey', image: 'image_url2' },
-        { text: 'Education is the passport to the future, for tomorrow belongs to those who prepare for it today.', author: 'Malcolm X', image: 'image_url3' },
-        { text: 'Education is the movement from darkness to light.', author: 'Allan Bloom', image: 'image_url4' },
-        { text: 'Education is the act of learning things that are not previously known.', author: 'Hermann Ebbinghaus', image: 'image_url5' },
-        { text: 'Education is the most powerful weapon which you can use to change the world.', author: 'Nelson Mandela', image: 'image_url6' },
-        { text: 'Education is not preparation for life; education is life itself.', author: 'John Dewey', image: 'image_url7' },
-        { text: 'Education is the passport to the future, for tomorrow belongs to those who prepare for it today.', author: 'Malcolm X', image: 'image_url8' },
-        { text: 'Education is the movement from darkness to light.', author: 'Allan Bloom', image: 'image_url9' },
-        { text: 'Education is the act of learning things that are not previously known.', author: 'Hermann Ebbinghaus', image: 'image_url10' }
-    ];
-    const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const { t } = useTranslation("global");
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentPhraseIndex((prevIndex) =>
-                prevIndex === phrases.length - 1 ? 0 : prevIndex + 1
-            );
-        }, 3000); // Cambia la frase cada 3 segundos
+  const phrases = [
+    { text: t("carousel.phrases.mandela.text"), author: "Nelson Mandela", image: "image_url1" },
+    { text: t("carousel.phrases.dewey.text"), author: "John Dewey", image: "image_url2" },
+    { text: t("carousel.phrases.malcolm.text"), author: "Malcolm X", image: "image_url3" },
+    { text: t("carousel.phrases.bloom.text"), author: "Allan Bloom", image: "image_url4" },
+    { text: t("carousel.phrases.ebbinghaus.text"), author: "Hermann Ebbinghaus", image: "image_url5" },
+  ];
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
 
-        return () => clearInterval(interval);
-    }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPhraseIndex((prevIndex) =>
+        prevIndex === phrases.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000); // Cambia la frase cada 3 segundos
 
-    return (
-        <div
-            className="flex w-1/2 justify-center items-center rounded-r-3xl relative"
-            style={{ backgroundImage: gradient }}
-        >
-            <div className="text-center p-12">
-                {/* Imagen en la parte izquierda superior */}
-                <div className="absolute top-0 left-1/3 p-4 ">
-                    <img className="h-80" src={imagen} alt="Logo" />
-                </div>
-                {/* Imagen sobre las frases */}
-               
-                <p className="font-bold text-white text-2xl">
-                    "{phrases[currentPhraseIndex].text}" - {phrases[currentPhraseIndex].author}
-                </p>
-            </div>
-        </div>
-    );
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="hidden rounded-r-3xl sm:flex sm:w-1/2 sm:min-h-screen bg-gradient-to-r from-purple-600 to-emerald-500 shadow-pink-500 shadow-2xl justify-center">
+      <div className="text-center text-white">
+        <img className="h-80 w-80 mx-auto mb-4 mt-10" src={imagen} alt="Logo" />
+        <p className="text-3xl italic mb-2 mt-10">"{phrases[currentPhraseIndex].text}"</p>
+        <p className="text-2xl font-bold mt-20 text-black">- {phrases[currentPhraseIndex].author}</p>
+      </div>
+    </div>
+  );
 }
 
 export default Carousel;

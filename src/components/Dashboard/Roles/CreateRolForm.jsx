@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { Modal, message } from "antd";
 import { useRoleContext } from "../../../context/user/role.context";
+import { useTranslation } from 'react-i18next';
 
 const CreateRolForm = ({ visible, onClose }) => {
-  const { createRole } = useRoleContext();
+  const { createRole, rolesData } = useRoleContext();
+  const { t } = useTranslation("global");
   const [role, setRole] = useState({ nombre: "" });
   const [error, setError] = useState(false);
   const [successMessageVisible, setSuccessMessageVisible] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setRole({ ...role, [name]: value.toLowerCase() });
+    setRole({ ...role, [name]: value.trim() });
     if (error && value.trim() !== "") {
       setError(false);
     }
@@ -23,6 +25,17 @@ const CreateRolForm = ({ visible, onClose }) => {
       return;
     }
     try {
+      if (
+        rolesData.some((existingRole) => existingRole.nombre === role.nombre)
+      ) {
+        message.error({
+          content: t('createRoleForm.roleExists'),
+          duration: 3,
+        });
+        return;
+      }
+
+      // Crear el nuevo rol
       await createRole(role);
       setSuccessMessageVisible(true);
       setTimeout(() => {
@@ -43,78 +56,57 @@ const CreateRolForm = ({ visible, onClose }) => {
 
   return (
     <Modal
+      className="shadow-orange shadow-white border-2 border-black rounded-lg"
+      centered
       visible={visible}
       footer={null}
       closable={false}
-      afterClose={() => setSuccessMessageVisible(false)}
+      maskStyle={{backdropFilter:"blur(10px)"}}
     >
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max p-6 bg-gradient-to-r from-blue-500 to-green-500 rounded-lg shadow-xl relative"
-        style={{ color: "black" }}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-white">Create Role</h1>
-          <button
-            type="button"
-            onClick={handleModalClose}
-            className="text-white hover:text-red-500 focus:outline-none"
-            style={{ fontSize: "1.5rem" }}
-          >
-            &times;
-          </button>
+      <div className="bg-gradient-to-tr from-teal-400 to-blue-500 shadow-lg rounded-lg p-6 ">
+        <div className="">
+          <h1 className="text-2xl text-center font-bold text-bold text-white">
+            {t('createRoleForm.title')}
+          </h1>
         </div>
-        <div className="mb-6">
-          <label
-            htmlFor="nombre"
-            className={`block text-sm font-medium ${
-              error ? "text-red-500" : "text-white"
-            } mb-2`}
-            style={{ color: "black" }}
-          >
-            Name:
-          </label>
+        <div className="mt-4">
+          <label className="text-base font-semibold ml-2 ">{t('createRoleForm.nameLabel')}:</label>
           <input
-            id="nombre"
-            type="text"
-            name="nombre"
             value={role.nombre}
             onChange={handleChange}
-            className={`w-full px-3 py-2 placeholder-gray-300 bg-white border rounded-md focus:outline-none focus:ring-2 ${
-              error ? "ring-red-500 border-red-500" : "ring-green-500 border-gray-300"
-            }`}
+            className="w-full py-2 border border-black focus-visible:ring rounded-md mt-2"
             required
           />
           {error && (
-            <p className="text-red-500 text-sm mt-1">Please enter a role name</p>
+            <p className="text-red-500 text-sm mt-1">{t('createRoleForm.namePlaceholder')}</p>
           )}
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-center mt-4 space-x-4">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
+            onClick={handleSubmit}
+          >
+            {t('createRoleForm.createButton')}
+          </button>
           <button
             type="button"
             onClick={handleModalClose}
-            className="inline-block px-4 py-2 mr-2 text-sm font-medium text-gray-700 bg-gray-200 border border-gray-300 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
+            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
           >
-            Close
-          </button>
-          <button
-            type="submit"
-            className="inline-block px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          >
-            Create Role
+            {t('createRoleForm.closeButton')}
           </button>
         </div>
-      </form>
-
-      {successMessageVisible && (
-        <div className="absolute top-0 right-0 mt-4 mr-4">
-          {message.success({
-            content: "Role created successfully",
-            duration: 3,
-            onClose: handleModalClose,
-          })}
-        </div>
-      )}
+        {successMessageVisible && (
+          <div className="absolute top-0 right-0 mt-4 mr-4">
+            {message.success({
+              content: t('createRoleForm.roleCreated'),
+              duration: 3,
+              onClose: handleModalClose,
+            })}
+          </div>
+        )}
+      </div>
     </Modal>
   );
 };

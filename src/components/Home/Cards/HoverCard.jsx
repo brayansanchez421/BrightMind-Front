@@ -1,26 +1,43 @@
-import React from 'react';
+import React from "react";
 
 const HoverCard = ({ title, description, ruta, onClick }) => {
   return (
-    <div 
-      className="relative group cursor-pointer overflow-hidden bg-gradient-to-b from-purple-500 to-emerald-400 w-full rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105 mb-10"
+    <div
+      className="group cursor-pointer bg-white w-full rounded-2xl shadow-lg transform transition-transform duration-500 hover:scale-105 mb-10"
       onClick={onClick}
     >
-      <div className="relative">
-        <img 
-          src={ruta} 
-          alt='Image Course Preview'
-          className="w-full h-40 sm:h-48 md:h-56 object-cover rounded-t-lg"
+      <div className="relative ">
+        <img
+          src={ruta}
+          alt="Image Course Preview"
+          className="w-full h-32 sm:h-48 md:h-56 object-cover rounded-t-lg"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500 "></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-transparent to-transparent text-white">
-          <h3 className="text-lg font-semibold">{title}</h3>
-        </div>
       </div>
-      <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-4 rounded-lg">
-        <div className="text-center">
-          <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">{title}</h3>
-          <p className="mt-2 text-sm sm:text-base md:text-lg text-gray-700">{description}</p>
+      <div
+        className="p-3 bg-gray-700 
+      sm:bg-gradient-to-tr from-purple-500 to-pink-500 border-t border-white rounded-b-lg"
+      >
+        <h3 className="text-lg font-semibold text-white text-center">
+          {title}
+        </h3>
+        <p
+          className="mt-2 text-sm text-white text-wrap mb-4
+        sm:hidden 
+         md:hidden"
+        >
+          {description}
+        </p>
+        <div className="absolute inset-0  items-center justify-center bg-gradient-to-br from-pink-200 to-violet-300 border border-black 
+        opacity-0 sm:hover:opacity-95 transition-opacity duration-300 p-4 sm:flex">
+          <div className="text-center">
+            <p
+              className="mt-2 text-lg text-black font-bold whitespace-wrap text-center px-2 sm:hover:opacity-100
+            sm:text-base 
+            md:text-lg"
+            >
+              {description}
+            </p>
+          </div>
         </div>
       </div>
     </div>
