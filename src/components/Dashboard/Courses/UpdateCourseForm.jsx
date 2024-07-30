@@ -4,10 +4,12 @@ import { useCoursesContext } from "../../../context/courses/courses.context";
 import { useCategoryContext } from "../../../context/courses/category.context";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTranslation } from 'react-i18next';
 
 const { Option } = Select;
 
 const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
+  const { t } = useTranslation("global");
   const { categories } = useCategoryContext();
   const { updateCourse, getCourse } = useCoursesContext();
   const MAX_DESCRIPCION_LENGTH = 150;
@@ -51,7 +53,7 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
       setErrorMessage("");
     } else {
       e.target.value = null;
-      setErrorMessage("Please select a valid image file.");
+      setErrorMessage(t("updateCourseForm.invalidImageFile"));
     }
   };
 
@@ -66,11 +68,11 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
     try {
       await updateCourse(courseId, courseData);
       onUpdate(courseData);
-      toast.success("Update successfully", { autoClose: 1000 });
+      toast.success(t("updateCourseForm.updateSuccess"), { autoClose: 1000 });
       window.location.reload();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to update course")
+      toast.error(t("updateCourseForm.updateFailure"));
     }
   };
 
@@ -86,10 +88,12 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
       >
         <form onSubmit={handleSubmit} className="bg-gradient-to-tr from-teal-400 to-blue-500 p-4 ">
           <div>
-            <h1 className="text-4xl font-black text-center mb-4 text-white">Update Course</h1>
+            <h1 className="text-4xl font-black text-center mb-4 text-white">
+              {t("updateCourseForm.title")}
+            </h1>
             <div className="mb-4">
               <label className="block text-black text-lg font-medium mb-4">
-                Name: <br />
+                {t("updateCourseForm.name")}:
                 <input
                   className="shadow appearance-none border rounded w-full py-1 px-3 text-black leading-tight focus:outline-none focus:shadow-outline mt-2 font-normal text-base"
                   type="text"
@@ -99,9 +103,9 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
                 />
               </label>
             </div>
-            <div className="">
+            <div>
               <label className="block text-black text-lg font-medium mb-4">
-                Category:
+                {t("updateCourseForm.category")}:
                 <Select
                   className="font-normal text-black text-base mt-2 "
                   style={{ width: "100%" }}
@@ -116,9 +120,9 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
                 </Select>
               </label>
             </div>
-            <div className="">
+            <div>
               <label className="block text-black text-lg font-medium mb-2">
-                Description:
+                {t("updateCourseForm.description")}:
                 <textarea
                   className="shadow appearance-none border text-base rounded w-full py-2 px-3 text-black leading-tight font-normal focus:outline-none focus:shadow-outline mt-2 resize-none"
                   name="descripcion"
@@ -127,12 +131,14 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
                   maxLength={MAX_DESCRIPCION_LENGTH}
                   style={{ minHeight: "100px" }}
                 />
-                <div className="text-white mt-1 text-right">{curso.descripcion.length}/{MAX_DESCRIPCION_LENGTH}</div>
+                <div className="text-white mt-1 text-right">
+                  {curso.descripcion.length}/{MAX_DESCRIPCION_LENGTH}
+                </div>
               </label>
             </div>
-            <div className="">
+            <div>
               <label className="block text-black text-lg font-bold mb-2">
-                Image:
+                {t("updateCourseForm.image")}:
                 <input
                   className="shadow text-normal appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline-red-100 italic mt-2"
                   type="file"
@@ -147,18 +153,18 @@ const UpdateCourseForm = ({ visible, onClose, onUpdate, courseId }) => {
             </div>
           </div>
           <div className="flex justify-center mt-4 space-x-4">
-          <button
+            <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
               type="submit"
             >
-              Update Course
+              {t("updateCourseForm.updateButton")}
             </button>
             <button
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg"
               type="button"
               onClick={onClose}
             >
-              Close
+              {t("updateCourseForm.closeButton")}
             </button>
           </div>
         </form>

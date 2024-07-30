@@ -8,8 +8,10 @@ import Navbar from "../NavBar";
 import DeleteCategory from "./DeleteCategory";
 import DetailsCategoryModal from "./DetailsCategoryModal";
 import UpdateCategoryModal from "./UpdateCategoryModal";
+import { useTranslation } from "react-i18next";
 
 const DataTablete = () => {
+  const { t } = useTranslation("global");
   const { getCategories, categories, deleteCategory, createCategory, updateCategory } = useCategoryContext();
   const [searchValue, setSearchValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -36,10 +38,10 @@ const DataTablete = () => {
   const handleCreateCategory = async (category) => {
     try {
       await createCategory(category);
-      message.success("Category successfully created");
+      message.success(t("categories.createSuccess"));
       getCategories();
     } catch (error) {
-      message.error("Error creating category");
+      message.error(t("categories.createError"));
     } finally {
       setShowCategoryForm(false);
     }
@@ -85,10 +87,10 @@ const DataTablete = () => {
   const handleUpdateSubmit = async (values) => {
     try {
       await updateCategory(selectedCategory._id, values);
-      message.success("Category successfully updated");
+      message.success(t("categories.updateSuccess"));
       getCategories();
     } catch (error) {
-      message.error("Error updating category");
+      message.error(t("categories.updateError"));
     } finally {
       handleUpdateModalClose();
     }
@@ -107,10 +109,10 @@ const DataTablete = () => {
   const handleDeleteConfirm = async () => {
     try {
       await deleteCategory(categoryToDelete._id);
-      message.success("Category successfully deleted");
+      message.success(t("categories.deleteSuccess"));
       getCategories();
     } catch (error) {
-      message.error("Error deleting category");
+      message.error(t("categories.deleteError"));
     } finally {
       setIsDeleteModalVisible(false);
       setCategoryToDelete(null);
@@ -135,7 +137,7 @@ const DataTablete = () => {
           <Navbar />
           <div className="flex flex-col mt-6 px-4">
             <div>
-              <h2 className="text-2xl font-black text-white text-center">Categories</h2>
+              <h2 className="text-2xl font-black text-white text-center">{t("categories.title")}</h2>
               <div className="flex flex-col items-center justify-center mt-4">
                 <Button
                   type="primary"
@@ -143,10 +145,10 @@ const DataTablete = () => {
                   onClick={handleCreateCategoryClick}
                   className="text-center font-medium text-base mt-2"
                 >
-                  <b>Create Category</b>
+                  <b>{t("categories.createCategory")}</b>
                 </Button>
                 <Input
-                  placeholder="Search by Name"
+                  placeholder={t("categories.searchPlaceholder")}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   className="w-44 text-center font-medium text-base mt-2"
@@ -157,10 +159,10 @@ const DataTablete = () => {
                   <table className="min-w-full overflow-x-auto">
                     <thead>
                       <tr>
-                        <th className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800">ID</th>
-                        <th className="text-xl px-6 py-3 bg-green-500 text-white border-2 cursor-pointer border-blue-800">Name</th>
-                        <th className="text-xl px-20 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">Description</th>
-                        <th className="text-xl px-10 py-3 bg-red-500 text-white border-2 border-blue-800">Actions</th>
+                        <th className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800">{t("categories.id")}</th>
+                        <th className="text-xl px-6 py-3 bg-green-500 text-white border-2 cursor-pointer border-blue-800">{t("categories.name")}</th>
+                        <th className="text-xl px-20 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">{t("categories.description")}</th>
+                        <th className="text-xl px-10 py-3 bg-red-500 text-white border-2 border-blue-800">{t("categories.actions")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -237,7 +239,7 @@ const DataTablete = () => {
                 disabled={currentPage === 1}
                 className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
               >
-                Previous
+                {t("categories.previous")}
               </button>
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
@@ -253,7 +255,7 @@ const DataTablete = () => {
                 disabled={currentPage === totalPages}
                 className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
               >
-                Next
+                {t("categories.next")}
               </button>
             </div>
           )}

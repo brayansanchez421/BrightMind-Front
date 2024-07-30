@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import { Modal, Button, Collapse, notification, Spin } from "antd";
 import { DeleteFilled } from "@ant-design/icons";
+import { useTranslation } from 'react-i18next';
 
 const { Panel } = Collapse;
 const ALLOWED_FILE_TYPES = ['.mov', '.mp4', '.docx', '.pdf', '.jpg', '.png'];
@@ -13,6 +14,7 @@ const AssignContentModal = ({
   setContentFile,
   handleRemoveResource,
 }) => {
+  const { t } = useTranslation("global");
   const [loading, setLoading] = useState(false);
   const [fileSelected, setFileSelected] = useState(null);
   const videoRefs = useRef([]);
@@ -41,20 +43,20 @@ const AssignContentModal = ({
       setContentFile(file);
     } else {
       notification.warning({
-        message: 'Invalid File Type',
-        description: 'Only ".mov" , ".mp4" , ".docx" , ".pdf" , ".jpg", ".npg" and .jpg files are allowed.',
+        message: t('assignContentModal.invalidFileType'),
+        description: t('assignContentModal.invalidFileType'),
         duration: 3,
       });
       e.target.value = '';
       setFileSelected(null);
     }
-  }, [setContentFile]);
+  }, [setContentFile, t]);
 
   const handleAssignContent = useCallback(async () => {
     if (!fileSelected) {
       notification.warning({
-        message: 'No File Selected',
-        description: 'Please select a file to assign',
+        message: t('assignContentModal.noFileSelected'),
+        description: t('assignContentModal.noFileSelected'),
         duration: 3,
       });
       return;
@@ -62,8 +64,8 @@ const AssignContentModal = ({
 
     if (!selectedCourse) {
       notification.error({
-        message: 'Course Error',
-        description: 'No course selected.',
+        message: t('assignContentModal.courseError'),
+        description: t('assignContentModal.courseError'),
         duration: 3,
       });
       return;
@@ -73,26 +75,25 @@ const AssignContentModal = ({
     try {
       await onAssignContent();
       notification.success({
-        message: 'Content Assigned Successfully',
+        message: t('assignContentModal.contentAssignedSuccessfully'),
         duration: 3,
       });
       onClose();
     } catch (error) {
       notification.error({
-        message: 'Error Assigning Content',
-        description: error.message || 'An error occurred while assigning content.',
+        message: t('assignContentModal.errorAssigningContent'),
+        description: error.message || t('assignContentModal.errorAssigningContent'),
         duration: 3,
       });
     } finally {
       setLoading(false);
       setFileSelected(null);
     }
-  }, [fileSelected, onAssignContent, onClose, selectedCourse]);
+  }, [fileSelected, onAssignContent, onClose, selectedCourse, t]);
 
   const handleCancel = () => {
     resetState();
     onClose();
-
   };
 
   return (
@@ -113,7 +114,7 @@ const AssignContentModal = ({
         ) : (
           <>
             <h1 className="font-bold text-center text-2xl text-white mb-4">
-              Agregar Contenido A <span className="font-black">{selectedCourse?.title || ""}</span>
+              {t('assignContentModal.title')} <span className="font-black">{selectedCourse?.title || ""}</span>
             </h1>
             {selectedCourse?.content?.length ? (
               <Collapse className="mt-6 bg-white border-2 border-black">
@@ -122,7 +123,7 @@ const AssignContentModal = ({
                     className="hover:bg-slate-400"
                     header={
                       <div className="flex justify-between items-center">
-                        <span>Recurso {index + 1}</span>
+                        <span>{t('assignContentModal.resource')} {index + 1}</span>
                         <Button
                           type="danger"
                           icon={<DeleteFilled />}
@@ -139,11 +140,11 @@ const AssignContentModal = ({
                         className="w-full mb-4"
                       >
                         <source src={url} type="video/mp4" />
-                        Tu navegador no soporta el elemento de video.
+                        {t('assignContentModal.videoSupport')}
                       </video>
                     ) : url.endsWith(".pdf") ? (
                       <div>
-                        <p>Descargar PDF:</p>
+                        <p>{t('assignContentModal.downloadPDF')}</p>
                         <a
                           href={url}
                           target="_blank"
@@ -151,14 +152,14 @@ const AssignContentModal = ({
                           className="text-blue-500 hover:underline"
                           download
                         >
-                          {`Descargar PDF - Recurso ${index + 1}`}
+                          {`${t('assignContentModal.downloadPDF')} - ${t('assignContentModal.resource')} ${index + 1}`}
                         </a>
                       </div>
                     ) : (
                       <img
                         ref={(el) => (imgRefs.current[index] = el)}
                         src={url}
-                        alt={`Vista previa del curso ${index}`}
+                        alt={`Course preview ${index}`}
                         className="w-full mb-4"
                       />
                     )}
@@ -166,13 +167,13 @@ const AssignContentModal = ({
                 ))}
               </Collapse>
             ) : (
-              <p className="text-center text-white">No hay recursos asignados.</p>
+              <p className="text-center text-white">{t('assignContentModal.noContentAssigned')}</p>
             )}
           </>
         )}
         <div className="mt-4">
           <label className="block text-lg font-bold mb-4">
-            Assign Resource:
+            {t('assignContentModal.assignResource')}:
             <input
               type="file"
               onChange={handleFileChange}
@@ -184,13 +185,13 @@ const AssignContentModal = ({
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
               onClick={handleAssignContent}
             >
-              Asignar
+              {t('assignContentModal.assign')}
             </button>
             <button
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg"
               onClick={handleCancel}
             >
-              Cancelar
+              {t('assignContentModal.cancel')}
             </button>
           </div>
         </div>

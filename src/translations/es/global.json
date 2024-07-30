@@ -131,7 +131,8 @@
         "are_you_sure": "¿Estás seguro?",
         "cannot_undo": "Esta acción no se puede deshacer",
         "yes_delete_account": "Sí, eliminar cuenta",
-        "cancel": "Cancelar"
+        "cancel": "Cancelar",
+        "deleteImage": "Borrar Imagen"
     },
     "navigationBar": {
         "search_placeholder": "Buscar...",
@@ -284,5 +285,151 @@
         "deleteCannot": "Esta acción no se puede deshacer.",
         "SearchRoles": "Buscar por roles",
         "close":"Cerrar"
+    },
+    "createRoleForm": {
+        "title": "Crear Rol",
+        "nameLabel": "Nombre",
+        "namePlaceholder": "Por favor ingrese el nombre del rol",
+        "roleExists": "El nombre del rol ya existe",
+        "roleCreated": "Rol creado exitosamente",
+        "createButton": "Crear Rol",
+        "closeButton": "Cerrar"
+    },
+    "courses": {
+        "title": "Cursos",
+        "createCourse": "Crear Curso",
+        "searchPlaceholder": "Buscar por Nombre",
+        "id": "ID",
+        "category": "Categoría",
+        "name": "Nombre",
+        "description": "Descripción",
+        "actions": "Acciones",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "updateSuccess": "Curso actualizado con éxito",
+        "deleteSuccess": "Curso eliminado con éxito",
+        "deleteError": "Error al eliminar el curso",
+        "removeResourceSuccess": "Recurso eliminado con éxito",
+        "removeResourceError": "Error al eliminar el recurso",
+        "newCourse": "Nuevo curso",
+        "assignedContent": "Contenido asignado"
+    },
+    "courseDetails": {
+        "detailsOfCourse": "Detalles del curso:",
+        "id": "ID:",
+        "category": "Categoría:",
+        "name": "Nombre:",
+        "description": "Descripción:",
+        "imagePreview": "Vista previa de la imagen",
+        "close": "Cerrar",
+        "noCourseSelected": "Ningún curso seleccionado"
+    },
+    "deleteConfirmation": {
+        "confirmDeletion": "Confirmar Eliminación",
+        "deleteConfirmationMessage": "¿Estás seguro de que quieres eliminar esta categoría?",
+        "cannotUndo": "Esta acción no se puede deshacer.",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar"
+    },
+    "updateCourseForm": {
+        "title": "Actualizar Curso",
+        "name": "Nombre",
+        "category": "Categoría",
+        "description": "Descripción",
+        "image": "Imagen",
+        "updateButton": "Actualizar Curso",
+        "closeButton": "Cerrar",
+        "invalidImageFile": "Por favor selecciona un archivo de imagen válido.",
+        "updateSuccess": "Actualización exitosa",
+        "updateFailure": "Error al actualizar el curso"
+    },
+    "createCourseForm": {
+        "title": "Crear Curso",
+        "name": "Nombre",
+        "category": "Categoría",
+        "description": "Descripción",
+        "image": "Imagen",
+        "createButton": "Crear Curso",
+        "closeButton": "Cerrar",
+        "invalidImageFile": "Por favor selecciona un archivo de imagen válido.",
+        "allFieldsRequired": "Todos los campos son obligatorios.",
+        "createSuccess": "Curso creado con éxito!",
+        "createFailure": "Error al crear el curso. Por favor, inténtalo de nuevo."
+    },
+    "assignContentModal": {
+        "title": "Agregar Contenido A",
+        "noFileSelected": "Por favor selecciona un archivo para asignar",
+        "courseError": "No hay curso seleccionado.",
+        "contentAssignedSuccessfully": "Contenido asignado con éxito",
+        "errorAssigningContent": "Error al asignar contenido",
+        "invalidFileType": "Solo se permiten archivos \".mov\", \".mp4\", \".docx\", \".pdf\", \".jpg\", \".png\".",
+        "noContentAssigned": "No hay contenido asignado.",
+        "downloadPDF": "Descargar PDF:",
+        "assign": "Asignar",
+        "assignResource": "Asignar recurso",
+        "cancel": "Cancelar",
+        "resource": "Recurso",
+        "videoSupport": "Tu navegador no soporta el elemento de video."
+    },
+    "categories": {
+        "title": "Categorías",
+        "createCategory": "Crear Categoría",
+        "searchPlaceholder": "Buscar por Nombre",
+        "id": "ID",
+        "name": "Nombre",
+        "description": "Descripción",
+        "actions": "Acciones",
+        "createSuccess": "Categoría creada con éxito",
+        "createError": "Error al crear categoría",
+        "updateSuccess": "Categoría actualizada con éxito",
+        "updateError": "Error al actualizar categoría",
+        "deleteSuccess": "Categoría eliminada con éxito",
+        "deleteError": "Error al eliminar categoría",
+        "assign": "Asignar",
+        "cancel": "Cancelar",
+        "resource": "Recurso",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "details": "Detalles",
+        "update": "Actualizar",
+        "delete": "Eliminar",
+        "noCategories": "No hay categorías disponibles",
+        "addContent": "Agregar Contenido A",
+        "invalidFileType": "Solo se permiten archivos \".mov\", \".mp4\", \".docx\", \".pdf\", \".jpg\", \".png\"."
+    },
+    "createCategoryForm": {
+        "title": "Crear Categoría",
+        "nameLabel": "Nombre:",
+        "descriptionLabel": "Descripción:",
+        "imageLabel": "Imagen:",
+        "errorMessage": "Todos los campos son obligatorios.",
+        "successMessage": "Categoría creada con éxito!",
+        "errorToastMessage": "Error al crear la categoría. Inténtalo de nuevo.",
+        "cancelButton": "Cancelar",
+        "createButton": "Crear Categoría"
+    },
+    "deleteCategory": {
+        "confirmDeletion": "Confirmar Eliminación",
+        "confirmMessage": "¿Estás seguro de que deseas eliminar esta categoría?",
+        "warningMessage": "Esta acción no se puede deshacer.",
+        "confirmButton": "Confirmar",
+        "cancelButton": "Cancelar"
+    },
+    "detailsCategoryModal": {
+        "title": "Detalles de la categoría",
+        "name": "Nombre",
+        "description": "Descripción",
+        "imagePreview": "Vista previa de la imagen",
+        "closeButton": "Cerrar"
+    },
+    "updateCategoryModal": {
+        "title": "Actualizar Categoría",
+        "nameLabel": "Nombre",
+        "namePlaceholder": "¡Por favor ingrese el nombre de la categoría!",
+        "descriptionLabel": "Descripción",
+        "descriptionPlaceholder": "¡Por favor ingrese la descripción de la categoría!",
+        "imagePreview": "Vista Previa de la Imagen",
+        "updateButton": "Actualizar",
+        "cancelButton": "Cancelar"
     }
 }

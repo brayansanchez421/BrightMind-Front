@@ -131,7 +131,8 @@
         "are_you_sure": "Are you sure?",
         "cannot_undo": "This action cannot be undone",
         "yes_delete_account": "Yes, delete account",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "deleteImage": "Delete Image"
     },
     "navigationBar": {
         "search_placeholder": "Search...",
@@ -284,5 +285,151 @@
         "deleteCannot": "This action cannot be undone.",
         "SearchRoles": "Search by roles",
         "close":"Close"
+    },
+    "createRoleForm": {
+        "title": "Create Role",
+        "nameLabel": "Name",
+        "namePlaceholder": "Please enter a role name",
+        "roleExists": "Role name already exists",
+        "roleCreated": "Role created successfully",
+        "createButton": "Create Role",
+        "closeButton": "Close"
+    },
+    "courses": {
+        "title": "Courses",
+        "createCourse": "Create Course",
+        "searchPlaceholder": "Search by Name",
+        "id": "ID",
+        "category": "Category",
+        "name": "Name",
+        "description": "Description",
+        "actions": "Actions",
+        "previous": "Previous",
+        "next": "Next",
+        "updateSuccess": "Course successfully updated",
+        "deleteSuccess": "Course successfully deleted",
+        "deleteError": "Error deleting the course",
+        "removeResourceSuccess": "Resource successfully removed",
+        "removeResourceError": "Error removing the resource",
+        "newCourse": "New course",
+        "assignedContent": "Assigned content"
+    },
+    "courseDetails": {
+        "detailsOfCourse": "Details of course:",
+        "id": "ID:",
+        "category": "Category:",
+        "name": "Name:",
+        "description": "Description:",
+        "imagePreview": "Image Preview",
+        "close": "Close",
+        "noCourseSelected": "No course selected"
+    },
+    "deleteConfirmation": {
+        "confirmDeletion": "Confirm Deletion",
+        "deleteConfirmationMessage": "Are you sure you want to delete this category?",
+        "cannotUndo": "This action cannot be undone.",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+    },
+    "updateCourseForm": {
+        "title": "Update Course",
+        "name": "Name",
+        "category": "Category",
+        "description": "Description",
+        "image": "Image",
+        "updateButton": "Update Course",
+        "closeButton": "Close",
+        "invalidImageFile": "Please select a valid image file.",
+        "updateSuccess": "Update successfully",
+        "updateFailure": "Failed to update course"
+    },
+    "createCourseForm": {
+        "title": "Create Course",
+        "name": "Name",
+        "category": "Category",
+        "description": "Description",
+        "image": "Image",
+        "createButton": "Create Course",
+        "closeButton": "Close",
+        "invalidImageFile": "Please select a valid image file.",
+        "allFieldsRequired": "All fields are required.",
+        "createSuccess": "Course created successfully!",
+        "createFailure": "Failed to create course. Please try again."
+    },
+    "assignContentModal": {
+        "title": "Add Content To",
+        "noFileSelected": "Please select a file to assign",
+        "courseError": "No course selected.",
+        "contentAssignedSuccessfully": "Content Assigned Successfully",
+        "errorAssigningContent": "Error Assigning Content",
+        "invalidFileType": "Only \".mov\", \".mp4\", \".docx\", \".pdf\", \".jpg\", \".png\" files are allowed.",
+        "noContentAssigned": "No content assigned.",
+        "downloadPDF": "Download PDF:",
+        "assign": "Assign",
+        "assignResource": "Assign resource",
+        "cancel": "Cancel",
+        "resource": "Resource",
+        "videoSupport": "Your browser does not support the video element."
+    },
+    "categories": {
+        "title": "Categories",
+        "createCategory": "Create Category",
+        "searchPlaceholder": "Search by Name",
+        "id": "ID",
+        "name": "Name",
+        "description": "Description",
+        "actions": "Actions",
+        "createSuccess": "Category successfully created",
+        "createError": "Error creating category",
+        "updateSuccess": "Category successfully updated",
+        "updateError": "Error updating category",
+        "deleteSuccess": "Category successfully deleted",
+        "deleteError": "Error deleting category",
+        "assign": "Assign",
+        "cancel": "Cancel",
+        "resource": "Resource",
+        "previous": "Previous",
+        "next": "Next",
+        "details": "Details",
+        "update": "Update",
+        "delete": "Delete",
+        "noCategories": "No categories available",
+        "addContent": "Add Content To",
+        "invalidFileType": "Only \".mov\", \".mp4\", \".docx\", \".pdf\", \".jpg\", \".png\" files are allowed."
+    },
+    "createCategoryForm": {
+        "title": "Create Category",
+        "nameLabel": "Name:",
+        "descriptionLabel": "Description:",
+        "imageLabel": "Image:",
+        "errorMessage": "All fields are required.",
+        "successMessage": "Category created successfully!",
+        "errorToastMessage": "Failed to create category. Please try again.",
+        "cancelButton": "Cancel",
+        "createButton": "Create Category"
+    },
+    "deleteCategory": {
+        "confirmDeletion": "Confirm Deletion",
+        "confirmMessage": "Are you sure you want to delete this category?",
+        "warningMessage": "This action cannot be undone.",
+        "confirmButton": "Confirm",
+        "cancelButton": "Cancel"
+    },
+    "detailsCategoryModal": {
+        "title": "Details of category",
+        "name": "Name",
+        "description": "Description",
+        "imagePreview": "Image Preview",
+        "closeButton": "Close"
+    },
+    "updateCategoryModal": {
+        "title": "Update Category",
+        "nameLabel": "Name",
+        "namePlaceholder": "Please input the category name!",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Please input the category description!",
+        "imagePreview": "Image Preview",
+        "updateButton": "Update",
+        "cancelButton": "Cancel"
     }
 }

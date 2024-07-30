@@ -15,8 +15,10 @@ import Navbar from "../NavBar";
 import AssignContentModal from "./AssignContentModal";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import CourseDetailsModal from "./CourseDetailsModal"; // Import the new modal
+import { useTranslation } from "react-i18next";
 
 const DataTablete = () => {
+  const { t } = useTranslation("global");
   const { getUsers, usersData } = useUserContext();
   const {
     getAllCourses,
@@ -64,14 +66,14 @@ const DataTablete = () => {
   };
 
   const handleUpdateCourse = async (updatedCourse) => {
-    message.success("Curso actualizado con éxito");
+    message.success(t('courses.updateSuccess'));
     window.location.reload();
     setShowUpdateForm(false);
     setSelectedCourse(null);
   };
 
   const handleCreateCourse = (curso) => {
-    console.log("Nuevo curso:", curso);
+    console.log(t('courses.newCourse'), curso);
     setShowCreateForm(false);
   };
 
@@ -85,7 +87,7 @@ const DataTablete = () => {
       const courseId = selectedCourse._id;
       const res = await asignarContenido(courseId, contentFile);
 
-      console.log("Contenido asignado:", res);
+      console.log(t('courses.assignedContent'), res);
       setIsAssignModalVisible(false);
       window.location.reload();
     }
@@ -99,10 +101,10 @@ const DataTablete = () => {
   const handleDeleteConfirm = async () => {
     try {
       await deleteCourse(courseToDelete._id);
-      message.success("Curso eliminado con éxito");
+      message.success(t('courses.deleteSuccess'));
       getAllCourses();
     } catch (error) {
-      message.error("Error al eliminar el curso");
+      message.error(t('courses.deleteError'));
     } finally {
       setIsDeleteModalVisible(false);
       setCourseToDelete(null);
@@ -123,9 +125,9 @@ const DataTablete = () => {
           ...prevCourse,
           content: updatedContent,
         }));
-        message.success("Recurso eliminado con éxito");
+        message.success(t('courses.removeResourceSuccess'));
       } catch (error) {
-        message.error("Error al eliminar el recurso");
+        message.error(t('courses.removeResourceError'));
       }
     }
   };
@@ -156,7 +158,7 @@ const DataTablete = () => {
           <div className="flex flex-col mt-6 px-4">
             <div>
               <h2 className="text-2xl font-black text-white text-center">
-                Courses
+                {t('courses.title')}
               </h2>
               <div className="flex flex-col items-center justify-center mt-4">
                 <Button
@@ -165,10 +167,10 @@ const DataTablete = () => {
                   onClick={handleCreateCourseClick}
                   className="text-center font-medium text-base"
                 >
-                  <b>Create Course</b>
+                  <b>{t('courses.createCourse')}</b>
                 </Button>
                 <Input
-                  placeholder="Search by Name"
+                  placeholder={t('courses.searchPlaceholder')}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   className="w-44 text-center font-medium text-base mt-2"
@@ -180,19 +182,19 @@ const DataTablete = () => {
                     <thead>
                       <tr>
                         <th className="text-xl px-3 py-3 bg-blue-500 text-white border-2 cursor-pointer border-blue-800">
-                          ID
+                          {t('courses.id')}
                         </th>
                         <th className="text-xl px-8 py-3 bg-yellow-500 text-white border-2 cursor-pointer border-blue-800">
-                          Category
+                          {t('courses.category')}
                         </th>
                         <th className="text-xl px-6 py-3 bg-green-500 text-white border-2 cursor-pointer border-blue-800">
-                          Name
+                          {t('courses.name')}
                         </th>
                         <th className="text-xl px-48 py-3 bg-purple-500 text-white border-2 cursor-pointer border-blue-800">
-                          Description
+                          {t('courses.description')}
                         </th>
                         <th className="text-xl px-20 py-3 bg-red-500 text-white border-2 border-blue-800">
-                          Actions
+                          {t('courses.actions')}
                         </th>
                       </tr>
                     </thead>
@@ -299,7 +301,7 @@ const DataTablete = () => {
             disabled={currentPage === 1}
             className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
           >
-            Previous
+            {t('courses.previous')}
           </button>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
@@ -319,7 +321,7 @@ const DataTablete = () => {
             disabled={currentPage === totalPages}
             className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
           >
-            Next
+            {t('courses.next')}
           </button>
         </div>
       )}

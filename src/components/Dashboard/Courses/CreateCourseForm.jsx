@@ -4,12 +4,14 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCoursesContext } from "../../../context/courses/courses.context";
 import { useCategoryContext } from "../../../context/courses/category.context";
+import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 
 const CreateCourseForm = ({ visible, onClose, onCreate }) => {
   const { categories } = useCategoryContext();
   const { createCourse } = useCoursesContext();
+  const { t } = useTranslation("global");
   const MAX_DESCRIPTION_LENGTH = 150;
 
   const [course, setCourse] = useState({
@@ -34,14 +36,14 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       setErrorMessage("");
     } else {
       e.target.value = null;
-      setErrorMessage("Please select a valid image file.");
+      setErrorMessage(t("createCourseForm.invalidImageFile"));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!course.name || !course.category || !course.description || !course.image) {
-      setErrorMessage("All fields are required.");
+      setErrorMessage(t("createCourseForm.allFieldsRequired"));
       return;
     }
 
@@ -53,7 +55,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     };
     try {
       await createCourse(courseData);
-      toast.success("Course created successfully!", { autoClose: 1000 });
+      toast.success(t("createCourseForm.createSuccess"), { autoClose: 1000 });
       setTimeout(() => {
         onCreate(courseData);
         resetForm();
@@ -62,7 +64,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       }, 1000); // Adjust the delay as needed
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create course. Please try again.", { autoClose: 3000 });
+      toast.error(t("createCourseForm.createFailure"), { autoClose: 3000 });
     }
   };
 
@@ -93,10 +95,10 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       >
         <form onSubmit={handleSubmit} className="bg-gradient-to-tr from-teal-400 to-blue-500 shadow-lg rounded-lg p-6">
           <div>
-            <h1 className="text-3xl font-bold text-white text-center mb-6">Create Course</h1>
+            <h1 className="text-3xl font-bold text-white text-center mb-6">{t("createCourseForm.title")}</h1>
             <div className="mb-4">
               <label className="block text-black text-base font-bold mb-2">
-                Name:
+                {t("createCourseForm.name")}:
                 <input
                   className="shadow font-normal appearance-none border rounded w-full py-1 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
                   type="text"
@@ -109,7 +111,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
             </div>
             <div className="mb-4">
               <label className="block text-black text-base font-bold mb-2">
-                Category:
+                {t("createCourseForm.category")}:
                 <Select
                   className="w-full mt-1"
                   style={{ borderRadius: "0.375rem" }}
@@ -127,7 +129,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
             </div>
             <div className="mb-4">
               <label className="block text-black text-base font-bold mb-2">
-                Description:
+                {t("createCourseForm.description")}:
                 <textarea
                   className="shadow appearance-none font-normal border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1 resize-none"
                   name="description"
@@ -142,7 +144,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
             </div>
             <div className="mb-4">
               <label className="block text-black text-lg font-bold mb-2">
-                Image:
+                {t("createCourseForm.image")}:
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:ring focus:border-green-300 mt-1"
                   type="file"
@@ -158,18 +160,18 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
             </div>
           </div>
           <div className="flex justify-center mt-4 space-x-4">
-          <button
+            <button
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
               type="submit"
             >
-              Create Course
+              {t("createCourseForm.createButton")}
             </button>
             <button
               className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
               type="button"
               onClick={onClose}
             >
-              Close
+              {t("createCourseForm.closeButton")}
             </button>
           </div>
         </form>

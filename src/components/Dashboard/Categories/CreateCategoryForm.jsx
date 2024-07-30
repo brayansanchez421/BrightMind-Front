@@ -3,8 +3,10 @@ import { Modal, Button, Input } from "antd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCategoryContext } from "../../../context/courses/category.context";
+import { useTranslation } from "react-i18next";
 
 const CreateCategoryForm = ({ visible, onClose }) => {
+  const { t } = useTranslation("global");
   const { createCategory } = useCategoryContext();
 
   const [category, setCategory] = useState({ name: "", description: "", image: null });
@@ -28,19 +30,19 @@ const CreateCategoryForm = ({ visible, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!category.name || !category.description || !category.image) {
-      setErrorMessage("All fields are required.");
+      setErrorMessage(t("createCategoryForm.errorMessage"));
       return;
     }
 
     try {
       await createCategory(category);
-      toast.success("Category created successfully!", { autoClose: 3000 });
+      toast.success(t("createCategoryForm.successMessage"), { autoClose: 3000 });
       setTimeout(() => {
         window.location.reload();
       }, 3000);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create category. Please try again.");
+      toast.error(t("createCategoryForm.errorToastMessage"));
     }
   };
 
@@ -67,10 +69,10 @@ const CreateCategoryForm = ({ visible, onClose }) => {
         onSubmit={handleSubmit}
       >
         <div>
-          <h1 className="text-3xl font-bold text-center mb-4 text-white">Create Category</h1>
+          <h1 className="text-3xl font-bold text-center mb-4 text-white">{t("createCategoryForm.title")}</h1>
           <div className="mb-4">
             <label className="block text-black text-lg font-medium mb-2">
-              Name: <br />
+              {t("createCategoryForm.nameLabel")} <br />
               <Input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:border-teal-300"
                 type="text"
@@ -83,7 +85,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-black text-lg font-medium mb-2">
-              Description: <br />
+              {t("createCategoryForm.descriptionLabel")} <br />
               <Input.TextArea
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:border-teal-300"
                 name="description"
@@ -98,7 +100,7 @@ const CreateCategoryForm = ({ visible, onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-black text-lg font-medium mb-2">
-              Image: <br />
+              {t("createCategoryForm.imageLabel")} <br />
               <input
                 type="file"
                 accept="image/*"
@@ -118,19 +120,18 @@ const CreateCategoryForm = ({ visible, onClose }) => {
           )}
         </div>
         <div className="flex justify-center mt-6 space-x-4">
-        <button
+          <Button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
-            onClick={toast}
+            htmlType="submit"
           >
-            Create Category
-          </button>
-          <button
+            {t("createCategoryForm.createButton")}
+          </Button>
+          <Button
             className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
             onClick={onClose}
           >
-            Cancel
-          </button>
-          
+            {t("createCategoryForm.cancelButton")}
+          </Button>
         </div>
       </form>
     </Modal>

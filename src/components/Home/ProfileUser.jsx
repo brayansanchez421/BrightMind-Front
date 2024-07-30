@@ -147,7 +147,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
                                         className="bg-red-500 text-white rounded-lg w-28 hover:bg-red-600 h-6 font-semibold"
                                         onClick={handleDeleteImage}
                                     >
-                                        Delete Image
+                                        {t('userProfileSettings.deleteImage')}
                                     </button>
                                 </div>
                             )}
