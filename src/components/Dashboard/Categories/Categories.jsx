@@ -39,7 +39,6 @@ const DataTablete = () => {
     try {
       await createCategory(category);
       message.success(t("categories.createSuccess"));
-      getCategories();
     } catch (error) {
       message.error(t("categories.createError"));
     } finally {
@@ -86,9 +85,12 @@ const DataTablete = () => {
 
   const handleUpdateSubmit = async (values) => {
     try {
+      console.log("prueba:", selectedCategory._id)
+      console.log("prueba2:", values)
       await updateCategory(selectedCategory._id, values);
+   
+
       message.success(t("categories.updateSuccess"));
-      getCategories();
     } catch (error) {
       message.error(t("categories.updateError"));
     } finally {
@@ -110,7 +112,6 @@ const DataTablete = () => {
     try {
       await deleteCategory(categoryToDelete._id);
       message.success(t("categories.deleteSuccess"));
-      getCategories();
     } catch (error) {
       message.error(t("categories.deleteError"));
     } finally {
