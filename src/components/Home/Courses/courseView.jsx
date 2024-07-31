@@ -3,28 +3,24 @@ import { useParams, Link } from 'react-router-dom';
 import { useCoursesContext } from '../../../context/courses/courses.context';
 import { useAuth } from '../../../context/auth.context';
 import { useUserContext } from '../../../context/user/user.context';
-
-
 import { Collapse, Button, Modal } from 'antd';
 import NavigationBar from '../NavigationBar';
 import { FaArrowLeft } from 'react-icons/fa';
 import jsPDF from 'jspdf';
-import Logo from '../../../assets/img/hola.png'; 
+import zorro from '../../../assets/img/Zorro.jpeg';
 
 const { Panel } = Collapse;
 
 const CourseView = () => {
     const { courseId } = useParams();
     const { getCourse } = useCoursesContext();
-    const {  user } = useAuth();
+    const { user } = useAuth();
     const { getUserById } = useUserContext();
     const [username, setUsername] = useState('');
-
-
     const [course, setCourse] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(0); 
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [modalVisible, setModalVisible] = useState(false);
-    const [currentViewedIndex, setCurrentViewedIndex] = useState(-1); 
+    const [currentViewedIndex, setCurrentViewedIndex] = useState(-1);
 
     useEffect(() => {
         const fetchCourse = async () => {
@@ -38,14 +34,13 @@ const CourseView = () => {
 
         fetchCourse();
     }, [courseId, getCourse]);
-    
+
     useEffect(() => {
         const fetchUserData = async () => {
             if (user && user.data && user.data.id) {
                 try {
                     const userData = await getUserById(user.data.id);
                     setUsername(userData.username);
-                    setUserImage(userData.userImage);
                 } catch (error) {
                     console.error('Error al obtener datos del usuario:', error);
                 }
@@ -54,12 +49,11 @@ const CourseView = () => {
 
         fetchUserData();
     }, [user, getUserById]);
-    
 
     const handleContentClick = (index) => {
         if (index <= currentViewedIndex + 1) {
             setCurrentIndex(index);
-            setCurrentViewedIndex(index); 
+            setCurrentViewedIndex(index);
             setModalVisible(true);
         }
     };
@@ -67,43 +61,83 @@ const CourseView = () => {
     const handleNext = () => {
         if (currentViewedIndex === currentIndex) {
             setCurrentIndex(currentIndex + 1);
-            setCurrentViewedIndex(currentIndex + 1); 
+            setCurrentViewedIndex(currentIndex + 1);
         }
     };
 
     const handleCloseModal = () => {
         setModalVisible(false);
         if (currentViewedIndex === course.content.length - 1) {
-            generateCongratulationsPDF(); 
-            
+            generatePremiumCertificatePDF(username, course.title, zorro);
         }
     };
 
-    const generateCongratulationsPDF = () => {
-        const doc = new jsPDF();
+    const generatePremiumCertificatePDF = (username, courseTitle, zorroImage) => {
+        const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'cm',
+            format: [21.6, 28]
+        });
 
-        const imgData = Logo;
-        doc.addImage(imgData, 'PNG', 75, 15, 60, 60);
+        // Fondo blanco
+        doc.setFillColor(255, 255, 255);
+        doc.rect(0, 0, 21.6, 28, 'F');
 
-        doc.setFont('helvetica');
-        doc.setTextColor('#333333');
+        // Borde dorado
+        doc.setDrawColor(218, 165, 32); // Color dorado
+        doc.setLineWidth(0.5);
+        doc.rect(1, 1, 19.6, 25.6);
+
+        // Borde interno
+        doc.setDrawColor(192, 192, 192); // Color gris claro
+        doc.setLineWidth(0.3);
+        doc.rect(1.5, 1.5, 18.6, 24.6);
+
+        // Título del certificado
+        doc.setFont('times', 'bold');
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(28);
+        doc.text('CERTIFICADO DE APRENDIZAJE', 10.8, 4.5, { align: 'center' });
+
+        // Nombre del usuario
+        doc.setFont('times', 'bold');
+        doc.setTextColor(0, 0, 128); // Color azul oscuro
+        doc.setFontSize(24);
+        doc.text(`¡Felicitaciones ${username}!`, 10.8, 7.5, { align: 'center' });
+
+        // Texto de reconocimiento
+        doc.setFont('times', 'italic');
+        doc.setTextColor(105, 105, 105); // Color gris
+        doc.setFontSize(18);
+        doc.text('Por completar exitosamente el curso', 10.8, 10.5, { align: 'center' });
+
+        // Título del curso
+        doc.setFont('times', 'bold');
+        doc.setTextColor(0, 0, 0); // Color negro
         doc.setFontSize(22);
+        doc.text(`"${courseTitle}"`, 10.8, 12.5, { align: 'center' });
 
-        doc.text(`¡Felicitaciones ${username}! `, 105, 75, null, null, 'center');
-    
+        // Imagen de Zorro
+        if (zorroImage) {
+            doc.addImage(zorroImage, 'JPEG', 8.8, 14, 4, 4);
+        }
+
+        // Texto adicional
+        doc.setFont('times', 'normal');
         doc.setFontSize(16);
-        doc.setTextColor('#666666');
-        doc.text(`Has completado el curso "${course.title}" exitosamente.`, 105, 95, null, null, 'center');
+        doc.setTextColor(47, 79, 79); // Color verde azulado
+        doc.text('Gracias por tu dedicación y esfuerzo.', 10.8, 19, { align: 'center' });
+
+        doc.setFontSize(16);
+        doc.setTextColor(47, 79, 79); // Color verde azulado
+        doc.text('¡Sigue aprendiendo y mejorando!', 10.8, 21, { align: 'center' });
 
         doc.setFontSize(14);
-        doc.setTextColor('#999999');
-        doc.text('Gracias por tu dedicación y esfuerzo.', 105, 115, null, null, 'center');
+        doc.setTextColor(192, 192, 192); // Color gris claro
+        doc.text('Este certificado fue generado automáticamente.', 10.8, 23, { align: 'center' });
 
-        doc.setFontSize(10);
-        doc.setTextColor('#666666');
-        doc.text('¡Sigue aprendiendo y mejorando!', 105, 135, null, null, 'center');
-
-        doc.save(`Felicitaciones_${course.title}.pdf`);
+        // Guardar el PDF
+        doc.save(`Certificado_${courseTitle}.pdf`);
     };
 
     if (!course) return <div>Loading...</div>;
@@ -129,7 +163,7 @@ const CourseView = () => {
                                 <Panel
                                     header={`Recurso ${index + 1}`}
                                     key={index}
-                                    disabled={index > currentViewedIndex + 1} 
+                                    disabled={index > currentViewedIndex + 1}
                                 >
                                     <Button type="link" onClick={() => handleContentClick(index)}>
                                         {url.endsWith('.mp4') ? 'Ver Video' : url.endsWith('.pdf') ? 'Ver PDF' : 'Ver Imagen'}
@@ -145,7 +179,7 @@ const CourseView = () => {
                 onCancel={handleCloseModal}
                 footer={null}
                 destroyOnClose
-                afterClose={() => setCurrentIndex(0)} 
+                afterClose={() => setCurrentIndex(0)}
             >
                 {course.content && currentIndex < course.content.length && (
                     <>
@@ -166,7 +200,7 @@ const CourseView = () => {
                         ) : (
                             <img src={course.content[currentIndex]} alt="Vista previa del contenido" className="w-full" />
                         )}
-                        {currentViewedIndex === currentIndex && ( // Mostrar botón "Siguiente" solo si el recurso actual ha sido visto
+                        {currentViewedIndex === currentIndex && (
                             <Button onClick={handleNext} className="mt-4">Siguiente</Button>
                         )}
                     </>

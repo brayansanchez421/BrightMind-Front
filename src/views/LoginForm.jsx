@@ -136,7 +136,7 @@ const LoginForm = () => {
             <div className="flex justify-center">
             <button 
               type="submit"
-              className="w-56 py-2  bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
+              className="w-56 py-2 cursor-pointer bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
               disabled={!formik.isValid || loading}
             >
               {loading ? t("login.loading") : t("login.login")}
@@ -146,7 +146,7 @@ const LoginForm = () => {
           <div className="mt-4 text-center">
             <Link
               to="/reset"
-              className="text-gray-600 hover:text-blue-600 font-bold text-lg"
+              className="text-gray-600 hover:text-blue-400 font-bold text-lg"
               style={{ textDecoration: "none" }}
             >
               {t("login.forgot_password")}

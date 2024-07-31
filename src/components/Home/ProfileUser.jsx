@@ -133,7 +133,7 @@ const UserProfileSettings = ({ name: initialName, email: initialEmail }) => {
         <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen ">
             <NavigationBar />
             <div className="flex justify-center 2xl:mt-20">
-                <div className='grid grid-cols-1 lg:w-4/12 border'>
+                <div className='grid grid-cols-1 lg:w-4/12'>
                 <SettingsBar className=""/>
                 <ToastContainer />
                     <form onSubmit={handleSubmit} className="bg-gradient-to-br w-full from-purple-500 to-violet-800 shadow-lg rounded-lg px-6 mt-2 text-white">

@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Carousel from "../components/Login_components/Carousel";
 import { Link, useNavigate } from "react-router-dom";
 import { registerRequest } from "../api/auth";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function RegisterForm() {
   const [error, setError] = useState(null);
@@ -17,14 +17,21 @@ function RegisterForm() {
 
   const validationSchema = yup.object().shape({
     username: yup.string().required(t("register.username_required")),
-    email: yup.string().email(t("register.invalid_email")).required(t("register.email_required")),
-    password: yup.string().required(t("register.password_required"))
-      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, //Correcion
+    email: yup
+      .string()
+      .email(t("register.invalid_email"))
+      .required(t("register.email_required")),
+    password: yup
+      .string()
+      .required(t("register.password_required"))
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/,
         t("register.password_matches")
       ),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password"), null], t("register.passwords_match")),
+      .oneOf([yup.ref("password"), null], t("register.passwords_match"))
+      .required(t("register.repeat_password")),
   });
 
   const formik = useFormik({
@@ -35,13 +42,15 @@ function RegisterForm() {
       confirmPassword: "",
     },
     validationSchema: validationSchema,
+    validateOnChange: true,
+    validateOnBlur: true,
     onSubmit: async (values) => {
       try {
         const { confirmPassword, ...userData } = values;
         console.log("Values:", userData);
 
-        const response = await registerRequest(values);
-        console.log("Response:", response.data); // Check response structure
+        const response = await registerRequest(userData); // Corregido para enviar userData
+        console.log("Response:", response.data);
 
         if (
           response &&
@@ -55,7 +64,7 @@ function RegisterForm() {
           toast.success(t("register.user_created"));
           setTimeout(() => {
             navigate("/");
-          }, 5000);
+          }, 2000);
         }
       } catch (error) {
         console.error(error);
@@ -81,7 +90,10 @@ function RegisterForm() {
               </button>
             </Link>
           </div>
-          <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-6 mt-4">
+          <form
+            onSubmit={formik.handleSubmit}
+            className="flex flex-col space-y-6 mt-4"
+          >
             <div>
               <label className="text-base font-bold text-gray-600 block mb-2">
                 {t("register.username")}
@@ -92,11 +104,17 @@ function RegisterForm() {
                 value={formik.values.username}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full p-2 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
+                className={`w-full p-2 border rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none ${
+                  formik.touched.username && formik.errors.username
+                    ? "border-red-500"
+                    : "border-purple-300"
+                }`}
                 placeholder={t("register.enter_username")}
               />
               {formik.touched.username && formik.errors.username ? (
-                <div>{formik.errors.username}</div>
+                <div className="text-red-500 mt-1">
+                  {formik.errors.username}
+                </div>
               ) : null}
             </div>
             <div>
@@ -109,11 +127,15 @@ function RegisterForm() {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full p-2 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
+                className={`w-full p-2 border rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none ${
+                  formik.touched.email && formik.errors.email
+                    ? "border-red-500"
+                    : "border-purple-300"
+                }`}
                 placeholder={t("register.enter_email")}
               />
               {formik.touched.email && formik.errors.email ? (
-                <div>{formik.errors.email}</div>
+                <div className="text-red-500 mt-1">{formik.errors.email}</div>
               ) : null}
             </div>
             <div>
@@ -126,16 +148,22 @@ function RegisterForm() {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full p-2 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
+                className={`w-full p-2 border rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none ${
+                  formik.touched.password && formik.errors.password
+                    ? "border-red-500"
+                    : "border-purple-300"
+                }`}
                 placeholder={t("register.enter_password")}
               />
               {formik.touched.password && formik.errors.password ? (
-                <div>{formik.errors.password}</div>
+                <div className="text-red-500 mt-1">
+                  {formik.errors.password}
+                </div>
               ) : null}
             </div>
             <div>
               <label className="text-base font-bold text-gray-600 block mb-2">
-                {t("register.confirm_password")}
+                {t("register.repeat_password")}
               </label>
               <input
                 type="password"
@@ -143,21 +171,37 @@ function RegisterForm() {
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full p-2 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
+                className={`w-full p-2 border rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none ${
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                    ? "border-red-500"
+                    : "border-purple-300"
+                }`}
                 placeholder={t("register.repeat_password")}
               />
-              {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                <div>{formik.errors.confirmPassword}</div>
+              {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword ? (
+                <div className="text-red-500 mt-1">
+                  {formik.errors.confirmPassword}
+                </div>
               ) : null}
             </div>
             <div className="flex justify-center">
-            <button
-              type="submit"
-              className="w-48  py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
-              disabled={!formik.isValid || formik.values.password !== formik.values.confirmPassword}
-            >
-              {t("register.register")}
-            </button>
+              <button
+                type="submit"
+                className="w-48 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
+                disabled={
+                  !formik.isValid ||
+                  formik.values.password !== formik.values.confirmPassword
+                }
+                onClick={() => {
+                  if (!formik.isValid) {
+                    toast.error(t("register.complete_all_fields"));
+                  }
+                }}
+              >
+                {t("register.register")}
+              </button>
             </div>
           </form>
         </div>
