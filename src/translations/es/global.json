@@ -339,6 +339,8 @@
         "image": "Imagen",
         "updateButton": "Actualizar Curso",
         "closeButton": "Cerrar",
+        "nameTooShort": "El nombre debe tener al menos 2 caracteres.",
+        "descriptionTooShort": "La descripción debe tener al menos 6 caracteres.",
         "invalidImageFile": "Por favor selecciona un archivo de imagen válido.",
         "updateSuccess": "Actualización exitosa",
         "updateFailure": "Error al actualizar el curso"
@@ -351,6 +353,8 @@
         "image": "Imagen",
         "createButton": "Crear Curso",
         "closeButton": "Cerrar",
+        "nameTooShort": "El nombre debe tener al menos 2 caracteres.",
+        "descriptionTooShort": "La descripción debe tener al menos 6 caracteres.",
         "invalidImageFile": "Por favor selecciona un archivo de imagen válido.",
         "allFieldsRequired": "Todos los campos son obligatorios.",
         "createSuccess": "Curso creado con éxito!",
@@ -406,7 +410,12 @@
         "successMessage": "Categoría creada con éxito!",
         "errorToastMessage": "Error al crear la categoría. Inténtalo de nuevo.",
         "cancelButton": "Cancelar",
-        "createButton": "Crear Categoría"
+        "nameTooShort": "El nombre de la categoría debe tener al menos 2 caracteres.",
+        "descriptionTooShort": "La descripción debe tener al menos 6 caracteres.",
+        "createButton": "Crear Categoría",
+        "createSuccess": "¡Categoría creada exitosamente!",
+        "createFailure": "No se pudo crear la categoría. Por favor, intenta de nuevo.",
+        "invalidImageFile": "Por favor, sube un archivo de imagen válido."
     },
     "deleteCategory": {
         "confirmDeletion": "Confirmar Eliminación",

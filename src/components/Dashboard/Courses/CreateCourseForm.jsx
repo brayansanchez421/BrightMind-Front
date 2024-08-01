@@ -20,30 +20,78 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     description: "",
     image: null,
   });
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState({
+    name: "",
+    category: "",
+    description: "",
+    image: "",
+  });
 
   const imageRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCourse({ ...course, [name]: value });
+    validateField(name, value);
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       setCourse({ ...course, image: file });
-      setErrorMessage("");
+      setErrorMessage((prev) => ({ ...prev, image: "" }));
     } else {
       e.target.value = null;
-      setErrorMessage(t("createCourseForm.invalidImageFile"));
+      setErrorMessage((prev) => ({ ...prev, image: t("createCourseForm.invalidImageFile") }));
+    }
+  };
+
+  const validateField = (name, value) => {
+    switch (name) {
+      case "name":
+        if (value.length < 2) {
+          setErrorMessage((prev) => ({ ...prev, name: t("createCourseForm.nameTooShort") }));
+        } else {
+          setErrorMessage((prev) => ({ ...prev, name: "" }));
+        }
+        break;
+      case "description":
+        if (value.length < 6) {
+          setErrorMessage((prev) => ({ ...prev, description: t("createCourseForm.descriptionTooShort") }));
+        } else {
+          setErrorMessage((prev) => ({ ...prev, description: "" }));
+        }
+        break;
+      default:
+        break;
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!course.name || !course.category || !course.description || !course.image) {
-      setErrorMessage(t("createCourseForm.allFieldsRequired"));
+
+    const errors = {
+      name: "",
+      category: "",
+      description: "",
+      image: "",
+    };
+
+    if (!course.name || course.name.length < 2) {
+      errors.name = t("createCourseForm.nameTooShort");
+    }
+    if (!course.category) {
+      errors.category = t("createCourseForm.categoryRequired");
+    }
+    if (!course.description || course.description.length < 6) {
+      errors.description = t("createCourseForm.descriptionTooShort");
+    }
+    if (!course.image) {
+      errors.image = t("createCourseForm.imageRequired");
+    }
+
+    if (Object.values(errors).some((error) => error)) {
+      setErrorMessage(errors);
       return;
     }
 
@@ -61,7 +109,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
         resetForm();
         onClose();
         window.location.reload();
-      }, 1000); // Adjust the delay as needed
+      }, 1000); // Ajusta el retraso según sea necesario
     } catch (error) {
       console.error(error);
       toast.error(t("createCourseForm.createFailure"), { autoClose: 3000 });
@@ -75,7 +123,12 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       description: "",
       image: null,
     });
-    setErrorMessage("");
+    setErrorMessage({
+      name: "",
+      category: "",
+      description: "",
+      image: "",
+    });
     if (imageRef.current) {
       imageRef.current.value = null;
     }
@@ -107,6 +160,9 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                   onChange={handleChange}
                   required
                 />
+                {errorMessage.name && (
+                  <p className="text-red-500 text-sm mt-1">{errorMessage.name}</p>
+                )}
               </label>
             </div>
             <div className="mb-4">
@@ -125,6 +181,9 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                     </Option>
                   ))}
                 </Select>
+                {errorMessage.category && (
+                  <p className="text-red-500 text-sm mt-1">{errorMessage.category}</p>
+                )}
               </label>
             </div>
             <div className="mb-4">
@@ -140,6 +199,9 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                   required
                 />
                 <div className="text-gray-300 text-right mt-1">{course.description.length}/{MAX_DESCRIPTION_LENGTH}</div>
+                {errorMessage.description && (
+                  <p className="text-red-500 text-sm mt-1">{errorMessage.description}</p>
+                )}
               </label>
             </div>
             <div className="mb-4">
@@ -153,8 +215,8 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                   onChange={handleImageChange}
                   required
                 />
-                {errorMessage && (
-                  <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+                {errorMessage.image && (
+                  <p className="text-red-500 text-sm mt-1">{errorMessage.image}</p>
                 )}
               </label>
             </div>
@@ -181,3 +243,4 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
 };
 
 export default CreateCourseForm;
+
