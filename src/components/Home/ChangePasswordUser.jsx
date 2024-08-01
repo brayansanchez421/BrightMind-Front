@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
 import { Link, useParams, useNavigate } from 'react-router-dom'; // Importa useParams
-import { passwordReset } from '../../api/auth'; // Debes implementar esta función en tu API
 import { useUserContext } from '../../context/user/user.context';
 import { useAuth } from '../../context/auth.context';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +14,7 @@ function NewPassword() {
     const [passwordsMatch, setPasswordsMatch] = useState(false);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
-    const { getUserById } = useUserContext();
+    const { getUserById, changePassword } = useUserContext(); // Importa changePassword del contexto
     const { user } = useAuth();
 
     useEffect(() => {
@@ -32,7 +31,7 @@ function NewPassword() {
         };
 
         fetchUserEmail();
-    }, [getUserById, user]);
+    }, [getUserById, user, t]);
 
     const validationSchema = yup.object().shape({
         password: yup.string().required(t('newPasswordUser.password_required')).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, t('newPasswordUser.password_invalid')),
@@ -49,20 +48,27 @@ function NewPassword() {
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             try {
-                await passwordReset({ email, password: values.password, confirmPassword: values.confirmPassword });
+                console.log('Submitting with:', {
+                    email,
+                    newPassword: values.password,
+                    confirmPassword: values.confirmPassword
+                });
+    
+                await changePassword(email, values.password); // Asegúrate de que se está enviando `values.password` correctamente
                 toast.success(t('newPasswordUser.password_changed_success'));
                 setTimeout(() => {
                     navigate('/');
                 }, 2000);
-                console.log(values);
             } catch (error) {
                 toast.error(t('newPasswordUser.password_change_error'));
-                console.error(error);
+                console.error('Error changing password:', error);
             }
         },
     });
+    
+    
 
-    // Verificar si las contraseñas coinciden
+    // Verificar si las contraseñas coinciden solo en el frontend
     useEffect(() => {
         setPasswordsMatch(formik.values.password === formik.values.confirmPassword);
     }, [formik.values.password, formik.values.confirmPassword]);
@@ -70,10 +76,10 @@ function NewPassword() {
     return (
         <div className="flex min-h-screen bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600">
             <ToastContainer />
-            <div className="flex w-1/2 mx-auto justify-center items-center ">
-                <div className="p-16 bg-white rounded-3xl shadow-2xl w-4/5 bg-gradient-to-r from-violet-600  to-rose-500  ">
-                    <h2 className="text-5xl font-black text-center mb-10 text-white ">{t('newPasswordUser.change_password')}</h2>
-                    <form onSubmit={formik.handleSubmit} className=" flex flex-col space-y-6">
+            <div className="flex w-1/2 mx-auto justify-center items-center">
+                <div className="p-16 bg-white rounded-3xl shadow-2xl w-4/5 bg-gradient-to-r from-violet-600 to-rose-500">
+                    <h2 className="text-5xl font-black text-center mb-10 text-white">{t('newPasswordUser.change_password')}</h2>
+                    <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-6">
                         <div>
                             <label className="text-lg font-bold text-white block mb-4 mx-4">{t('newPasswordUser.email')}</label>
                             <input
@@ -116,7 +122,7 @@ function NewPassword() {
                         {error && <div className="text-red-500">{error}</div>}
                         <button
                             type="submit"
-                            className={`w-full py-4 px-8 font-medium text-white rounded-full text-xl  ${passwordsMatch ? 'bg-green-500 hover:bg-green-600 ' : 'bg-red-500 hover:bg-red-600'} disabled:opacity-50`}
+                            className={`w-full py-4 px-8 font-medium text-white rounded-full text-xl ${passwordsMatch ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'} disabled:opacity-50`}
                             disabled={!formik.isValid || !passwordsMatch}
                         >
                             {t('newPasswordUser.change_password_button')}

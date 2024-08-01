@@ -1,6 +1,7 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { getAllUsers, ActivateAcc, getUser, updateUser as updateUserApi, deleteUser as deleteUserApi, deleteUserConfirmation as deleteUserConfirmationApi, createUser as createUserApi, registerToCourse as registerToCourseApi, getUserCourses as getUserCoursesApi } from '../../api/user/user.request';
+import { getAllUsers, ActivateAcc, getUser, updateUser as updateUserApi, deleteUser as deleteUserApi, deleteUserConfirmation as deleteUserConfirmationApi, createUser as createUserApi, registerToCourse as registerToCourseApi, getUserCourses as getUserCoursesApi, changePassword as changePasswordApi } from '../../api/user/user.request';
 import { useAuth } from '../auth.context'; // Importa el contexto de autenticación
+import NewPassword from '../../components/Home/ChangePasswordUser';
 
 export const UserContext = createContext();
 
@@ -131,6 +132,17 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    // Nueva función para cambiar la contraseña
+    const changePassword = async (email, newPassword) => {
+        try {
+            console.log(email)
+            const res = await changePasswordApi(email, newPassword);
+            console.log("Contraseña cambiada:", res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         if (isAuthenticated()) {
             getUsers();
@@ -152,6 +164,7 @@ export const UserProvider = ({ children }) => {
                 deleteUserConfirmation,
                 registerToCourse,
                 getUserCourses, // Agregar la función al contexto
+                changePassword, // Agregar la nueva función al contexto
             }}
         >
             {children}

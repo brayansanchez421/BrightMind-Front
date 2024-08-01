@@ -3,7 +3,6 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { passwordReset } from "../../../api/auth"; // Implement this function in your API
 import LeftBar from "./../../Dashboard/LeftBar";
 import Navbar from "./../../Dashboard/NavBar";
 import { useUserContext } from "../../../context/user/user.context";
@@ -17,7 +16,7 @@ function Changepassword() {
   const [passwordsMatch, setPasswordsMatch] = useState(false);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const { getUserById } = useUserContext();
+  const { getUserById, changePassword } = useUserContext(); // Usa la función changePassword
   const { user } = useAuth();
 
   useEffect(() => {
@@ -60,11 +59,7 @@ function Changepassword() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        await passwordReset({
-          email,
-          password: values.password,
-          confirmPassword: values.confirmPassword
-        });
+        await changePassword(email, values.password); // Usa la función changePassword del contexto
         toast.success(t("newPasswordUser.password_changed_success"));
         setTimeout(() => {
           navigate("/ProfileEditor");
