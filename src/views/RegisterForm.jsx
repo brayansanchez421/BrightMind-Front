@@ -61,10 +61,10 @@ function RegisterForm() {
           toast.error(t("register.email_exists"));
         } else {
           setSuccess(true);
-          toast.success(t("register.user_created"));
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
+          toast.success(t("register.user_created"), {
+            autoClose: 2500, // Ajusta el tiempo que el toast permanecerá visible
+            onClose: () => navigate("/"), // Redirige después de que el toast se cierra
+          });
         }
       } catch (error) {
         console.error(error);

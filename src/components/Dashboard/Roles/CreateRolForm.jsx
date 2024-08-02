@@ -7,41 +7,68 @@ const CreateRolForm = ({ visible, onClose }) => {
   const { createRole, rolesData } = useRoleContext();
   const { t } = useTranslation("global");
   const [role, setRole] = useState({ nombre: "" });
-  const [error, setError] = useState(false);
-  const [successMessageVisible, setSuccessMessageVisible] = useState(false);
+  const [error, setError] = useState({
+    nombre: ""
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setRole({ ...role, [name]: value.trim() });
-    if (error && value.trim() !== "") {
-      setError(false);
+    validateField(name, value.trim());
+  };
+
+  const validateField = (name, value) => {
+    switch (name) {
+      case "nombre":
+        if (value.length < 3) {
+          setError((prev) => ({ ...prev, nombre: t("createRoleForm.mixRole") }));
+        } else if (value.length > 15) {
+          setError((prev) => ({ ...prev, nombre: t("createRoleForm.maxRole") }));
+        } else {
+          setError((prev) => ({ ...prev, nombre: "" }));
+        }
+        break;
+      default:
+        break;
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!role.nombre.trim()) {
-      setError(true);
+
+    const errors = {
+      nombre: "",
+    };
+
+    if (!role.nombre || role.nombre.length < 3 || role.nombre.length > 10) {
+      errors.nombre = t("createRoleForm.mixRole");
+    }
+
+    if (rolesData.some((existingRole) => existingRole.nombre === role.nombre)) {
+      errors.nombre = t("createRoleForm.maxRole");
+    }
+
+    if (Object.values(errors).some((error) => error)) {
+      setError(errors);
       return;
     }
+
     try {
-      if (
-        rolesData.some((existingRole) => existingRole.nombre === role.nombre)
-      ) {
+      
+      if (rolesData.some((existingRole) => existingRole.nombre === role.nombre)) {
         message.error({
-          content: t('createRoleForm.roleExists'),
+          content: "Role name already exists",
           duration: 3,
         });
         return;
       }
-
       // Crear el nuevo rol
       await createRole(role);
-      setSuccessMessageVisible(true);
-      setTimeout(() => {
-        setSuccessMessageVisible(false);
-        onClose();
-      }, 3000);
+      message.success({
+        content: t('createRoleForm.roleCreated'),
+        duration: 1,
+        onClose: handleModalClose,
+      });
       setRole({ nombre: "" });
     } catch (error) {
       console.error("Error creating role:", error);
@@ -49,8 +76,8 @@ const CreateRolForm = ({ visible, onClose }) => {
   };
 
   const handleModalClose = () => {
-    setSuccessMessageVisible(false);
     setRole({ nombre: "" });
+    setError({ nombre: "" });
     onClose();
   };
 
@@ -61,7 +88,7 @@ const CreateRolForm = ({ visible, onClose }) => {
       visible={visible}
       footer={null}
       closable={false}
-      maskStyle={{backdropFilter:"blur(10px)"}}
+      maskStyle={{ backdropFilter: "blur(10px)" }}
     >
       <div className="bg-gradient-to-tr from-teal-400 to-blue-500 shadow-lg rounded-lg p-6 ">
         <div className="">
@@ -72,13 +99,14 @@ const CreateRolForm = ({ visible, onClose }) => {
         <div className="mt-4">
           <label className="text-base font-semibold ml-2 ">{t('createRoleForm.nameLabel')}:</label>
           <input
+            name="nombre"
             value={role.nombre}
             onChange={handleChange}
             className="w-full py-2 border border-black focus-visible:ring rounded-md mt-2"
             required
           />
-          {error && (
-            <p className="text-red-500 text-sm mt-1">{t('createRoleForm.namePlaceholder')}</p>
+          {error.nombre && (
+            <p className="text-red-500 text-sm mt-1">{error.nombre}</p>
           )}
         </div>
         <div className="flex justify-center mt-4 space-x-4">
@@ -97,15 +125,6 @@ const CreateRolForm = ({ visible, onClose }) => {
             {t('createRoleForm.closeButton')}
           </button>
         </div>
-        {successMessageVisible && (
-          <div className="absolute top-0 right-0 mt-4 mr-4">
-            {message.success({
-              content: t('createRoleForm.roleCreated'),
-              duration: 3,
-              onClose: handleModalClose,
-            })}
-          </div>
-        )}
       </div>
     </Modal>
   );

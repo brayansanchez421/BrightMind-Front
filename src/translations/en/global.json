@@ -54,7 +54,7 @@
         "confirm_password": "Confirm Password",
         "repeat_password": "Repeat password",
         "passwords_match": "Passwords must match",
-        "user_created": "User created successfully",
+        "user_created": "User created successfully, Please check your email to activate your account",
         "email_exists": "Email already exists"
     },
     "reset_password": {
@@ -293,7 +293,9 @@
         "roleExists": "Role name already exists",
         "roleCreated": "Role created successfully",
         "createButton": "Create Role",
-        "closeButton": "Close"
+        "closeButton": "Close",
+        "maxRole": "The role must be at least 15 characters long",
+        "mixRole": "The role must be at least 3 characters long"
     },
     "courses": {
         "title": "Courses",

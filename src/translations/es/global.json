@@ -54,7 +54,7 @@
         "confirm_password": "Confirmar contraseña",
         "repeat_password": "Repite la contraseña",
         "passwords_match": "Las contraseñas deben coincidir",
-        "user_created": "Usuario creado exitosamente",
+        "user_created": "Usuario creado exitosamente, Por favor revisa tu correo para activar la cuenta",
         "email_exists": "El correo electrónico ya existe"
     },
     "reset_password": {
@@ -293,7 +293,9 @@
         "roleExists": "El nombre del rol ya existe",
         "roleCreated": "Rol creado exitosamente",
         "createButton": "Crear Rol",
-        "closeButton": "Cerrar"
+        "closeButton": "Cerrar",
+        "maxRole": "El rol debe tener al menos 15 caracteres",
+        "mixRole": "El rol debe tener como minimo 3"
     },
     "courses": {
         "title": "Cursos",
