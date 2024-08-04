@@ -8,6 +8,8 @@ import Navbar from "./../../Dashboard/NavBar";
 import { useUserContext } from "../../../context/user/user.context";
 import { useAuth } from "../../../context/auth.context";
 import { useTranslation } from "react-i18next";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import "react-toastify/dist/ReactToastify.css";
 
 function Changepassword() {
   const { t } = useTranslation("global");
@@ -77,6 +79,8 @@ function Changepassword() {
   }, [formik.values.password, formik.values.confirmPassword]);
 
   const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleLeftBarVisibilityChange = (isVisible) => {
     setIsLeftBarVisible(isVisible);
@@ -87,7 +91,17 @@ function Changepassword() {
       <LeftBar onVisibilityChange={handleLeftBarVisibilityChange} />
       <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? "ml-44" : ""}`}>
         <Navbar />
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <div className="flex justify-center items-center mx-2 mt-20 sm:mt-10 mb-5">
           <div className="bg-gradient-to-bl border from-purple-500 to-blue-500 p-4 rounded-3xl w-full sm:w-5/6 md:w-7/12 lg:w-5/12 shadow-orange shadow-white">
             <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black text-center mb-2 text-white">
@@ -95,7 +109,7 @@ function Changepassword() {
             </h2>
             <form onSubmit={formik.handleSubmit} className="py-4 sm:py-6 lg:py-10 flex flex-col space-y-4 sm:space-y-6 lg:space-y-8">
               <div>
-                <label className="text-lg font-bold text-white block mb-2 sm:mb-4 mx-2 sm:mx-4">
+                <label className="text-lg font-bold text-white block mx-2 sm:mx-4">
                   {t("newPasswordUser.email")}
                 </label>
                 <input
@@ -107,41 +121,59 @@ function Changepassword() {
                   className="w-full p-2 sm:p-3 border border-cyan-300 rounded-full bg-pink-100 placeholder-gray-450 focus:outline-none"
                 />
                 {formik.touched.email && formik.errors.email ? (
-                  <div>{formik.errors.email}</div>
+                  <div className="text-red-500">{formik.errors.email}</div>
                 ) : null}
               </div>
               <div>
-                <label className="text-lg font-bold text-white block mb-2 sm:mb-4 mx-2 sm:mx-4">
+                <label className="text-lg font-bold text-white block  mx-2 sm:mx-4">
                   {t("newPasswordUser.new_password")}
                 </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className="w-full p-2 sm:p-3 border border-cyan-300 rounded-full bg-pink-100 placeholder-gray-450 focus:outline-sky-600 focus:border-sky-950 focus:bg-slate-200"
-                  placeholder={t("newPasswordUser.new_password")}
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full p-2 sm:p-3 border border-cyan-300 rounded-full bg-pink-100 placeholder-gray-450 focus:outline-sky-600 focus:border-sky-950 focus:bg-slate-200"
+                    placeholder={t("newPasswordUser.new_password")}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-2/4 transform -translate-y-2/4 text-gray-600"
+                  >
+                    {showPassword ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+                  </button>
+                </div>
                 {formik.touched.password && formik.errors.password ? (
-                  <div>{formik.errors.password}</div>
+                  <div className="text-red-500">{formik.errors.password}</div>
                 ) : null}
               </div>
               <div>
-                <label className="text-lg font-bold text-white block mb-2 sm:mb-4 mx-2 sm:mx-4">
+                <label className="text-lg font-bold text-white block mx-2 sm:mx-4">
                   {t("newPasswordUser.confirm_password")}
                 </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formik.values.confirmPassword}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className="w-full p-2 sm:p-3 border border-cyan-300 rounded-full mb-2 bg-pink-100 placeholder-gray-450 focus:outline-sky-600 focus:border-sky-950 focus:bg-slate-200"
-                  placeholder={t("newPasswordUser.confirm_password")}
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full p-2 sm:p-3 border border-cyan-300 rounded-full mb-2 bg-pink-100 placeholder-gray-450 focus:outline-sky-600 focus:border-sky-950 focus:bg-slate-200"
+                    placeholder={t("newPasswordUser.confirm_password")}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-2/4 transform -translate-y-2/4 text-gray-600"
+                  >
+                    {showConfirmPassword ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+                  </button>
+                </div>
                 {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                  <div>{formik.errors.confirmPassword}</div>
+                  <div className="text-red-500">{formik.errors.confirmPassword}</div>
                 ) : null}
               </div>
               {error && <div className="text-red-500">{error}</div>}

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Modal, Button, Input } from "antd";
+import { Modal, Button, Input, message } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCategoryContext } from "../../../context/courses/category.context";
@@ -9,12 +9,16 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
   const { t } = useTranslation("global");
   const { createCategory } = useCategoryContext();
 
-  const [category, setCategory] = useState({ name: "", description: "", image: null });
+  const [category, setCategory] = useState({
+    name: "",
+    description: "",
+    image: null,
+  });
   const [imagePreview, setImagePreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState({
     name: "",
     description: "",
-    image: ""
+    image: "",
   });
   const MAX_DESCRIPTION_LENGTH = 100;
 
@@ -35,28 +39,10 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
     } else {
       e.target.value = null;
       setImagePreview(null);
-      setErrorMessage((prev) => ({ ...prev, image: t("createCategoryForm.invalidImageFile") }));
-    }
-  };
-
-  const validateField = (name, value) => {
-    switch (name) {
-      case "name":
-        if (value.length < 2) {
-          setErrorMessage((prev) => ({ ...prev, name: t("createCategoryForm.nameTooShort") }));
-        } else {
-          setErrorMessage((prev) => ({ ...prev, name: "" }));
-        }
-        break;
-      case "description":
-        if (value.length < 6) {
-          setErrorMessage((prev) => ({ ...prev, description: t("createCategoryForm.descriptionTooShort") }));
-        } else {
-          setErrorMessage((prev) => ({ ...prev, description: "" }));
-        }
-        break;
-      default:
-        break;
+      setErrorMessage((prev) => ({
+        ...prev,
+        image: t("createCategoryForm.invalidImageFile"),
+      }));
     }
   };
 
@@ -66,13 +52,13 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
     const errors = {
       name: "",
       description: "",
-      image: ""
+      image: "",
     };
 
-    if (!category.name || category.name.length < 2) {
+    if (!category.name || category.name.length < 8) {
       errors.name = t("createCategoryForm.nameTooShort");
     }
-    if (!category.description || category.description.length < 6) {
+    if (!category.description || category.description.length < 30) {
       errors.description = t("createCategoryForm.descriptionTooShort");
     }
     if (!category.image) {
@@ -86,16 +72,12 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
 
     try {
       await createCategory(category);
-      toast.success(t("createCategoryForm.createSuccess"), { autoClose: 1000 });
-      setTimeout(() => {
-        onCreate(category);
-        resetForm();
-        onClose();
-        window.location.reload();
-      }, 1000); // Ajusta el retraso según sea necesario
+      onCreate(category);
+      onClose();
     } catch (error) {
       console.error(error);
-      toast.error(t("createCategoryForm.createFailure"), { autoClose: 3000 });
+      message.error(t("createCategoryForm.createFailure"));
+      onclose();
     }
   };
 
@@ -127,11 +109,13 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
         styles={{ mask: { backdropFilter: "blur(15px)" } }}
       >
         <form
-          className="w-full p-6 bg-gradient-to-tr from-teal-400 to-blue-500 rounded-lg shadow-lg relative"
+          className="w-full p-4 bg-gradient-to-tr from-teal-400 to-blue-500 rounded-lg shadow-lg relative"
           onSubmit={handleSubmit}
         >
           <div>
-            <h1 className="text-3xl font-bold text-center mb-4 text-white">{t("createCategoryForm.title")}</h1>
+            <h1 className="text-3xl font-bold text-center mb-4 text-white">
+              {t("createCategoryForm.title")}
+            </h1>
             <div className="mb-4">
               <label className="block text-black text-lg font-medium mb-2">
                 {t("createCategoryForm.nameLabel")} <br />
@@ -144,11 +128,11 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
                   required
                 />
                 {errorMessage.name && (
-                  <p className="text-red-500 text-sm mt-1">{errorMessage.name}</p>
+                  <p className="text-red-500 text-sm">{errorMessage.name}</p>
                 )}
               </label>
             </div>
-            <div className="mb-4">
+            <div className="">
               <label className="block text-black text-lg font-medium mb-2">
                 {t("createCategoryForm.descriptionLabel")} <br />
                 <Input.TextArea
@@ -160,9 +144,13 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
                   style={{ minHeight: "100px" }}
                   required
                 />
-                <div className="text-gray-300 mt-1 text-right">{category.description.length}/{MAX_DESCRIPTION_LENGTH}</div>
+                <div className="text-gray-300 text-right">
+                  {category.description.length}/{MAX_DESCRIPTION_LENGTH}
+                </div>
                 {errorMessage.description && (
-                  <p className="text-red-500 text-sm mt-1">{errorMessage.description}</p>
+                  <p className="text-red-500 text-sm ">
+                    {errorMessage.description}
+                  </p>
                 )}
               </label>
             </div>
@@ -178,29 +166,36 @@ const CreateCategoryForm = ({ visible, onClose, onCreate }) => {
                   required
                 />
                 {errorMessage.image && (
-                  <p className="text-red-500 text-sm mt-1">{errorMessage.image}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errorMessage.image}
+                  </p>
                 )}
               </label>
               {imagePreview && (
                 <div className="mt-2 flex justify-center">
-                  <img src={imagePreview} alt="preview" className="rounded-lg" style={{ maxWidth: "100%", maxHeight: "200px" }} />
+                  <img
+                    src={imagePreview}
+                    alt="preview"
+                    className="rounded-lg"
+                    style={{ maxWidth: "100%", maxHeight: "200px" }}
+                  />
                 </div>
               )}
             </div>
           </div>
           <div className="flex justify-center mt-6 space-x-4">
-            <Button
+            <button
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
               htmlType="submit"
             >
               {t("createCategoryForm.createButton")}
-            </Button>
-            <Button
+            </button>
+            <button
               className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
               onClick={onClose}
             >
               {t("createCategoryForm.cancelButton")}
-            </Button>
+            </button>
           </div>
         </form>
       </Modal>

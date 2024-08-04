@@ -96,7 +96,7 @@ const LeftBar = ({ onVisibilityChange }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 h-full overflow-auto bg-gradient-to-t from-purple-800 to-teal-400 text-white flex flex-col items-center shadow-xl shadow-blue-100 transition-transform duration-300 ${
+      className={`fixed top-0 left-0 h-full overflow-auto bg-gradient-to-t from-purple-800 to-teal-400 text-white flex flex-col items-center shadow-xl shadow-blue-100 transition-transform duration-100 ${
         isVisible ? "translate-x-0" : "-translate-x-full"
       } md:w-72 w-56 sm:w-56 lg:w-72 xl:w-72`}
       onMouseEnter={() => setIsVisible(true)}

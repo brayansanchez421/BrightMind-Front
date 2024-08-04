@@ -8,14 +8,19 @@ import Carousel from "./../components/Login_components/Carousel";
 import { useAuth } from "../context/auth.context";
 import VideoPage from "./VideoPage";
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const LoginForm = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [userRole, setUserRole] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const { t } = useTranslation("global");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const validationSchema = yup.object().shape({
     email: yup.string().email(t("login.invalid_email")).required(t("login.email_required")),
@@ -32,18 +37,20 @@ const LoginForm = () => {
       console.log("Valores enviados al hacer inicio de sesión:", values);
       try {
         setLoading(true);
+        setIsSubmitting(true); // Desactiva el botón
+  
         const response = await login(values);
         const success = response?.success;
         const user = response?.user;
         const message = response?.message;
-
+  
         console.log("Inicio de sesión exitoso:", success);
-
+  
         if (success) {
           const userRole = user?.data?.role || null;
           const userToken = user?.data?.token || null;
           console.log(userRole);
-
+  
           toast.success(message || t("login.login_successful"));
           document.cookie = `token=${userToken}; path=/`;
           setUserRole(userRole);
@@ -60,9 +67,12 @@ const LoginForm = () => {
         toast.error(errorMessage);
       } finally {
         setLoading(false);
+        setTimeout(() => {
+          setIsSubmitting(false); // Activa el botón después de 3 segundos
+        }, 3000);
       }
     },
-  });
+  });  
 
   useEffect(() => {
     if (error) {
@@ -80,7 +90,7 @@ const LoginForm = () => {
   return (
     <div className="flex min-h-screen bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400">
       <Carousel />
-      <div className="flex flex-col justify-center items-center w-full sm:w-1/2 mx-4">
+      <div className="flex flex-col justify-center items-center w-full sm:w-1/2 sm:mx-4">
         <ToastContainer />
         <form
           onSubmit={formik.handleSubmit}
@@ -120,27 +130,37 @@ const LoginForm = () => {
               <label className="text-lg font-bold text-gray-600 block mb-2">
                 {t("login.password")}
               </label>
-              <input
-                type="password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
-                placeholder={t("login.enter_password")}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="w-full p-4 border border-purple-300 rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none focus:border-purple-500 focus:bg-white"
+                  placeholder={t("login.enter_password")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                </button>
+              </div>
               {formik.touched.password && formik.errors.password ? (
                 <div className="text-red-500">{formik.errors.password}</div>
               ) : null}
             </div>
             <div className="flex justify-center">
             <button 
-              type="submit"
-              className="w-56 py-2 cursor-pointer bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
-              disabled={!formik.isValid || loading}
-            >
-              {loading ? t("login.loading") : t("login.login")}
-            </button>
+             type="submit"
+             className="w-56 py-2 cursor-pointer bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
+             disabled={!formik.isValid || loading || isSubmitting}
+           >
+             {loading ? t("login.loading") : t("login.login")}
+           </button>
+           
             </div>
           </div>
           <div className="mt-4 text-center">

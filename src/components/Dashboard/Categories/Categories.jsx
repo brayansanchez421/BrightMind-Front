@@ -26,10 +26,11 @@ const DataTablete = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(null);
   const [form] = Form.useForm();
   const [imagePreview, setImagePreview] = useState(null);
+  const pagesToShow = 1;
 
   useEffect(() => {
     getCategories();
-  }, [getCategories]);
+  }, []);
 
   useEffect(() => {
     setTotalPages(Math.ceil(categories.length / itemsPerPage));
@@ -44,6 +45,28 @@ const DataTablete = () => {
     } finally {
       setShowCategoryForm(false);
     }
+  };
+
+  const getVisiblePageNumbers = () => {
+    const pages = [];
+    const half = Math.floor(pagesToShow / 1);
+  
+    let start = Math.max(1, currentPage - half);
+    let end = Math.min(totalPages, currentPage + half);
+  
+    if (currentPage <= half) {
+      end = Math.min(totalPages, end + (half - currentPage + 1));
+    }
+  
+    if (totalPages - currentPage < half) {
+      start = Math.max(1, start - (half - (totalPages - currentPage)));
+    }
+  
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+  
+    return pages;
   };
 
   const handleCreateCategoryClick = () => {
@@ -232,37 +255,36 @@ const DataTablete = () => {
             form={form}
             imagePreview={imagePreview}
           />
-
-          {totalPages > 1 && (
-            <div className="flex justify-center mb-8 mt-8">
+           {totalPages > 1 && (
+          <div className="flex justify-center mx-auto mb-4 mt-8 space-x-2 items-center border">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 bg-gray-200 text-gray-800 border"
+            >
+              {t("categories.previous")}
+            </button>
+            {getVisiblePageNumbers().map((page) => (
               <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
+                key={page}
+                onClick={() => paginate(page)}
+                className={`px-3 py-1 ${currentPage === page ? "bg-black border text-white" : "bg-gray-200 text-gray-800 border"}`}
               >
-                {t("categories.previous")}
+                {page}
               </button>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => paginate(index + 1)}
-                  className={`px-3 py-1 mx-1 ${currentPage === index + 1 ? "bg-black border text-white" : "bg-gray-200 text-gray-800 border"}`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-800 border"
-              >
-                {t("categories.next")}
-              </button>
-            </div>
-          )}
+            ))}
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 bg-gray-200 text-gray-800 border"
+            >
+              {t("categories.next")}
+            </button>
+          </div>
+        )}
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 

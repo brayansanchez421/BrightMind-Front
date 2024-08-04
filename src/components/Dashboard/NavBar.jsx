@@ -63,14 +63,18 @@ const Navbar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
+  const toggleMenu = () => {
+    setIsMenuVisible(!isMenuVisible);
+  };
+
   return (
     <>
       <nav className="shadow-lg shadow-teal-200 bg-gradient-to-r from-teal-400 to-teal-500 py-2 transition-all duration-400 justify-center flex w-full">
         <div ref={sidebarRef}>
           <LeftBar onVisibilityChange={(isVisible) => setIsSidebarVisible(isVisible)} />
         </div>
-        <div className="flex items-center relative w-screen text-justify">
-          <div className="absolute left-0 top-0 h-full flex items-center">
+        <div className="flex items-center w-screen text-justify">
+          <div className="absolute left-0 top-6 flex items-center">
             <FaBars
               className="text-white text-lg cursor-pointer ml-4"
               onClick={toggleSidebar}
@@ -85,21 +89,19 @@ const Navbar = () => {
           </div>
           <div className="flex items-center ml-auto mr-4 relative">
             <span className="text-white text-xl font-bold hidden sm:block mr-4">{username}</span>
-            <div 
-              className="relative" 
-              onMouseEnter={() => setIsMenuVisible(true)} 
-              onMouseLeave={() => setIsMenuVisible(false)}
-            >
+            <div className="relative">
               {userImage ? (
                 <img
                   src={userImage}
                   alt="UserImage"
                   className="h-12 w-12 cursor-pointer rounded-full"
+                  onClick={toggleMenu}
                 />
               ) : (
                 <FaUserCircle
                   size="48px" // Ajusta el tamaño del icono según sea necesario
                   className="cursor-pointer text-white"
+                  onClick={toggleMenu}
                 />
               )}
               {isMenuVisible && (

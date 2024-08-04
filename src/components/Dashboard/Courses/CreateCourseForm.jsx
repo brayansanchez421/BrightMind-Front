@@ -19,6 +19,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
     category: "",
     description: "",
     image: null,
+    imagePreview: null,
   });
   const [errorMessage, setErrorMessage] = useState({
     name: "",
@@ -38,7 +39,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      setCourse({ ...course, image: file });
+      setCourse({ ...course, image: file, imagePreview:URL.createObjectURL(file)});
       setErrorMessage((prev) => ({ ...prev, image: "" }));
     } else {
       e.target.value = null;
@@ -122,6 +123,7 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
       category: "",
       description: "",
       image: null,
+      imagePreview:null,
     });
     setErrorMessage({
       name: "",
@@ -146,9 +148,9 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
         maskStyle={{ backdropFilter: "blur(15px)" }}
         onCancel={onClose}
       >
-        <form onSubmit={handleSubmit} className="bg-gradient-to-tr from-teal-400 to-blue-500 shadow-lg rounded-lg p-6">
+        <form onSubmit={handleSubmit} className="bg-gradient-to-tr from-teal-400 to-blue-500 shadow-lg rounded-lg p-2">
           <div>
-            <h1 className="text-3xl font-bold text-white text-center mb-6">{t("createCourseForm.title")}</h1>
+            <h1 className="text-3xl font-bold text-white text-center mb-2">{t("createCourseForm.title")}</h1>
             <div className="mb-4">
               <label className="block text-black text-base font-bold mb-2">
                 {t("createCourseForm.name")}:
@@ -219,6 +221,11 @@ const CreateCourseForm = ({ visible, onClose, onCreate }) => {
                   <p className="text-red-500 text-sm mt-1">{errorMessage.image}</p>
                 )}
               </label>
+              {course.imagePreview && (
+                <div className="mt-2 flex justify-center">
+                  <img src={course.imagePreview} alt="Image Preview" className="w-56 h-56 rounded-lg shadow-md" />
+                </div>
+              )}
             </div>
           </div>
           <div className="flex justify-center mt-4 space-x-4">

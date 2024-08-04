@@ -36,6 +36,9 @@
         }
     },
     "register": {
+        "username_min_length": "Username must be at least 4 characters long",
+        "email_requires_at": "Email must contain '@'",
+        "email_requires_com": "Email must end with '.com'",
         "register": "Register",
         "already_registered": "Already registered?",
         "login": "Login",
@@ -54,7 +57,7 @@
         "confirm_password": "Confirm Password",
         "repeat_password": "Repeat password",
         "passwords_match": "Passwords must match",
-        "user_created": "User created successfully",
+        "user_created": "User created successfully, Please check your email to activate your account",
         "email_exists": "Email already exists"
     },
     "reset_password": {
@@ -293,7 +296,9 @@
         "roleExists": "Role name already exists",
         "roleCreated": "Role created successfully",
         "createButton": "Create Role",
-        "closeButton": "Close"
+        "closeButton": "Close",
+        "maxRole": "The role must be at least 15 characters long",
+        "mixRole": "The role must be at least 3 characters long"
     },
     "courses": {
         "title": "Courses",
@@ -410,8 +415,8 @@
         "successMessage": "Category created successfully!",
         "errorToastMessage": "Failed to create category. Please try again.",
         "cancelButton": "Cancel",
-        "nameTooShort": "Category name must be at least 2 characters long.",
-        "descriptionTooShort": "Description must be at least 6 characters long.",
+        "nameTooShort": "Category name must be at least 8 characters long.",
+        "descriptionTooShort": "Description must be at least 30 characters long.",
         "createButton": "Create Category",
         "createSuccess": "Category created successfully!",
         "createFailure": "Failed to create category. Please try again.",

@@ -36,6 +36,9 @@
         }
     },
     "register": {
+        "username_min_length": "El nombre de usuario debe tener al menos 4 caracteres",
+        "email_requires_at": "El correo debe contener un '@'",
+        "email_requires_com": "El correo debe terminar en' .com'",
         "register": "Registrarse",
         "already_registered": "¿Ya estás registrado?",
         "login": "Iniciar sesión",
@@ -54,7 +57,7 @@
         "confirm_password": "Confirmar contraseña",
         "repeat_password": "Repite la contraseña",
         "passwords_match": "Las contraseñas deben coincidir",
-        "user_created": "Usuario creado exitosamente",
+        "user_created": "Usuario creado exitosamente, Por favor revisa tu correo para activar la cuenta",
         "email_exists": "El correo electrónico ya existe"
     },
     "reset_password": {
@@ -293,7 +296,9 @@
         "roleExists": "El nombre del rol ya existe",
         "roleCreated": "Rol creado exitosamente",
         "createButton": "Crear Rol",
-        "closeButton": "Cerrar"
+        "closeButton": "Cerrar",
+        "maxRole": "El rol debe tener al menos 15 caracteres",
+        "mixRole": "El rol debe tener como minimo 3"
     },
     "courses": {
         "title": "Cursos",
@@ -410,8 +415,8 @@
         "successMessage": "Categoría creada con éxito!",
         "errorToastMessage": "Error al crear la categoría. Inténtalo de nuevo.",
         "cancelButton": "Cancelar",
-        "nameTooShort": "El nombre de la categoría debe tener al menos 2 caracteres.",
-        "descriptionTooShort": "La descripción debe tener al menos 6 caracteres.",
+        "nameTooShort": "El nombre de la categoría debe tener al menos 8 caracteres.",
+        "descriptionTooShort": "La descripción debe tener al menos 30 caracteres.",
         "createButton": "Crear Categoría",
         "createSuccess": "¡Categoría creada exitosamente!",
         "createFailure": "No se pudo crear la categoría. Por favor, intenta de nuevo.",

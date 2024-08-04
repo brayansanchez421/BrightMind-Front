@@ -7,19 +7,29 @@ import Carousel from "../components/Login_components/Carousel";
 import { Link, useNavigate } from "react-router-dom";
 import { registerRequest } from "../api/auth";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 function RegisterForm() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
   const { t } = useTranslation("global");
 
   const validationSchema = yup.object().shape({
-    username: yup.string().required(t("register.username_required")),
+    username: yup
+      .string()
+      .min(4, t("register.username_min_length"))
+      .required(t("register.username_required")),
     email: yup
       .string()
       .email(t("register.invalid_email"))
+      .matches(/@/, t("register.email_requires_at"))
+      .matches(/\.com$/, t("register.email_requires_com"))
       .required(t("register.email_required")),
     password: yup
       .string()
@@ -49,7 +59,9 @@ function RegisterForm() {
         const { confirmPassword, ...userData } = values;
         console.log("Values:", userData);
 
-        const response = await registerRequest(userData); // Corregido para enviar userData
+        setIsSubmitting(true); // Desactiva el botón
+
+        const response = await registerRequest(userData);
         console.log("Response:", response.data);
 
         if (
@@ -61,14 +73,18 @@ function RegisterForm() {
           toast.error(t("register.email_exists"));
         } else {
           setSuccess(true);
-          toast.success(t("register.user_created"));
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
+          toast.success(t("register.user_created"), {
+            autoClose: 2500, // Ajusta el tiempo que el toast permanecerá visible
+            onClose: () => navigate("/"), // Redirige después de que el toast se cierra
+          });
         }
       } catch (error) {
         console.error(error);
         toast.error(t("register.email_exists"));
+      } finally {
+        setTimeout(() => {
+          setIsSubmitting(false); // Activa el botón después de 3 segundos
+        }, 3000);
       }
     },
   });
@@ -142,19 +158,28 @@ function RegisterForm() {
               <label className="text-base font-bold text-gray-600 block mb-2">
                 {t("register.password")}
               </label>
-              <input
-                type="password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={`w-full p-2 border rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none ${
-                  formik.touched.password && formik.errors.password
-                    ? "border-red-500"
-                    : "border-purple-300"
-                }`}
-                placeholder={t("register.enter_password")}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={`w-full p-2 border rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none ${
+                    formik.touched.password && formik.errors.password
+                      ? "border-red-500"
+                      : "border-purple-300"
+                  }`}
+                  placeholder={t("register.enter_password")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                </button>
+              </div>
               {formik.touched.password && formik.errors.password ? (
                 <div className="text-red-500 mt-1">
                   {formik.errors.password}
@@ -165,20 +190,31 @@ function RegisterForm() {
               <label className="text-base font-bold text-gray-600 block mb-2">
                 {t("register.repeat_password")}
               </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formik.values.confirmPassword}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={`w-full p-2 border rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none ${
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? "border-red-500"
-                    : "border-purple-300"
-                }`}
-                placeholder={t("register.repeat_password")}
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={`w-full p-2 border rounded-full bg-purple-50 placeholder-purple-200 focus:outline-none ${
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                      ? "border-red-500"
+                      : "border-purple-300"
+                  }`}
+                  placeholder={t("register.repeat_password")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  <FontAwesomeIcon
+                    icon={showConfirmPassword ? faEyeSlash : faEye}
+                  />
+                </button>
+              </div>
               {formik.touched.confirmPassword &&
               formik.errors.confirmPassword ? (
                 <div className="text-red-500 mt-1">
@@ -192,7 +228,8 @@ function RegisterForm() {
                 className="w-48 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-bold text-xl"
                 disabled={
                   !formik.isValid ||
-                  formik.values.password !== formik.values.confirmPassword
+                  formik.values.password !== formik.values.confirmPassword ||
+                  isSubmitting
                 }
                 onClick={() => {
                   if (!formik.isValid) {
