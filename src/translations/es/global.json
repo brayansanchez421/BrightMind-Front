@@ -126,6 +126,8 @@
     "userProfileSettings": {
         "edit_profile": "Editar Perfil",
         "name": "Nombre",
+        "invalid_email": "Email Invalido",
+        "name_invalid": "El nombre debe tener almenos 4 caracteres",
         "email": "Correo Electrónico",
         "profile_image": "Imagen de Perfil",
         "save": "Guardar",

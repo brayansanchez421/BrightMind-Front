@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Changepassword() {
   const { t } = useTranslation("global");
-  const { token } = useParams(); // Get the token from the URL parameters
+  const { token } = useParams();
   const [error, setError] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false);
   const navigate = useNavigate();
@@ -48,14 +48,17 @@ function Changepassword() {
       ),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password"), null], t("newPasswordUser.passwords_must_match"))
+      .oneOf(
+        [yup.ref("password"), null],
+        t("newPasswordUser.passwords_must_match")
+      ),
   });
 
   const formik = useFormik({
     initialValues: {
       email: email,
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -71,7 +74,7 @@ function Changepassword() {
         toast.error(t("newPasswordUser.password_change_error"));
         console.error(error);
       }
-    }
+    },
   });
 
   useEffect(() => {
@@ -89,7 +92,11 @@ function Changepassword() {
   return (
     <div className="flex min-h-screen bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600">
       <LeftBar onVisibilityChange={handleLeftBarVisibilityChange} />
-      <div className={`w-full transition-all duration-300 ${isLeftBarVisible ? "ml-44" : ""}`}>
+      <div
+        className={`w-full transition-all duration-300 ${
+          isLeftBarVisible ? "ml-44" : ""
+        }`}
+      >
         <Navbar />
         <ToastContainer
           position="top-right"
@@ -107,7 +114,10 @@ function Changepassword() {
             <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black text-center mb-2 text-white">
               {t("newPasswordUser.change_password")}
             </h2>
-            <form onSubmit={formik.handleSubmit} className="py-4 sm:py-6 lg:py-10 flex flex-col space-y-4 sm:space-y-6 lg:space-y-8">
+            <form
+              onSubmit={formik.handleSubmit}
+              className="py-4 sm:py-6 lg:py-10 flex flex-col space-y-4 sm:space-y-6 lg:space-y-8"
+            >
               <div>
                 <label className="text-lg font-bold text-white block mx-2 sm:mx-4">
                   {t("newPasswordUser.email")}
@@ -169,17 +179,28 @@ function Changepassword() {
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-2/4 transform -translate-y-2/4 text-gray-600"
                   >
-                    {showConfirmPassword ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+                    {showConfirmPassword ? (
+                      <EyeTwoTone />
+                    ) : (
+                      <EyeInvisibleOutlined />
+                    )}
                   </button>
                 </div>
-                {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                  <div className="text-red-500">{formik.errors.confirmPassword}</div>
+                {formik.touched.confirmPassword &&
+                formik.errors.confirmPassword ? (
+                  <div className="text-red-500">
+                    {formik.errors.confirmPassword}
+                  </div>
                 ) : null}
               </div>
               {error && <div className="text-red-500">{error}</div>}
               <div className="flex justify-center items-center space-x-4">
                 <button
-                  className={`w-48 font-bold py-2 text-lg text-white rounded-full ${passwordsMatch ? "bg-green-700 hover:bg-green-600 shadow-green-600 shadow-orange" : "bg-red-500 hover:bg-red-600 shadow-orange shadow-red-400"} disabled:opacity-80`}
+                  className={`w-48 font-bold py-2 text-lg text-white rounded-full ${
+                    passwordsMatch
+                      ? "bg-green-700 hover:bg-green-600 shadow-green-600 shadow-orange"
+                      : "bg-red-500 hover:bg-red-600 shadow-orange shadow-red-400"
+                  } disabled:opacity-80`}
                   type="submit"
                   disabled={!formik.isValid || !passwordsMatch}
                 >

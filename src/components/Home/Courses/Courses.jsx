@@ -177,12 +177,14 @@ const Course = () => {
             <p className="mb-4 text-center">
               {t('courseComponent.success_message')}
             </p>
+            <div className="flex justify-center">
             <button
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400 transition-colors flex justify-center"
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400 transition-colors"
               onClick={closeSuccessModal}
             >
               {t('courseComponent.close')}
             </button>
+            </div>
           </div>
         </div>
       )}

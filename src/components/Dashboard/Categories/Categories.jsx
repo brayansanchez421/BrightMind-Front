@@ -256,7 +256,7 @@ const DataTablete = () => {
             imagePreview={imagePreview}
           />
            {totalPages > 1 && (
-          <div className="flex justify-center mx-auto mb-4 mt-8 space-x-2 items-center border">
+          <div className="flex justify-center mx-auto mb-4 mt-8 space-x-2 items-center">
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}

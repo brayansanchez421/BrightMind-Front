@@ -34,7 +34,7 @@ import HomePage from "./views/HomePage";
 import ProfileUser from "./components/Home/ProfileUser";
 import MyCourses from "./components/Home/Courses/MyCourses";
 import CoursesHome from "./components/Home/Courses/Courses";
-
+import UserDeleteAccount from "./components/Home/UserDeleteAccount";
 //Vista error
 import NotFoundPage from "./views/Error/404Page";
 
@@ -66,6 +66,7 @@ function App() {
                     path="/eliminatedCode"
                     element={<DeleteAccountConfirmation />}
                   />
+                  <Route path="/UserDeleteAccount" element={<UserDeleteAccount/>}/>
                   <Route path="/notFound" element={<NotFoundPage />} />
                   <Route path="/activate" element={<ActivationComponent />} />
                   <Route path="/ChangePassword" element={<ChangePassword />} />

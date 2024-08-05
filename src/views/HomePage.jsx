@@ -25,7 +25,7 @@ const HomePage = () => {
     }, [categoriesLoaded, getCategories]);
 
     const phrases = [
-        { text: t('home.quotes.da_vinci'), author: 'Leonardo da Vinci', imageUrl: 'https://th.bing.com/th/id/OIG1._bdTJRgcKBp2wYC3oen1?pid=ImgGn' },
+        { text: t('home.quotes.da_vinci'), author: 'Leonardo da Vinci', imageUrl: 'https://th.bing.com/th/id/OIP.DtC3ATqwhnlc_X8KeBv7aAHaJg?rs=1&pid=ImgDetMain' },
         { text: t('home.quotes.mandela'), author: 'Nelson Mandela', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Nelson_Mandela_1994_%282%29.jpg/1200px-Nelson_Mandela_1994_%282%29.jpg' },
         { text: t('home.quotes.sassoon'), author: 'Vidal Sassoon', imageUrl: 'https://cdijum.mx/wp-content/uploads/2018/01/sassoon-nyt.jpg' },
         { text: t('home.quotes.einstein_idea'), author: 'Albert Einstein', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_Head.jpg' },

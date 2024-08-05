@@ -104,12 +104,12 @@
         "previous": "Previous",
         "next": "Next",
         "quotes": {
-            "da_vinci": "Learning never exhausts the mind.",
-            "mandela": "Education is the most powerful weapon which you can use to change the world.",
-            "sassoon": "The only place where success comes before work is in the dictionary.",
-            "einstein_idea": "The mind that opens to a new idea never returns to its original size.",
-            "davis": "The road to success and the road to failure are almost exactly the same.",
-            "einstein_knowledge": "The only source of knowledge is experience."
+        "da_vinci": "Learning never exhausts the mind.",
+        "mandela": "Education is the most powerful weapon which you can use to change the world.",
+        "sassoon": "The only place where success comes before work is in the dictionary.",
+        "einstein_idea": "The mind that opens to a new idea never returns to its original size.",
+        "davis": "The road to success and the road to failure are almost exactly the same.",
+        "einstein_knowledge": "The only source of knowledge is experience."
         }
     },
     "settingsBar": {
@@ -125,6 +125,8 @@
     },
     "userProfileSettings": {
         "edit_profile": "Edit Profile",
+        "invalid_email": "Invalid email",
+        "name_invalid": "The name must be at least 4 characters long",
         "name": "Name",
         "email": "Email",
         "profile_image": "Profile Image",
