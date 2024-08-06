@@ -12,16 +12,37 @@ import { useTranslation } from 'react-i18next';
 const ResetPasswordVerifyForm = () => {
     const navigate = useNavigate();
     const [codes, setCodes] = useState(['', '', '', '', '', '']);
-    const inputRefs = useRef([React.createRef(), React.createRef(), React.createRef(), React.createRef(), React.createRef(), React.createRef()]);
+    const inputRefs = useRef([]);
     const { t } = useTranslation('global');
 
+    // Helper function to handle input changes and focus management
     const handleCodeChange = (index, value) => {
         const newCodes = [...codes];
         newCodes[index] = value;
         setCodes(newCodes);
 
-        if (value !== '' && index < 5) {
-            inputRefs.current[index + 1].current.focus();
+        // Move to next input if current one is filled
+        if (value !== '' && index < codes.length - 1) {
+            inputRefs.current[index + 1]?.focus();
+        }
+        // Move to previous input if backspace is pressed and current input is empty
+        if (value === '' && index > 0) {
+            inputRefs.current[index - 1]?.focus();
+        }
+    };
+
+    const handleKeyDown = (e, index) => {
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            if (index < codes.length - 1) {
+                inputRefs.current[index + 1]?.focus();
+            }
+        }
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            if (index > 0) {
+                inputRefs.current[index - 1]?.focus();
+            }
         }
     };
 
@@ -41,11 +62,11 @@ const ResetPasswordVerifyForm = () => {
     };
 
     return (
-        <div className="bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600 min-h-screen flex">
-            <div className="md:z-50 mx-auto my-3 max-w-full bg-gradient-to-r from-violet-600 to-rose-500 p-3 rounded-xl shadow-xl shadow-zinc-950">
-                <h1 className="md:text-nowrap font-black py-16 text-5xl p-6 text-slate-100 rounded-xl w-6/12 mx-10">{t('reset_password_verify.sent_code')}</h1>
-                <p className="italic font-semibold text-center text-2xl text-slate-300 my-10">{t('reset_password_verify.enter_code')}</p>
-                <div className="py-4 my-10 w-full flex flex-col items-center">
+        <div className="bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600 min-h-screen flex justify-center items-center">
+            <div className="bg-gradient-to-r from-violet-600 to-rose-500 rounded-xl shadow-xl shadow-zinc-950 py-10 px-6 mx-4">
+                <h1 className="text-center font-black text-xl text-slate-100 rounded-xl ">{t('reset_password_verify.sent_code')}</h1>
+                <p className="italic font-semibold text-center text-lg text-slate-300 ">{t('reset_password_verify.enter_code')}</p>
+                <div className="w-full flex flex-col items-center">
                     <img src={logo} alt="Logo" className="h-40" />
                 </div>
                 <form onSubmit={handleSubmit} className="my-3">
@@ -54,24 +75,26 @@ const ResetPasswordVerifyForm = () => {
                             {codes.map((code, index) => (
                                 <input
                                     key={index}
-                                    ref={inputRefs.current[index]}
+                                    ref={(el) => inputRefs.current[index] = el}
                                     type="text"
-                                    className="block w-12 h-12 bg-white text-center text-3xl rounded-lg focus:outline-none focus:border-slate-500 hover:shadow"
+                                    className="block w-10 h-10 bg-white text-center text-xl rounded-lg focus:outline-none focus:border-slate-500 hover:shadow"
                                     maxLength="1"
                                     value={code}
                                     onChange={(e) => handleCodeChange(index, e.target.value)}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
+                                    autoFocus={index === 0} // Automatically focus the first input
                                 />
                             ))}
                         </div>
                         <button
                             type="submit"
-                            className="w-full sm:w-full md:w-96 mx-auto py-4 font-medium text-white bg-gradient-to-r from-cyan-300 to-cyan-800 rounded-lg inline-flex space-x-4 items-center justify-center"
+                            className="py-2 font-medium text-white bg-gradient-to-r from-cyan-300 to-cyan-800 rounded-lg"
                         >
                             <span>{t('reset_password_verify.confirm_code')}</span>
                         </button>
                         <p className="text-center text-slate-100 font-medium">
                             {t('reset_password_verify.not_received')}{' '}
-                            <Link to="/reset" className="text-black hover:bg-gradient-to-r font-semibold from-teal-200 to-cyan-400 shadow-lg shadow-red-300 inline-flex space-x-1 items-center">
+                            <Link to="/reset" className="text-black hover:bg-white">
                                 {t('reset_password_verify.request_new')}
                             </Link>
                         </p>

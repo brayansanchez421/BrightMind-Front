@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useUserContext } from "../../../context/user/user.context";
-import { useAuth } from "../../../context/auth.context";
+import { useUserContext } from "../../../src/context/user/user.context";
+import { useAuth } from "../../../src/context/auth.context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import logo from "../../../assets/img/hola.png";
+import logo from "../../../src/assets/img/hola.png"
 
 const DeleteAccountConfirmation = () => {
   const navigate = useNavigate();
@@ -109,7 +109,7 @@ const DeleteAccountConfirmation = () => {
           >
             <span>Delete</span>
           </button>
-          <Link to={"/ProfileEditor"}>
+          <Link to={"/Account"}>
             <button className="w-32 py-3 font-medium text-white bg-slate-950 shadow-white shadow hover:bg-gray-800 rounded-lg">
               <span>Cancel</span>
             </button>

@@ -1,5 +1,4 @@
 import React from 'react';
-import LanguagePreferences from '../Dashboard/ProfileAdmin/Languaje';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useNavigate } from 'react-router-dom';
@@ -29,7 +28,7 @@ const SettingsBar = () => {
       if (result.isConfirmed) {
         try {
           await deleteUser(user.data.id);
-          navigate('/eliminatedCode');
+          navigate('/UserDeleteAccount');
         } catch (error) {
           console.error(error);
           Swal.fire({
