@@ -58,7 +58,8 @@
         "repeat_password": "Repeat password",
         "passwords_match": "Passwords must match",
         "user_created": "User created successfully, Please check your email to activate your account",
-        "email_exists": "Email already exists"
+        "email_exists": "Email already exists",
+        "username_exists": "The username already exists, please enter a different one"
     },
     "reset_password": {
         "invalid_email": "Invalid email",

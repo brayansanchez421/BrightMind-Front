@@ -58,7 +58,8 @@
         "repeat_password": "Repite la contraseña",
         "passwords_match": "Las contraseñas deben coincidir",
         "user_created": "Usuario creado exitosamente, Por favor revisa tu correo para activar la cuenta",
-        "email_exists": "El correo electrónico ya existe"
+        "email_exists": "El correo electrónico ya existe",
+        "username_exists": "El username ya existe, por favor ingrese uno distinto"
     },
     "reset_password": {
         "invalid_email": "Correo electrónico no válido",

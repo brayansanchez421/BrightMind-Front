@@ -200,6 +200,7 @@ const DataTablete = () => {
                     </thead>
                     <tbody>
                       {courses
+                        .filter((course) => course.title.toLowerCase().includes(searchValue.toLowerCase()))
                         .slice(
                           (currentPage - 1) * itemsPerPage,
                           currentPage * itemsPerPage
