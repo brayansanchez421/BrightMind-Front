@@ -57,34 +57,59 @@ function RegisterForm() {
     onSubmit: async (values) => {
       try {
         const { confirmPassword, ...userData } = values;
-        console.log("Values:", userData);
-
-        setIsSubmitting(true); // Desactiva el botón
-
+    
+        setIsSubmitting(true);
+    
         const response = await registerRequest(userData);
-        console.log("Response:", response.data);
-
-        if (
-          response &&
-          response.data &&
-          response.data.error &&
-          response.data.error === "Email already exists"
-        ) {
-          toast.error(t("register.email_exists"));
+    
+        if (response.data.msg) {
+          switch (response.data.msg) {
+            case "Email already exists": //Correo Existente Mensaje error
+              toast.error(t("register.email_exists"));
+              break;
+            case "Username already exists":
+              toast.error(t("register.username_exists")); //Username Existente Mensaje error
+              break;
+            default:
+              toast.error(t("register.server_error"));
+          }
         } else {
           setSuccess(true);
           toast.success(t("register.user_created"), {
-            autoClose: 2500, // Ajusta el tiempo que el toast permanecerá visible
-            onClose: () => navigate("/"), // Redirige después de que el toast se cierra
+            autoClose: 2500,
+            onClose: () => navigate("/"),
           });
         }
       } catch (error) {
-        console.error(error);
-        toast.error(t("register.email_exists"));
+        console.error("Caught error:", error);
+    
+        if (error.response) {
+          // Error de respuesta del servidor
+          console.error("Server response error:", error.response.data);
+    
+          const errorMsg = error.response.data.msg || "Unknown error occurred";
+    
+          switch (errorMsg) {
+            case "Email already exists":
+              toast.error(t("register.email_exists"));
+              break;
+            case "Username already exists":
+              toast.error(t("register.username_exists"));
+              break;
+            default:
+              toast.error(t("register.server_error"));
+          }
+        } else if (error.request) {
+          // Error de solicitud 
+          console.error("Network error:", error.request);
+          toast.error(t("register.server_error"));
+        } else {
+          // Error al configurar la solicitud
+          console.error("Error configuring request:", error.message);
+          toast.error(t("register.server_error"));
+        }
       } finally {
-        setTimeout(() => {
-          setIsSubmitting(false); // Activa el botón después de 3 segundos
-        }, 3000);
+        setIsSubmitting(false);
       }
     },
   });

@@ -58,14 +58,22 @@ const DeleteAccountConfirmation = () => {
     const code = confirmationCode.join("");
     try {
       console.log("Confirmation code to send:", code);
-      await deleteUserConfirmation(user.data.id, code);
-      toast.success(t("deleteAccountConfirmation.successMessage"));
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      
+      const response = await deleteUserConfirmation(user.data.id, code);
+      //Verica la respuesta y contiene el mensaje esperado.
+      if (response && response.msg === "User deleted successfully"){
+        toast.success(t("deleteAccountConfirmation.successMessage"));
+        setTimeout(() => {
+          window.location.reload(); 
+          navigate("/");
+        }, 1500);
+      } else {
+         // Lanza un error si la respuesta no indica éxito
+         throw new Error(response?.msg || "Failed to delete user");
+      }   
     } catch (error) {
       console.error(error);
-      toast.error(t("deleteAccountConfirmation.errorMessage"));
+      toast.error(t("deleteAccountConfirmation.errorMessage") + ": " + error.message);
     }
   };
 

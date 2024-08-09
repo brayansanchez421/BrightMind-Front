@@ -99,7 +99,7 @@ export const UserProvider = ({ children }) => {
     const deleteUser = async (id) => {
         try {
             const res = await deleteUserApi(id);
-            console.log(res.data);
+            return res.data;
         } catch (error) {
             console.error(error);
         }
@@ -108,7 +108,7 @@ export const UserProvider = ({ children }) => {
     const deleteUserConfirmation = async (id, confirmationCode) => {
         try {
             const res = await deleteUserConfirmationApi(id, confirmationCode);
-            console.log(res.data);
+            return res.data;
         } catch (error) {
             console.error(error);
         }

@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../src/assets/img/hola.png"
 import { useTranslation } from 'react-i18next';
+import Cookies from 'js-cookie';
 
 const DeleteAccountConfirmation = () => {
   const navigate = useNavigate();
@@ -49,16 +50,29 @@ const DeleteAccountConfirmation = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const code = confirmationCode.join("");
+
     try {
-      console.log("Confirmation code to send:", code);
-      await deleteUserConfirmation(user.data.id, code);
-      toast.success(t("deleteAccountConfirmation.successMessage"));
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+        console.log("Confirmation code to send:", code);
+        
+        const response = await deleteUserConfirmation(user.data.id, code);
+
+        // Verifica si la respuesta está definida y contiene el mensaje esperado
+        if (response && response.msg === "User deleted successfully") {
+          toast.success(t("deleteAccountConfirmation.successMessage"), {
+            autoClose: 1500,
+            onClose: () => {
+              setTimeout(() => {
+                window.location.reload(); 
+                navigate("/register"); // Redirige a la página de login
+              }, 1500);
+            },
+          });
+        } else {
+            throw new Error(response?.msg || "Failed to delete user");
+        }
     } catch (error) {
-      console.error(error);
-      toast.error(t("deleteAccountConfirmation.errorMessage"));
+        console.error(error);
+        toast.error(t("deleteAccountConfirmation.errorMessage") + ": " + error.message);
     }
   };
 
