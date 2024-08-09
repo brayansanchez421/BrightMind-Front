@@ -13,6 +13,7 @@ const CoursesComponent = () => {
   const navigate = useNavigate();
   const [itemsPerPage] = useState(15);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchUserCourses = async () => {
@@ -34,17 +35,26 @@ const CoursesComponent = () => {
     navigate(`/course/${courseId}`);
   };
 
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    setCurrentPage(1); // Reinicia la página al hacer una búsqueda nueva
+  };
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(userCourses.length / itemsPerPage);
-  const paginatedCourses = userCourses.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+
+  const paginatedCourses = userCourses
+    .filter(course => {
+      // Asegúrate de que course.name está definido antes de llamar a toLowerCase
+      const courseName = course.title || "";
+      return courseName.toLowerCase().includes(searchTerm.toLowerCase());
+    })
+    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 min-h-screen overflow-hidden">
-      <NavigationBar />
+      <NavigationBar onSearch={handleSearch}/> {/*Se agrega el onSearch para poder realizar el filtrado de cursos por titulo*/}
       <div className="mt-10 flex justify-center">
         <h1 className="text-center text-3xl text-white font-black flex justify-center shadow-orange italic shadow-red-400 p-3 border border-white bg-gradient-to-t from-red-400 to-pink-300">
           {t('coursesComponent.your_courses')}
@@ -61,7 +71,7 @@ const CoursesComponent = () => {
       >
         {paginatedCourses.map((course) => (
           <div
-            key={course.id}
+            key={course._id} // Clave única para cada curso
             className="relative bg-white rounded-lg shadow-md border cursor-pointer transform hover:scale-105 transition-transform border-white"
             onClick={() => handleCourseClick(course._id)}
           >

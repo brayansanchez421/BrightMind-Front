@@ -33,8 +33,13 @@ const DataTablete = () => {
   }, []);
 
   useEffect(() => {
-    setTotalPages(Math.ceil(categories.length / itemsPerPage));
-  }, [categories, itemsPerPage]);
+    const filteredCategory = categories.filter( category => 
+      category.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      category.description.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    setTotalPages(Math.ceil(filteredCategory.length / itemsPerPage));
+  }, [categories, searchValue, itemsPerPage]);
 
   const handleCreateCategory = async (category) => {
     try {
@@ -146,10 +151,20 @@ const DataTablete = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateIds = () => {
-    return categories
+    const filteredCategory = categories.filter( category => 
+      category.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      category.description.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    return filteredCategory
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map((_, index) => index + 1 + (currentPage - 1) * itemsPerPage);
   };
+
+  const filteredCategory = categories.filter( category => 
+    category.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+    category.description.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   return (
     <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 overflow-hidden min-h-screen">
@@ -190,9 +205,11 @@ const DataTablete = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {categories
-                        .filter((category) => category.name.toLowerCase().includes(searchValue.toLowerCase()))
-                        .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                      {filteredCategory
+                        .slice(
+                          (currentPage - 1) * itemsPerPage,
+                          currentPage * itemsPerPage
+                        )
                         .map((category, index) => (
                           <tr key={category._id}>
                             <td className="border-2 border-blue-800 bg-gray-300 text-lg text-black mt-1 text-center font-black">

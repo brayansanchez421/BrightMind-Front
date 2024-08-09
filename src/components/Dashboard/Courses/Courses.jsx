@@ -48,8 +48,14 @@ const DataTablete = () => {
   }, []);
 
   useEffect(() => {
-    setTotalPages(Math.ceil(courses.length / itemsPerPage));
-  }, [courses, itemsPerPage]);
+    const filteredCourses = courses.filter(course =>
+      course.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+      course.category.toLowerCase().includes(searchValue.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    setTotalPages(Math.ceil(filteredCourses.length / itemsPerPage));
+  }, [courses, searchValue, itemsPerPage]);
 
   const handleCreateCourseClick = () => setShowCreateForm(true);
 
@@ -140,10 +146,22 @@ const DataTablete = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateIds = () => {
-    return courses
+    const filteredCourses = courses.filter(course =>
+      course.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+      course.category.toLowerCase().includes(searchValue.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    return filteredCourses
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map((_, index) => index + 1 + (currentPage - 1) * itemsPerPage);
   };
+
+  const filteredCourses = courses.filter(course =>
+    course.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+    course.category.toLowerCase().includes(searchValue.toLowerCase()) ||
+    course.description.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   return (
     <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 overflow-hidden min-h-screen">
@@ -199,8 +217,7 @@ const DataTablete = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {courses
-                        .filter((course) => course.title.toLowerCase().includes(searchValue.toLowerCase()))
+                      {filteredCourses
                         .slice(
                           (currentPage - 1) * itemsPerPage,
                           currentPage * itemsPerPage

@@ -7,7 +7,7 @@ import { useAuth } from "../../context/auth.context";
 import { useUserContext } from "../../context/user/user.context";
 import { useTranslation } from 'react-i18next';
 
-function NavigationBar() {
+function NavigationBar({ onSearch }) {
   const { t } = useTranslation("global");
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false); // Estado para mostrar el modal de bienvenida
@@ -15,6 +15,7 @@ function NavigationBar() {
   const { getUserById } = useUserContext();
   const [username, setUsername] = useState("");
   const [userImage, setUserImage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const menuRef = useRef(null);
   const welcomeModalRef = useRef(null); // Referencia al modal de bienvenida
@@ -27,6 +28,12 @@ function NavigationBar() {
     } catch (error) {
       console.error("Error al hacer logout:", error);
     }
+  };
+
+  const handleSearchChange = (e) => { //Se agrega esta función para poder filtrar mediante el nombre de la categoria
+    const term = e.target.value;
+    setSearchTerm(term);
+    onSearch(term); // Llama a la función que actualiza el término de búsqueda en el componente principal
   };
 
   useEffect(() => {
@@ -71,7 +78,9 @@ function NavigationBar() {
         <input
           type="search"
           placeholder={t('navigationBar.search_placeholder')}
-          className="mr-1 rounded-lg p-2 md:w-28 md:h-9 w-11 h-7 bg-purple-400 text-white placeholder-white focus:outline-none  border-2 border-transparent hover:border-white"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="mr-1 rounded-lg p-2 md:w-28 md:h-9 w-11 h-7 bg-purple-400 text-white placeholder-white focus:outline-none border-2 border-transparent hover:border-white"
         />
         <Link
           to="/MyCourses"

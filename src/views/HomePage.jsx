@@ -14,6 +14,7 @@ const HomePage = () => {
     const [categoriesLoaded, setCategoriesLoaded] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const { t } = useTranslation('global');
+    const [searchTerm, setSearchTerm] = useState("");
 
     const categoriesPerPage = 15;
 
@@ -38,6 +39,11 @@ const HomePage = () => {
         navigate(`/CoursesHome`, { state: { title: category.name } });
     };
 
+    const handleSearch = (term) => { //Se agrega esta función para poder filtrar por el nombre de la categoria
+        setSearchTerm(term);
+        setCurrentPage(1); // Reinicia la página al hacer una búsqueda nueva
+      };
+
     const handleNextPage = () => {
         if ((currentPage * categoriesPerPage) < categories.length) {
             setCurrentPage((prevPage) => prevPage + 1);
@@ -51,17 +57,21 @@ const HomePage = () => {
     };
 
     const totalPages = Math.ceil(categories.length / categoriesPerPage);
-    const paginatedCategories = categories.slice((currentPage - 1) * categoriesPerPage, currentPage * categoriesPerPage);
+    
+    const paginatedCategories = categories //Se modifica esta función para poder filtrar por el nombre de la categoria
+        .filter(category => category.name.toLowerCase().includes(searchTerm.toLowerCase())) // Filtrar categorías por término de búsqueda
+        .slice((currentPage - 1) * categoriesPerPage, currentPage * categoriesPerPage);
 
     return (
         <div className="bg-gradient-to-t from-blue-200 via-blue-400 to-blue-600 min-h-screen">
             <div className='flex flex-col'>
-                <NavigationBar />
+                <NavigationBar onSearch={handleSearch}/> {/*Se agrega El onSearch Para poder Filtrar mediante Categorias*/}
                 <QuoteCarousel phrases={phrases} />
                 <div className="text-center justify-center items-center">
                     <h1 className="flex justify-center p-2 text-4xl mt-8 font-black text-white sm:text-3xl md:text-5xl">{t('home.explore_categories')}</h1>
                     <p className="mt-4 text-base sm:text-lg text-gray-200 font-semibold flex justify-center">{t('home.find_course')}</p>
                 </div>
+                
                 <div className="flex justify-center">
                     <div className="grid grid-cols-1 w-full mx-2 gap-1 mt-10 sm:grid-cols-2 sm:mx-3 sm:gap-3 sm:mt-16 md:grid-cols-3 md:mx-4 lg:grid-cols-4 lg:mx-5 xl:grid-cols-5 xl:mx-6">
                         {paginatedCategories.map((category, index) => (
