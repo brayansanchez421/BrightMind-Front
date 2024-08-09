@@ -448,5 +448,13 @@
         "imagePreview": "Vista Previa de la Imagen",
         "updateButton": "Actualizar",
         "cancelButton": "Cancelar"
+    },
+    "deleteAccountConfirmation": {
+        "title": "Eliminar Cuenta",
+        "description": "Ingresa el código de confirmación enviado a tu correo electrónico 📧",
+        "deleteButton": "Eliminar",
+        "cancelButton": "Cancelar",
+        "successMessage": "Cuenta eliminada exitosamente",
+        "errorMessage": "Código de confirmación inválido o expirado."
     }
 }

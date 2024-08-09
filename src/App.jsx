@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate  } from "react-router-dom";
 import "./index.css";
 
 // Context
@@ -41,6 +41,7 @@ import NotFoundPage from "./views/Error/404Page";
 
 // Rutas protegidas
 import ProtectedRoute from "./protectedRoute";
+import PublicRoute from "./publicRoutes";
 import ActivationComponent from "./components/Activate";
 import DeleteAccountConfirmation from "./components/Dashboard/ProfileAdmin/eliminatedCode";
 
@@ -54,11 +55,13 @@ function App() {
               <CoursesProvider>
                 <Routes>
                   {/* Vistas del LOGIN */}
-                  <Route path="/" element={<LoginForm />} />
-                  <Route path="/register" element={<RegisterForm />} />
-                  <Route path="/reset" element={<ResetPasswordForm />} />
-                  <Route path="/code" element={<ResetPasswordVerifyForm />} />
-                  <Route path="/newPassword" element={<NewPassword />} />
+                  <Route element={<PublicRoute redirectToUser="/Home" redirectToAdmin="/admin" />}>
+                    <Route path="/" element={<LoginForm />} />
+                    <Route path="/register" element={<RegisterForm />} />
+                    <Route path="/reset" element={<ResetPasswordForm />} />
+                    <Route path="/code" element={<ResetPasswordVerifyForm />} />
+                    <Route path="/newPassword" element={<NewPassword />} />
+                  </Route>
 
                   {/* Vistas para USUARIO */}
                   <Route element={<ProtectedRoute requiredRole="usuario"/>}>
@@ -86,6 +89,7 @@ function App() {
                   {/* Vistas ADICIONALES */}
                   <Route path="/notFound" element={<NotFoundPage />} />
                   <Route path="/activate" element={<ActivationComponent />} />
+                  <Route path="*" element={<Navigate to="/notFound" />} />
                 </Routes>
               </CoursesProvider>
             </CategoryProvider>

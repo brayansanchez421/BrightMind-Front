@@ -1,8 +1,20 @@
 import logo from '../../assets/img/hola.png'; 
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../context/auth.context';
 
 const NotFoundPage = () => {
   const { t } = useTranslation('global');
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      localStorage.removeItem('token');
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error al hacer logout:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -17,7 +29,7 @@ const NotFoundPage = () => {
           </p>
         </div>
         <div className="text-center">
-          <a href="/" className="inline-block bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"> 
+          <a className="inline-block bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 cursor-pointer" onClick={handleLogout}> 
             {t('notFound.returnHome')}
           </a>
         </div>

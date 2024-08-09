@@ -448,5 +448,13 @@
         "imagePreview": "Image Preview",
         "updateButton": "Update",
         "cancelButton": "Cancel"
+    },
+    "deleteAccountConfirmation": {
+        "title": "Delete Account",
+        "description": "Enter the confirmation code sent to your email 📧",
+        "deleteButton": "Delete",
+        "cancelButton": "Cancel",
+        "successMessage": "Account deleted successfully",
+        "errorMessage": "Invalid or expired confirmation code."
     }
 }

@@ -5,11 +5,13 @@ import { useAuth } from "../../../context/auth.context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../assets/img/hola.png";
+import { useTranslation } from 'react-i18next';
 
 const DeleteAccountConfirmation = () => {
   const navigate = useNavigate();
   const { deleteUserConfirmation } = useUserContext();
   const { user } = useAuth();
+  const { t } = useTranslation("global");
 
   const [confirmationCode, setConfirmationCode] = useState([
     "",
@@ -57,13 +59,13 @@ const DeleteAccountConfirmation = () => {
     try {
       console.log("Confirmation code to send:", code);
       await deleteUserConfirmation(user.data.id, code);
-      toast.success("Account deleted successfully");
+      toast.success(t("deleteAccountConfirmation.successMessage"));
       setTimeout(() => {
         navigate("/");
       }, 3000);
     } catch (error) {
       console.error(error);
-      toast.error("Invalid or expired confirmation code.");
+      toast.error(t("deleteAccountConfirmation.errorMessage"));
     }
   };
 
@@ -74,10 +76,10 @@ const DeleteAccountConfirmation = () => {
         className="w-full max-w-lg bg-gradient-to-br from-violet-600 to-rose-500 py-6 px-6 rounded-xl shadow-xl shadow-pink-400"
       >
         <h1 className="text-center font-black text-5xl text-slate-100">
-          Delete Account
+          {t("deleteAccountConfirmation.title")}
         </h1>
         <p className="italic font-semibold text-center text-2xl text-slate-300 my-10">
-          Enter the confirmation code sent to your email 📧
+          {t("deleteAccountConfirmation.description")}
         </p>
         <div className="py-4 my-10 w-full flex justify-center">
           <img src={logo} alt="Logo" className="h-40" />
@@ -107,11 +109,11 @@ const DeleteAccountConfirmation = () => {
             type="submit"
             className="w-32 py-3 font-medium text-white bg-red-950 shadow shadow-white hover:bg-red-800 rounded-lg"
           >
-            <span>Delete</span>
+            <span>{t("deleteAccountConfirmation.deleteButton")}</span>
           </button>
           <Link to={"/ProfileEditor"}>
             <button className="w-32 py-3 font-medium text-white bg-slate-950 shadow-white shadow hover:bg-gray-800 rounded-lg">
-              <span>Cancel</span>
+              <span>{t("deleteAccountConfirmation.cancelButton")}</span>
             </button>
           </Link>
         </div>

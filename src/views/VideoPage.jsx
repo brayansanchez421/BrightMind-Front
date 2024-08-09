@@ -1,28 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Animation1 from "../assets/Video/Animation1.mp4";
 import Animation2 from "../assets/Video/Animation2.mp4";
 import Animation3 from "../assets/Video/Animation3.mp4";
 import Animation4 from "../assets/Video/Animation4.mp4";
 
 // Lista de videos disponibles
-const videos = [Animation1,Animation2,Animation3,Animation4];
+const videos = [Animation1, Animation2, Animation3, Animation4];
 
-const VideoPage = ({ userRole }) => {
-  const navigate = useNavigate();
+const VideoPage = () => {
   const [randomIndex, setRandomIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (userRole === 'Admin') {
-        navigate('/admin');
-      } else {
-        navigate('/home');
-      }
-    }, 5000); // Redirigir después de 5 segundos
-
-    return () => clearTimeout(timer);
-  }, [userRole, navigate]);
 
   // Función para obtener un índice aleatorio diferente cada vez
   const getRandomIndex = () => {
