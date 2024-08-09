@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
           const user = response.data;
           console.log("Respuesta de loginRequest:", response);
           console.log(user.token);
+          
           // Guardar la cookie de autenticación en el localStorage
           localStorage.setItem("authToken", user.token);
       
@@ -32,8 +33,8 @@ export const AuthProvider = ({ children }) => {
           setLoading(false);
           setAuthenticated(true);
           // Guardar el rol del usuario en el contexto de autenticación
-          setRole(user.role);
-      
+          setRole(user.data.role);
+    
           return { success: true, user }; // Devuelve true si el inicio de sesión fue exitoso y el usuario
         } catch (error) {
           console.error(error);
@@ -66,12 +67,14 @@ export const AuthProvider = ({ children }) => {
               if (!res.data) {
                 setAuthenticated(false);
                 setLoading(false);
+                
                 return;
               }
               
               setAuthenticated(true);
               setUser(res);
               setLoading(false);
+              setRole(res.data.role);
             } catch (error) {
               console.log(error)
               setAuthenticated(false);
@@ -86,13 +89,11 @@ export const AuthProvider = ({ children }) => {
       
       const logout = () => {
         localStorage.removeItem("authToken");
-        
         document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         document.cookie = "anotherCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        
         setUser(null);
         setRole(null);
-      
+        sessionStorage.clear();
         // Redireccionar a la página de login
         window.location.replace("/");
       };
@@ -101,9 +102,8 @@ export const AuthProvider = ({ children }) => {
     const isAuthenticated = () => {
         return !!user;
     };
-
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout, isAuthenticated, authenticated }}>
+        <AuthContext.Provider value={{ user, loading, role, login, logout, isAuthenticated, authenticated }}>
             {children}
         </AuthContext.Provider>
     );
