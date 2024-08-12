@@ -51,7 +51,7 @@ const LoginForm = () => {
           const userToken = user?.data?.token || null;
           console.log(userRole);
   
-          toast.success(message || t("login.login_successful"));
+          
           document.cookie = `token=${userToken}; path=/`;
           setUserRole(userRole);
           setIsAuthenticated(true);

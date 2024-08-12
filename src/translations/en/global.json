@@ -381,7 +381,9 @@
         "assignResource": "Assign resource",
         "cancel": "Cancel",
         "resource": "Resource",
-        "videoSupport": "Your browser does not support the video element."
+        "videoSupport": "Your browser does not support the video element.",
+        "resourceDeleted": "Resource successfully deleted",
+        "errorDeletingResource": "Error deleting resource"
     },
     "categories": {
         "title": "Categories",

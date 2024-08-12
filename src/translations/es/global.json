@@ -381,7 +381,9 @@
         "assignResource": "Asignar recurso",
         "cancel": "Cancelar",
         "resource": "Recurso",
-        "videoSupport": "Tu navegador no soporta el elemento de video."
+        "videoSupport": "Tu navegador no soporta el elemento de video.",
+        "resourceDeleted": "Recurso eliminado exitosamente",
+        "errorDeletingResource": "Error al eliminar el recurso"
     },
     "categories": {
         "title": "Categorías",

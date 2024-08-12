@@ -2,6 +2,8 @@ import React, { useCallback, useState, useRef, useEffect } from "react";
 import { Modal, Button, Collapse, notification, Spin } from "antd";
 import { DeleteFilled } from "@ant-design/icons";
 import { useTranslation } from 'react-i18next';
+import { deleteResource } from "../../../api/courses/course.request";
+import { toast } from "react-toastify";
 
 const { Panel } = Collapse;
 const ALLOWED_FILE_TYPES = ['.mov', '.mp4', '.docx', '.pdf', '.jpg', '.png'];
@@ -12,7 +14,6 @@ const AssignContentModal = ({
   onAssignContent,
   selectedCourse,
   setContentFile,
-  handleRemoveResource,
 }) => {
   const { t } = useTranslation("global");
   const [loading, setLoading] = useState(false);
@@ -96,6 +97,30 @@ const AssignContentModal = ({
     onClose();
   };
 
+  const handleRemoveResource = async (index) => {
+    try {
+      // 1. Eliminar el recurso del backend
+      await deleteResource(selectedCourse._id, index);
+  
+      // 2. Mostrar una notificación de éxito y recargar la página
+      toast.success(t("assignContentModal.resourceDeleted"), {
+        autoClose: 750,
+        onClose: () => {
+          // Recargar la página
+          window.location.reload();
+        },
+      });
+  
+    } catch (error) {
+      // 3. Manejar errores y mostrar una notificación de error
+      console.error('Error deleting resource:', error);
+      notification.error({
+        message: t('assignContentModal.errorDeletingResource'),
+        description: error.message || t('assignContentModal.errorDeletingResource'),
+        duration: 3,
+      });
+    }
+  };
   return (
     <Modal
       className="shadow-orange shadow-white border-2 border-black rounded-lg"

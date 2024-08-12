@@ -25,6 +25,11 @@ export const asignarContenido = (id, contentFile) => {
   });
 };
 
+// Función para eliminar un recurso de un curso
+export const deleteResource = (courseId, resourceIndex) => {
+  return courseRequest.delete(`/courses/${courseId}/resources/${resourceIndex}`);
+};
+
 
 // Función para obtener un curso por ID
 export const getCourse = (id) => courseRequest.get(`/getCourse/${id}`);
