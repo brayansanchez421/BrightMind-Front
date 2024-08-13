@@ -1,5 +1,5 @@
 import axios from 'axios'
-const api = 'https://plataformabrightmind.netlify.app/PE'
+const api = 'https://brightmind-back.onrender.com/PE'
 
 export const getAllRoles = () => axios.get(`${api}/roles/getRoles`,{withCredentials: true})
 export const getRole = (_id) => axios.get(`${api}/roles/getRole/${_id}`,{withCredentials: true})

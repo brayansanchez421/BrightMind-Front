@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const api = 'https://plataformabrightmind.netlify.app/PE/courses/'; 
+const api = 'https://brightmind-back.onrender.com/PE/courses/'; 
 
 const courseRequest = axios.create({
   baseURL: api,
