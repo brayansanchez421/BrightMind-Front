@@ -76,7 +76,7 @@ const WelcomePage = () => {
         )}
         <div className="flex justify-center mt-6">
           <motion.button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("https://brightmind-back.onrender.com/")}
             className="py-2 px-6 text-lg bg-green-500 text-white rounded-lg shadow-lg hover:bg-lime-500 transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
