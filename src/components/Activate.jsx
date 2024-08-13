@@ -22,7 +22,7 @@ const WelcomePage = () => {
     }, 1000);
 
     const navigateTimeout = setTimeout(() => {
-      navigate("/");
+      navigate("https://plataformbrightmind.netlify.app/");
     }, 3000);
 
     return () => {
@@ -76,7 +76,7 @@ const WelcomePage = () => {
         )}
         <div className="flex justify-center mt-6">
           <motion.button
-            onClick={() => navigate("https://brightmind-back.onrender.com/")}
+            onClick={() => navigate("https://plataformbrightmind.netlify.app/")}
             className="py-2 px-6 text-lg bg-green-500 text-white rounded-lg shadow-lg hover:bg-lime-500 transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
